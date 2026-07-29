@@ -1,0 +1,55 @@
+{
+  "name": "kao-cheng-ce-nlsooz",
+  "alias": "考成策",
+  "version": "1.0.0",
+  "description": "任务与进度管理插件",
+  "author": "Treasure",
+  "icon": "assets/schedule.svg",
+  "entry": "index.html",
+  "minPlatformVersion": "2.0.0",
+  "menu": {
+    "name": "考成策",
+    "icon": "assets/schedule.svg",
+    "order": 2
+  },
+  "settings": [
+    {
+      "param_key": "reminder_enabled",
+      "param_name": "到期提醒",
+      "param_type": "switch",
+      "param_value": "1",
+      "param_options": {
+        "activeText": "开",
+        "inActiveText": "关",
+        "activeValue": "1",
+        "inactiveValue": "0"
+      }
+    },
+    {
+      "param_key": "reminder_times",
+      "param_name": "提醒时间",
+      "param_type": "time",
+      "param_value": "09:30,17:30",
+      "param_properties": {
+        "multiple": true,
+        "start": "06:00",
+        "end": "23:30",
+        "step": "00:30"
+      },
+      "param_placeholder": "选择提醒时间"
+    },
+    {
+      "param_key": "reminder_days_before",
+      "param_name": "提前提醒天数",
+      "param_type": "number",
+      "param_value": "3",
+      "param_properties": {
+        "min": 0,
+        "max": 30,
+        "step": 1
+      },
+      "param_placeholder": "到期前 N 天开始提醒"
+    }
+  ],
+  "_frozen": true
+}

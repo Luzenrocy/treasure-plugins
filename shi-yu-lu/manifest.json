@@ -1,0 +1,25 @@
+{
+  "name": "shi-yu-lu-yvnr8p",
+  "alias": "石玉录",
+  "version": "1.0.0",
+  "description": "Markdown 笔记编辑器",
+  "author": "Treasure",
+  "icon": "icon.svg",
+  "entry": "index.html",
+  "minPlatformVersion": "2.0.0",
+  "menu": {
+    "name": "石玉录",
+    "icon": "Notebook",
+    "order": 1
+  },
+  "settings": [
+    {
+      "param_key": "storage_dir",
+      "param_name": "文件存储目录",
+      "param_type": "dir",
+      "param_value": "",
+      "param_placeholder": "请选择石玉录文件存储目录"
+    }
+  ],
+  "_frozen": true
+}

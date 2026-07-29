@@ -1,0 +1,24 @@
+{
+  "name": "my-plugin",
+  "alias": "我的插件",
+  "version": "1.0.0",
+  "description": "插件描述",
+  "author": "作者名",
+  "icon": "icon.svg",
+  "entry": "index.html",
+  "minPlatformVersion": "2.0.0",
+  "menu": {
+    "name": "我的插件",
+    "icon": "plugin",
+    "order": 100
+  },
+  "settings": [
+    {
+      "param_key": "example_key",
+      "param_name": "示例配置",
+      "param_type": "input",
+      "param_value": "",
+      "param_placeholder": "请输入配置值"
+    }
+  ]
+}
