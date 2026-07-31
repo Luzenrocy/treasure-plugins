@@ -1,12 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { db } from '@/db';
 
-// Mock @treasure/sdk
+// Mock treasure-sdk
 const mockQuery = vi.fn();
 const mockExecute = vi.fn();
 const mockSendNotification = vi.fn();
 
-vi.mock('@treasure/sdk', () => ({
+vi.mock('treasure-sdk', () => ({
   getTreasure: () => ({
     query: mockQuery,
     execute: mockExecute,
@@ -22,7 +22,7 @@ describe('启动通知', () => {
 
   it('启动成功后调用通知 API 发送打开成功通知', async () => {
     // 模拟 main.ts 启动逻辑
-    const bridge = await import('@treasure/sdk').then(m => m.getTreasure());
+    const bridge = await import('treasure-sdk').then(m => m.getTreasure());
     await bridge.sendNotification?.('考成策', '打开成功');
     
     expect(mockSendNotification).toHaveBeenCalledWith('考成策', '打开成功');

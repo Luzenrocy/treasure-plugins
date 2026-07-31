@@ -230,7 +230,7 @@
 <script setup lang="ts">
 import { ref, shallowRef, computed, watch, onMounted, onUnmounted } from 'vue';
 import { db } from '@/db';
-import { file, getTreasure } from '@treasure/sdk';
+import { file, getTreasure } from 'treasure-sdk';
 import { PRIORITY_CONFIG, STATUS_CONFIG } from '@/types';
 import type { Task, TaskStatus, TaskAttachment, Tag } from '@/types';
 import TaskItem from './TaskItem.vue';

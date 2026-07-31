@@ -13,7 +13,7 @@
  * @packageDocumentation
  */
 
-import { getTreasure } from '@treasure/sdk';
+import { getTreasure } from 'treasure-sdk';
 
 /** 提醒配置 */
 interface ReminderSettings {

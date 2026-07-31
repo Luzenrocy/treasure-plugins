@@ -6,7 +6,7 @@ import {
   Calendar, Edit, Delete, MoreFilled,
 } from '@element-plus/icons-vue';
 import App from './App.vue';
-import { initTreasure } from '@treasure/sdk';
+import { initTreasure } from 'treasure-sdk';
 import { ReminderChecker } from './reminder';
 
 const app = createApp(App);

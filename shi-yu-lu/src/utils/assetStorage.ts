@@ -1,4 +1,4 @@
-import { file } from '@treasure/sdk';
+import { file } from 'treasure-sdk';
 
 const ASSET_DIR_NAME = '.assets';
 const ASSET_ALIAS = '@assets';

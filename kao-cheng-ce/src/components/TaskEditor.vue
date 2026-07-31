@@ -155,7 +155,7 @@
 <script setup lang="ts">
 import { reactive, ref, watch, onMounted, onUnmounted } from 'vue';
 import { db } from '@/db';
-import { file, getTreasure } from '@treasure/sdk';
+import { file, getTreasure } from 'treasure-sdk';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import TagIcon from '@/icon/tag.svg?component';
 import type { Task, UpdateTaskInput, Priority, TaskStatus, Tag, TaskAttachment } from '@/types';

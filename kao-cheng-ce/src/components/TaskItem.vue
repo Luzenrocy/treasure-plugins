@@ -162,7 +162,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
-import { getTreasure } from '@treasure/sdk';
+import { getTreasure } from 'treasure-sdk';
 import { ElMessageBox } from 'element-plus';
 import { db } from '@/db';
 import type { Task, Priority, TaskStatus, Tag } from '@/types';
@@ -642,7 +642,7 @@ export default { name: 'TaskItem' };
   transition: background 0.15s;
   font-family: inherit;
   margin-top: 2px;
-  margin-left: -4px;
+  margin-left: 20px;
 }
 .subtask-add-btn:hover { background: rgba(99,102,241,0.06); color: #4f46e5; }
 

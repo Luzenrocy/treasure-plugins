@@ -1,4 +1,4 @@
-import { file } from '@treasure/sdk';
+import { file } from 'treasure-sdk';
 import { extractAssetMarkdownUrls, resolveAssetPath } from './assetStorage';
 
 const ASSET_DIR_NAME = '.assets';

@@ -1,4 +1,4 @@
-import { getTreasure } from '@treasure/sdk';
+import { getTreasure } from 'treasure-sdk';
 
 export interface FileEntry {
   name: string;

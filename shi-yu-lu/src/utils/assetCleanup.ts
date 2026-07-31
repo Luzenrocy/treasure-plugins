@@ -1,4 +1,4 @@
-import { file } from '@treasure/sdk';
+import { file } from 'treasure-sdk';
 import { extractAssetMarkdownUrls, resolveAssetPath } from './assetStorage';
 import { addAssetRef, removeAssetRef } from './assetIndex';
 

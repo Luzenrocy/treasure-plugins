@@ -1,5 +1,5 @@
 /**
- * 数据库操作层 —— 通过 @treasure/sdk 桥接执行 SQL
+ * 数据库操作层 —— 通过 treasure-sdk 桥接执行 SQL
  *
  * 所有 SQL 中的表名使用裸名，宿主侧的 rewriteWithDeclaredTables
  * 会自动添加 plugin_{pluginCode}_ 前缀。
@@ -7,7 +7,7 @@
  * 声明的表名列表：['tasks', 'tags', 'task_tags']
  */
 
-import { getTreasure, file } from '@treasure/sdk';
+import { getTreasure, file } from 'treasure-sdk';
 import type {
   Task, CreateTaskInput, UpdateTaskInput,
   Tag, TaskTag, TaskLog, CreateTaskLogInput,

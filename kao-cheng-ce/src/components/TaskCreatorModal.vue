@@ -122,7 +122,7 @@
 
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue';
-import { file } from '@treasure/sdk';
+import { file } from 'treasure-sdk';
 import { ElMessage } from 'element-plus';
 import TagIcon from '@/icon/tag.svg?component';
 import type { Priority, CreateTaskInput, Tag } from '@/types';

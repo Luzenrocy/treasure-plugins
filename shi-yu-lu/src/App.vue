@@ -99,7 +99,7 @@ import { defineComponent } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import Cherry from 'cherry-markdown';
 import 'cherry-markdown/dist/cherry-markdown.css';
-import { getTreasure, file, setting } from '@treasure/sdk';
+import { getTreasure, file, setting } from 'treasure-sdk';
 import { scanMarkdownDirectory, type FileEntry } from './utils/fileScanner';
 import { readAssetAsObjectUrl, revokeAssetObjectUrls, saveAssetForMarkdown } from './utils/assetStorage';
 import { cleanupAssetsBeforeMarkdownDelete, cleanupRemovedAssets } from './utils/assetCleanup';
@@ -1151,6 +1151,23 @@ async exportAsImage(fileName: string) {
   color: #554d43;
   line-height: 1.82;
   background: transparent;
+}
+
+.cherry-container .cherry-markdown .toc {
+  background: rgba(255, 255, 255, 0.48);
+  border-color: rgba(154, 132, 189, 0.24);
+}
+
+.cherry-container .cherry-markdown .toc .toc-li {
+  border-left-color: rgba(154, 132, 189, 0.32);
+}
+
+.cherry-container .cherry-markdown .toc .toc-li a:hover {
+  background-color: rgba(154, 132, 189, 0.10);
+}
+
+.cherry-container .cherry-markdown .toc .toc-li a:active {
+  background-color: rgba(154, 132, 189, 0.18);
 }
 
 .cherry-container .cherry-previewer h1,

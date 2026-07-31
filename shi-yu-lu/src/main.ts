@@ -8,7 +8,7 @@ import {
   ArrowRight,
 } from '@element-plus/icons-vue';
 import App from './App.vue';
-import { initTreasure } from '@treasure/sdk';
+import { initTreasure } from 'treasure-sdk';
 
 const app = createApp(App);
 // 注册所有图标到全局组件，模板中可直接通过字符串名使用 <el-icon><component :is="'Close'" /></el-icon>
