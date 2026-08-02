@@ -1,132 +1,81 @@
-# 石玉录 Treasure 插件
+# 石玉录
 
-石玉录是基于 Treasure 插件脚手架拆分出的 Markdown 笔记插件，使用 Cherry Markdown 作为编辑器，通过 Treasure SDK 与宿主平台通信。
+> 面向本地 Markdown 文件的笔记编辑与资产管理插件。
 
-## 环境要求
+石玉录将目录中的 Markdown 文件组织为可浏览、可编辑、可导出的笔记工作区。它使用 Cherry Markdown 提供编辑与预览能力，通过 `treasure-sdk` 调用宿主文件、设置、对话框和菜单能力。
 
-- Node.js 20+
-- npm
-- Treasure 平台版本 2.x
+## 产品原型与核心流程
 
-## 安装依赖
+```text
+选择存储目录
+  → 扫描 Markdown 文件树
+  → 选择或新建笔记
+  → 编辑、自动保存与资产索引维护
+  → 需要时导出 PDF 或图片
+```
+
+| 区域 | 功能 |
+| --- | --- |
+| 目录侧栏 | 浏览 Markdown 文件树、新建文件/目录、删除、打开右键操作。 |
+| 编辑区 | 使用 Cherry Markdown 提供双栏编辑、纯编辑和只读预览模式。 |
+| 资产管理 | 保存和清理笔记附件，维护资产引用索引；支持重建索引。 |
+| 导出 | 将当前笔记导出为 PDF 或图片。 |
+| 原生菜单 | 注册编辑模式、导出和关闭当前文件等上下文菜单能力。 |
+
+## 技术架构
+
+```mermaid
+flowchart LR
+  A[目录与 Markdown 文件] --> B[文件扫描与树形视图]
+  B --> C[Cherry Markdown 编辑器]
+  C --> D[自动保存与附件清理]
+  D --> E[资产索引]
+  C --> F[PDF / 图片导出]
+  G[treasure-sdk] --> A
+  G --> H[插件设置与原生菜单]
+```
+
+- `src/App.vue`：页面编排、编辑器生命周期、文件树、导出与菜单协作。
+- `src/utils/fileScanner.ts`：扫描与构建 Markdown 文件树。
+- `src/utils/assetStorage.ts`、`assetIndex.ts`、`assetCleanup.ts`：附件存储、索引重建与删除清理。
+- `scripts/`：插件包构建及生命周期脚本；当前版本不维护自建业务表。
+
+## 色彩方案
+
+石玉录使用与 Treasure 协调的“暖米纸张 + 紫墨强调”方案，突出安静阅读与长期书写。
+
+| 角色 | 色值 | 使用位置 |
+| --- | --- | --- |
+| 页面纸张底 | `#FFF7EA → #F7F2FF → #EEF7FF` | 编辑器与欢迎区的低饱和渐变基底。 |
+| 主文字 | `#4F463B` / `#554D43` | 标题、笔记内容与关键文字。 |
+| 紫色交互 | `#7656A7` / `#9A84BD` | 选中态、工具图标与操作反馈。 |
+| 装饰渐变 | `#FFB978 → #B69CFF` | 细分隔线和有限强调。 |
+| 危险操作 | `#D36C6C` | 删除与错误提示。 |
+
+深色导航属于宿主外壳，石玉录仅在自身页面内使用柔和的米色、紫灰与低对比度边界，避免产生第二层强导航。
+
+## 配置与数据
+
+| 配置 | 用途 |
+| --- | --- |
+| `storage_dir` | 用户选择的 Markdown 文件存储目录。 |
+
+笔记正文与附件存储在用户选择的目录中，不复制进插件数据库。插件通过 SDK 请求文件操作；资产索引用于判断附件引用并辅助安全清理。
+
+## 开发、联调与打包
 
 ```bash
 npm install
-```
-
-## 独立开发
-
-```bash
 npm run dev
-```
 
-独立开发模式下 SDK 会启用 `DevBridge`，使用浏览器本地存储模拟数据库、设置和文件操作。该模式适合调试页面布局、编辑器交互和基础逻辑。
-
-## 平台联调
-
-1. 启动石玉录插件开发服务：`npm run dev`
-2. 启动 Treasure 主程序：`npm run tauri dev`
-3. 打开 Treasure 的插件管理页面
-4. 使用调试入口输入插件地址，例如：`http://localhost:5173`
-5. 在侧边栏或调试标签页中验证 iframe 加载、编辑器渲染、SDK 通信
-
-调试模式不会安装插件，也不会写入正式插件表，适合开发阶段快速联调。
-
-## 打包
-
-```bash
-npm run build
+# 构建和生成插件目录包
 npm run build:plugin
 ```
 
-输出目录：
+独立模式用于调试界面和常规逻辑；涉及真实目录、附件、导出、原生菜单或设置时，应在 Treasure 中通过调试入口或导入包完成联调。完整流程见 [插件研发指南](../docs/PLUGIN-DEVELOPMENT-GUIDE.md)。
 
-```text
-build-output/shi-yu-lu.treasure-plugin/
-```
+## 关联文档
 
-该目录就是 Treasure 平台导入时选择的插件目录。
-
-## 导入到 Treasure
-
-1. 打开 Treasure 插件管理页面
-2. 点击导入
-3. 选择 `build-output/shi-yu-lu.treasure-plugin/`
-4. 导入成功后侧边栏出现「石玉录」菜单
-5. 首次进入时按提示选择笔记文件存储目录
-
-## manifest 配置
-
-当前插件编码：`shi-yu-lu`
-
-插件菜单：`石玉录`
-
-配置项：
-
-- `文件存储目录`：选择 Markdown 文件保存目录
-- `插件菜单`：控制菜单显示/隐藏
-
-## SDK 使用约定
-
-代码中统一使用 `@sdk` 别名引用 SDK：
-
-```ts
-import { initTreasure, getTreasure } from '@sdk/treasure';
-```
-
-不要使用 `../sdk/treasure` 这类相对路径，否则在 `src/utils` 等子目录中会解析到错误位置。
-
-## 文件操作
-
-石玉录不直接调用 Tauri API，而是通过 SDK 调用宿主能力：
-
-```ts
-const api = getTreasure();
-
-const content = await api.readFile(path);
-await api.writeFile(path, content);
-await api.mkdir(path);
-await api.deleteFile(path);
-const dir = await api.selectDirectory('选择文件存储目录');
-```
-
-## 配置读写
-
-```ts
-const api = getTreasure();
-
-const settings = await api.getSettings();
-await api.saveSetting(settings.data);
-```
-
-## 生命周期脚本
-
-- `scripts/init.sql`：当前版本预留，无需建表
-- `scripts/destroy.sql`：当前版本预留，无自建表需清理
-
-后续如增加插件自建表，表名必须以 `plugin_shi_yu_lu_` 开头。
-
-## 常见问题
-
-### Failed to resolve import "../sdk/treasure"
-
-原因是相对路径层级错误。已配置 `@sdk` 别名，应统一改为：
-
-```ts
-import { getTreasure } from '@sdk/treasure';
-```
-
-### 导入后 iframe 404
-
-请确认已执行：
-
-```bash
-npm run build
-npm run build:plugin
-```
-
-并导入 `build-output/shi-yu-lu.treasure-plugin/`。插件包根目录必须直接包含 `index.html`。
-
-### 修改后平台没有更新
-
-开发阶段请使用调试入口加载 `http://localhost:5173`。正式导入模式需要重新打包并重新导入插件。
+- [插件研发指南](../docs/PLUGIN-DEVELOPMENT-GUIDE.md)
+- [Treasure 宿主视觉参考](../docs/TREASURE-HOST-DESIGN.md)
+- [SDK API 参考](https://github.com/Luzenrocy/treasure-sdk/blob/main/docs/API-REFERENCE.md)
