@@ -4,6 +4,16 @@ on:
   push:
     tags:
       - 'plugin/**/v*'
+  workflow_dispatch:
+    inputs:
+      plugin:
+        description: '插件目录，例如 shi-yu-lu'
+        required: true
+        type: string
+      version:
+        description: '发布版本，例如 1.0.1'
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -18,13 +28,27 @@ jobs:
       - name: Parse release tag
         id: meta
         shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_PLUGIN: ${{ inputs.plugin }}
+          INPUT_VERSION: ${{ inputs.version }}
         run: |
-          tag="${GITHUB_REF_NAME#plugin/}"
-          plugin="${tag%/v*}"
-          version="${tag##*/v}"
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            plugin="$INPUT_PLUGIN"
+            version="$INPUT_VERSION"
+          else
+            tag="${GITHUB_REF_NAME#plugin/}"
+            plugin="${tag%/v*}"
+            version="${tag##*/v}"
+          fi
 
           if [ -z "$plugin" ] || [ -z "$version" ]; then
             echo "Invalid plugin release tag: $GITHUB_REF_NAME"
+            exit 1
+          fi
+
+          if [[ ! "$plugin" =~ ^[a-z][a-z0-9-]*$ ]]; then
+            echo "Invalid plugin directory: $plugin"
             exit 1
           fi
 
@@ -70,6 +94,19 @@ jobs:
         working-directory: ${{ steps.meta.outputs.plugin }}
         run: npm run build:plugin:zip
 
+      - name: Package plugin source
+        env:
+          PLUGIN: ${{ steps.meta.outputs.plugin }}
+          VERSION: ${{ steps.meta.outputs.version }}
+        run: |
+          source_zip="${PLUGIN}/build-output/${PLUGIN}-source-v${VERSION}.zip"
+          git archive \
+            --format=zip \
+            --output="$source_zip" \
+            --prefix="${PLUGIN}-${VERSION}/" \
+            "$GITHUB_SHA" \
+            "$PLUGIN"
+
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -79,6 +116,7 @@ jobs:
           tag="plugin/${PLUGIN}/v${VERSION}"
           gh release create "$tag" \
             "${PLUGIN}/build-output/${PLUGIN}.zip" \
+            "${PLUGIN}/build-output/${PLUGIN}-source-v${VERSION}.zip" \
             --title "${PLUGIN} v${VERSION}" \
             --generate-notes \
             --target "$GITHUB_SHA"
