@@ -84,7 +84,7 @@ treasure-plugins/
 ## 研发规范
 
 - 新插件优先使用 `npx treasure-sdk create <plugin-code>` 创建。`npx` 会按需执行 CLI，生成项目默认会安装其 `package.json` 中声明的 `treasure-sdk`；插件编码必须使用 kebab-case。
-- `manifest.json`、入口页的 `treasure-plugin-code` 和构建产物必须使用同一插件编码。
+- `manifest.json` 与入口页的 `treasure-plugin-code` 必须使用同一插件编码；构建产物使用项目目录名作为发布包名，生成 `build-output/<package-name>/` 与 `<package-name>.zip`。
 - 插件只通过 SDK 访问数据、文件、设置、对话框和菜单；不得直接依赖 Treasure 宿主源码或 Tauri API。
 - SQL 使用裸表名，并在每条语句中完整声明涉及表；不得使用平台表、手写插件前缀或高风险 DDL。
 - 插件色彩可以具备独立产品性格，但需尊重宿主的暖米、紫罗兰与暖金层级，并在各自 README 中记录自己的色彩角色。

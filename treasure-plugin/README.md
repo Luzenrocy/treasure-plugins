@@ -2,7 +2,7 @@
 
 > Treasure 插件最小参考实现，也是 `treasure-sdk create` 生成项目的结构基线。
 
-该目录不是面向最终用户发布的业务工具。它展示一个插件从 manifest、SDK 初始化、文件能力调用到 `.treasure-plugin` 打包的最小闭环，供新插件复制和二次开发。
+该目录不是面向最终用户发布的业务工具。它展示一个插件从 manifest、SDK 初始化、文件能力调用到目录包与 ZIP 打包的最小闭环，供新插件复制和二次开发。
 
 ## 适用场景
 
@@ -42,7 +42,12 @@ npm run dev
 
 # 生成可导入的目录包
 npm run build:plugin
+
+# 同时生成可导入的 ZIP 包
+npm run build:plugin:zip
 ```
+
+打包输出使用项目目录名：`build-output/treasure-plugin/` 与 `build-output/treasure-plugin.zip`。复制该脚手架并重命名目录后，输出名称会随目录名变化；插件身份仍以 `manifest.json` 的 `name` 为准。
 
 开始新插件时，推荐使用：
 

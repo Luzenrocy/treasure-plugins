@@ -32,22 +32,17 @@ function slugify(text) {
   return text.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]+/g, '-').replace(/^-|-$/g, '').replace(/[\u4e00-\u9fa5]/g, '');
 }
 function freezePluginCode(manifestPath, root) {
-  const raw = readFileSync(manifestPath, 'utf-8');
-  const manifest = JSON.parse(raw);
+  const manifest = JSON.parse(readFileSync(manifestPath, 'utf-8'));
   if (manifest._frozen) return manifest;
-  let slug = '';
-  if (manifest.alias) slug = slugify(manifest.alias);
+  let slug = manifest.alias ? slugify(manifest.alias) : '';
   if (!slug) slug = slugify(basename(root));
   if (!slug) slug = 'plugin';
-  const suffix = generateRandomSuffix(6);
-  const frozenName = `${slug}-${suffix}`;
-  manifest.name = frozenName;
+  manifest.name = `${slug}-${generateRandomSuffix(6)}`;
   manifest._frozen = true;
   writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
-  console.log(`❄️  plugin_code 已冻结并写回源文件: ${frozenName}`);
+  console.log(`❄️  plugin_code 已冻结并写回源文件: ${manifest.name}`);
   return manifest;
 }
-
 /** 同步源码 index.html 的 treasure-plugin-code 与 manifest.name 一致 */
 function syncPluginCodeInHtml(root, pluginName) {
   const htmlPath = join(root, 'index.html');
@@ -71,14 +66,16 @@ if (!existsSync(manifestPath)) { console.error('❌ manifest.json not found'); p
 
 const frozenManifest = freezePluginCode(manifestPath, root);
 const pluginName = frozenManifest.name;
+const packageName = basename(root);
 // 同步源码 index.html 的 plugin-code
 syncPluginCodeInHtml(root, pluginName);
 if (!pluginName) { console.error('❌ manifest.name is required'); process.exit(1); }
 if (!/^[a-z][a-z0-9-]*$/.test(pluginName)) { console.error('❌ manifest.name 必须为 kebab-case'); process.exit(1); }
+if (!/^[a-z][a-z0-9-]*$/.test(packageName)) { console.error('❌ 插件项目目录名必须为 kebab-case，才能作为插件包名'); process.exit(1); }
 
 const buildOutputDir = join(root, 'build-output');
 mkdirSync(buildOutputDir, { recursive: true });
-const outputDir = join(buildOutputDir, `${pluginName}.treasure-plugin`);
+const outputDir = join(buildOutputDir, packageName);
 mkdirSync(outputDir, { recursive: true });
 
 const distDir = join(root, 'dist');
@@ -109,8 +106,8 @@ console.log(`✅ Plugin package created: ${outputDir}`);
 
 if (shouldZip) {
   try {
-    const zipPath = `${outputDir}.zip`;
-    execSync(`zip -r "${zipPath}" "${pluginName}.treasure-plugin"`, { cwd: join(root, 'build-output'), stdio: 'pipe' });
+    const zipPath = join(buildOutputDir, `${packageName}.zip`);
+    execSync(`zip -r "${zipPath}" "${packageName}"`, { cwd: buildOutputDir, stdio: 'pipe' });
     console.log(`✅ Zip package created: ${zipPath}`);
   } catch (e) { console.warn(`⚠️  Zip 打包失败: ${e.message}`); }
 }

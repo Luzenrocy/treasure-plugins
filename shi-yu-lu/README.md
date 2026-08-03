@@ -70,7 +70,12 @@ npm run dev
 
 # 构建和生成插件目录包
 npm run build:plugin
+
+# 同时生成 ZIP 安装包
+npm run build:plugin:zip
 ```
+
+打包产物为 `build-output/shi-yu-lu/` 和 `build-output/shi-yu-lu.zip`。
 
 独立模式用于调试界面和常规逻辑；涉及真实目录、附件、导出、原生菜单或设置时，应在 Treasure 中通过调试入口或导入包完成联调。完整流程见 [插件研发指南](../docs/PLUGIN-DEVELOPMENT-GUIDE.md)。
 

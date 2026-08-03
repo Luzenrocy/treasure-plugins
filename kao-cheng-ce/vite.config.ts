@@ -10,18 +10,11 @@ function generateRandomSuffix(length = 6) {
   const chars = '0123456789abcdefghijklmnopqrstuvwxyz';
   const bytes = randomBytes(length);
   let result = '';
-  for (let i = 0; i < length; i++) {
-    result += chars[bytes[i] % 36];
-  }
+  for (let i = 0; i < length; i++) result += chars[bytes[i] % 36];
   return result;
 }
-
 function slugify(text: string) {
-  return text
-    .toLowerCase()
-    .replace(/[^a-z0-9\u4e00-\u9fa5]+/g, '-')
-    .replace(/^-|-$/g, '')
-    .replace(/[\u4e00-\u9fa5]/g, '');
+  return text.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]+/g, '-').replace(/^-|-$/g, '').replace(/[\u4e00-\u9fa5]/g, '');
 }
 
 function treasureDevEndpoints(): any {
@@ -51,19 +44,16 @@ function treasureDevEndpoints(): any {
         const manifest = JSON.parse(raw);
 
         if (!manifest._frozen) {
-          let slug = '';
-          if (manifest.alias) slug = slugify(manifest.alias);
+          let slug = manifest.alias ? slugify(manifest.alias) : '';
           if (!slug) slug = slugify(basename(root));
           if (!slug) slug = 'plugin';
-          const suffix = generateRandomSuffix(6);
-          const frozenName = `${slug}-${suffix}`;
+          const frozenName = `${slug}-${generateRandomSuffix(6)}`;
           manifest.name = frozenName;
           manifest._frozen = true;
           writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
           console.log(`❄️  plugin_code 已冻结: ${frozenName}`);
           syncHtmlPluginCode(frozenName);
         } else {
-          // 已冻结：确保 index.html 与 manifest 一致
           syncHtmlPluginCode(manifest.name);
         }
       }

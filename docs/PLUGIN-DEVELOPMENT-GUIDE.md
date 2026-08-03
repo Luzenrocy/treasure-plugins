@@ -109,7 +109,9 @@ npm run build:plugin
 npm run build:plugin:zip
 ```
 
-`build-output/<plugin>.treasure-plugin/` 是可导入 Treasure 的目录包。包根目录必须直接包含 `index.html`、静态资源、`manifest.json` 和 `scripts/`。
+打包以插件项目目录名作为**发布包名**：`build-output/<package-name>/` 是目录包，`build-output/<package-name>.zip` 是可导入 Treasure 的 ZIP 包。例如 `shi-yu-lu` 项目会生成 `build-output/shi-yu-lu/` 和 `build-output/shi-yu-lu.zip`。包根目录必须直接包含 `index.html`、静态资源、`manifest.json` 和 `scripts/`。
+
+发布包名只用于分发和文件管理；Treasure 的插件身份仍由 `manifest.json` 中的 `name` 与入口页的 `treasure-plugin-code` 决定，两者必须一致。首次开发或打包时，脚手架会按既有规则为插件身份生成并固定随机后缀，以避免不同开发者的插件编码冲突；该身份生成机制不影响发布包名。
 
 ### 发布检查清单
 
