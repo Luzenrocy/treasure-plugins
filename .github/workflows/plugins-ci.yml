@@ -1,0 +1,85 @@
+name: Plugins CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.plugins.outputs.matrix }}
+      has_plugins: ${{ steps.plugins.outputs.has_plugins }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - id: plugins
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BEFORE_SHA: ${{ github.event.before }}
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            matrix=$(node scripts/list-plugins.mjs --all)
+          elif [ "$EVENT_NAME" = "pull_request" ]; then
+            matrix=$(node scripts/list-plugins.mjs --from "origin/$BASE_REF" --to HEAD)
+          elif [ "$BEFORE_SHA" = "0000000000000000000000000000000000000000" ]; then
+            matrix=$(node scripts/list-plugins.mjs --all)
+          else
+            matrix=$(node scripts/list-plugins.mjs --from "$BEFORE_SHA" --to "$GITHUB_SHA")
+          fi
+
+          has_plugins=$(node -e 'process.stdout.write(String(JSON.parse(process.argv[1]).plugin.length > 0))' "$matrix")
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+          echo "has_plugins=$has_plugins" >> "$GITHUB_OUTPUT"
+          echo "Selected plugins: $matrix"
+
+  build:
+    needs: discover
+    if: ${{ needs.discover.outputs.has_plugins == 'true' }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix: ${{ fromJSON(needs.discover.outputs.matrix) }}
+
+    name: Build ${{ matrix.plugin }}
+
+    defaults:
+      run:
+        working-directory: ${{ matrix.plugin }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: ${{ matrix.plugin }}/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build plugin package
+        run: npm run build:plugin:zip
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.plugin }}
+          path: |
+            ${{ matrix.plugin }}/build-output/*.zip
+            ${{ matrix.plugin }}/build-output/${{ matrix.plugin }}/
+          if-no-files-found: error

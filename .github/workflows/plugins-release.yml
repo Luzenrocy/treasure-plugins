@@ -1,0 +1,84 @@
+name: Release Plugin
+
+on:
+  push:
+    tags:
+      - 'plugin/**/v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Parse release tag
+        id: meta
+        shell: bash
+        run: |
+          tag="${GITHUB_REF_NAME#plugin/}"
+          plugin="${tag%/v*}"
+          version="${tag##*/v}"
+
+          if [ -z "$plugin" ] || [ -z "$version" ]; then
+            echo "Invalid plugin release tag: $GITHUB_REF_NAME"
+            exit 1
+          fi
+
+          echo "plugin=$plugin" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Validate plugin metadata
+        env:
+          PLUGIN: ${{ steps.meta.outputs.plugin }}
+          RELEASE_VERSION: ${{ steps.meta.outputs.version }}
+        run: |
+          if [ ! -f "$PLUGIN/package.json" ] || [ ! -f "$PLUGIN/manifest.json" ]; then
+            echo "Plugin directory does not exist: $PLUGIN"
+            exit 1
+          fi
+
+          node <<'NODE'
+          const fs = require('fs');
+          const path = process.env.PLUGIN;
+          const manifest = JSON.parse(fs.readFileSync(`${path}/manifest.json`, 'utf8'));
+
+          if (manifest.publish === false) {
+            throw new Error(`${path} is marked publish: false`);
+          }
+          if (manifest.version !== process.env.RELEASE_VERSION) {
+            throw new Error(
+              `Version mismatch: manifest=${manifest.version}, tag=${process.env.RELEASE_VERSION}`,
+            );
+          }
+          NODE
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: ${{ steps.meta.outputs.plugin }}/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ${{ steps.meta.outputs.plugin }}
+        run: npm ci
+
+      - name: Build release package
+        working-directory: ${{ steps.meta.outputs.plugin }}
+        run: npm run build:plugin:zip
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PLUGIN: ${{ steps.meta.outputs.plugin }}
+          VERSION: ${{ steps.meta.outputs.version }}
+        run: |
+          tag="plugin/${PLUGIN}/v${VERSION}"
+          gh release create "$tag" \
+            "${PLUGIN}/build-output/${PLUGIN}.zip" \
+            --title "${PLUGIN} v${VERSION}" \
+            --generate-notes \
+            --target "$GITHUB_SHA"

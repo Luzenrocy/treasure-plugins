@@ -3,6 +3,7 @@
   "alias": "我的插件",
   "version": "1.0.0",
   "description": "插件描述",
+  "publish": false,
   "author": "作者名",
   "icon": "icon.svg",
   "entry": "index.html",
