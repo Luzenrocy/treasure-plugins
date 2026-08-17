@@ -88,7 +88,7 @@
     <div v-if="exporting" class="export-mask">
       <div class="export-panel">
         <el-icon class="export-loading"><Loading /></el-icon>
-        <span class="export-text">{{ exportingType === 'pdf' ? '正在导出 PDF' : '正在导出图片' }}，请稍候...</span>
+        <span class="export-text">{{ getExportStatus() }}</span>
       </div>
     </div>
   </div>
@@ -99,24 +99,18 @@ import { defineComponent } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import Cherry from 'cherry-markdown';
 import 'cherry-markdown/dist/cherry-markdown.css';
-import { getTreasure, file, setting } from 'treasure-sdk';
+import { files, logs, menus } from 'treasure-sdk';
 import { scanMarkdownDirectory, type FileEntry } from './utils/fileScanner';
-import { readAssetAsObjectUrl, revokeAssetObjectUrls, saveAssetForMarkdown } from './utils/assetStorage';
+import { workspace } from './utils/workspace';
+import { resolveContextPath } from './utils/contextMenu';
+import { clearAssetPreviewCache, readAssetAsObjectUrl, saveAssetForMarkdown } from './utils/assetStorage';
+import { createAssetUrlProcessor } from './utils/assetUrlProcessor';
+import { replaceRenderedAssetImages } from './utils/assetPreviewFallback';
 import { cleanupAssetsBeforeMarkdownDelete, cleanupRemovedAssets } from './utils/assetCleanup';
 import { addAssetRef, loadAssetIndex, rebuildAssetIndex, type RebuildProgress, type RebuildSignal } from './utils/assetIndex';
-
-/** 将 Blob 转为 base64 字符串，用于通过 bridge writeBinaryFile 保存 */
-function blobToBase64(blob: Blob): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      const result = reader.result as string;
-      resolve(result.split(',')[1]);
-    };
-    reader.onerror = () => reject(new Error('Blob 转 base64 失败'));
-    reader.readAsDataURL(blob);
-  });
-}
+import { exportStatus, exportStageAfterSave } from './utils/exportStatus';
+import { calculatePageSlices, measuredBlockStarts } from './utils/exportPagination';
+import { canvasSlice } from './utils/exportCanvasSlices';
 
 export default defineComponent({
   name: 'App',
@@ -129,6 +123,7 @@ export default defineComponent({
       cherryInstance: null as Cherry | null,
       autoSaveTimer: null as number | null,
       saveDebounceTimer: null as number | null,
+      assetPreviewRefreshTimer: null as number | null,
       isDirty: false,
       isSidebarOpen: true,
       dirPath: '',
@@ -142,10 +137,12 @@ editorMode: 'edit&preview' as 'edit&preview' | 'editOnly' | 'previewOnly',
       modeMenu: { visible: false, x: 0, y: 0 },
       exporting: false,
       exportingType: '' as 'pdf' | 'img' | '',
+      exportStage: '',
       menuRegistered: false,
       modeMenuId: 'shi-yu-lu-view',
       exportMenuId: 'shi-yu-lu-export',
       closeFileMenuId: 'shi-yu-lu-close-file',
+      assetPreviewFailureKey: '',
       modeItems: [
         { id: 'edit&preview', labelCN: '双栏编辑', labelEN: 'Split' },
         { id: 'editOnly', labelCN: '纯编辑', labelEN: 'Edit Only' },
@@ -194,10 +191,25 @@ editorMode: 'edit&preview' as 'edit&preview' | 'editOnly' | 'previewOnly',
     if (this.isDirty) this.saveFile();
     if (this.autoSaveTimer) clearInterval(this.autoSaveTimer);
     if (this.saveDebounceTimer) clearTimeout(this.saveDebounceTimer);
-    revokeAssetObjectUrls();
+    if (this.assetPreviewRefreshTimer) clearTimeout(this.assetPreviewRefreshTimer);
+    clearAssetPreviewCache();
     if (this.cherryInstance) this.cherryInstance.destroy();
   },
   methods: {
+    reportAssetPreviewDiagnostic(level: 'debug' | 'error', stage: string, details: Record<string, unknown>) {
+      const event = { stage, filePath: this.filePath, ...details };
+      (level === 'error' ? console.error : console.debug)('[asset-preview]', event);
+      if (level === 'error' || import.meta.env.DEV) {
+        void logs.write({ level, category: 'asset-preview', message: stage, details: event }).catch(() => undefined);
+      }
+      if (level === 'error') {
+        const key = `${stage}:${String(details.url || '')}`;
+        if (this.assetPreviewFailureKey !== key) {
+          this.assetPreviewFailureKey = key;
+          ElMessage.error(`图片预览失败（${stage}），请查看宿主日志`);
+        }
+      }
+    },
     toggleSidebar() { this.isSidebarOpen = !this.isSidebarOpen; },
     async ensureAssetIndex(): Promise<boolean> {
       if (!this.dirPath) return false;
@@ -254,7 +266,7 @@ editorMode: 'edit&preview' as 'edit&preview' | 'editOnly' | 'previewOnly',
     async handleNodeClick(data: FileEntry, node: any) {
       if (!data.isDirectory) {
         if (this.isDirty) await this.saveFile();
-        revokeAssetObjectUrls();
+        clearAssetPreviewCache();
         this.filePath = data.path;
         await this.loadFile();
       } else {
@@ -264,15 +276,16 @@ editorMode: 'edit&preview' as 'edit&preview' | 'editOnly' | 'previewOnly',
     async loadFile() {
       if (!this.cherryInstance) this.loading = true;
       try {
-        const db = getTreasure();
-        this.fileContent = await db.readFile(this.filePath);
+        const content = await workspace.readText(this.filePath);
+        if (content === null) throw new Error('文件引用已失效或没有访问权限');
+        this.fileContent = content;
         this.loading = false;
         if (this.cherryInstance) {
           this.$nextTick(() => {
             if (this.cherryInstance) {
               this.cherryInstance.setMarkdown(this.fileContent);
               this.cherryInstance.switchModel(this.editorMode); // 切换文件时保持用户上次选择的编辑模式
-              this.scheduleAssetPreviewRefresh();
+              this.scheduleAssetPreviewFallback();
               window.dispatchEvent(new Event('resize'));
             }
           });
@@ -284,23 +297,21 @@ editorMode: 'edit&preview' as 'edit&preview' | 'editOnly' | 'previewOnly',
         this.error = `无法加载文件: ${err.message || '未知错误'}`;
       }
     },
-    async refreshAssetPreviews() {
+    async refreshAssetPreviewFallback() {
       const container = document.getElementById('cherry-markdown-container');
       if (!container || !this.filePath) return;
-      const images = Array.from(container.querySelectorAll<HTMLImageElement>('img'));
-      for (const image of images) {
-        const originalSrc = image.getAttribute('data-asset-src') || image.getAttribute('src') || '';
-        if (!originalSrc || originalSrc.startsWith('blob:') || originalSrc.startsWith('data:')) continue;
-        const objectUrl = await readAssetAsObjectUrl(this.dirPath, this.filePath, originalSrc);
-        if (!objectUrl) continue;
-        image.setAttribute('data-asset-src', originalSrc);
-        image.src = objectUrl;
-      }
+      await replaceRenderedAssetImages(
+        Array.from(container.querySelectorAll<HTMLImageElement>('img')),
+        (url) => readAssetAsObjectUrl(this.dirPath, this.filePath, url),
+      );
     },
-    scheduleAssetPreviewRefresh() {
-      this.$nextTick(() => {
-        setTimeout(() => this.refreshAssetPreviews(), 0);
-      });
+    scheduleAssetPreviewFallback() {
+      if (this.assetPreviewRefreshTimer) clearTimeout(this.assetPreviewRefreshTimer);
+      // Cherry debounces asynchronous URL callback re-rendering for one second.
+      this.assetPreviewRefreshTimer = window.setTimeout(() => {
+        this.assetPreviewRefreshTimer = null;
+        void this.refreshAssetPreviewFallback();
+      }, 1100);
     },
     scheduleSave() {
       if (this.saveDebounceTimer) clearTimeout(this.saveDebounceTimer);
@@ -314,27 +325,20 @@ editorMode: 'edit&preview' as 'edit&preview' | 'editOnly' | 'previewOnly',
       this.cherryInstance = new Cherry({
         id: 'cherry-markdown-container',
         value: this.fileContent,
-        editor: { defaultModel: this.editorMode, contextMenu: false }, // 禁用 Cherry 内置右键菜单（含下载按钮）
-        engine: {
-          global: {
-            urlProcessor: (url: string, srcType: string, callback?: (url: string) => void) => {
-              if (srcType !== 'image') return url;
-              readAssetAsObjectUrl(this.dirPath, this.filePath, url).then(objectUrl => {
-                if (objectUrl && callback) callback(objectUrl);
-              });
-              return url;
-            },
-          },
-        },
+        editor: { defaultModel: this.editorMode, contextMenu: false } as any, // Cherry 类型未声明 contextMenu
         toolbars: { theme: 'light', toolbar: ['bold', 'italic', 'strikethrough', '|', 'header', 'list', 'quote', 'table', '|', 'link', 'image', 'code', 'codeTheme', '|', 'undo', 'redo'] },
         callback: {
+          urlProcessor: createAssetUrlProcessor(
+            (url) => readAssetAsObjectUrl(this.dirPath, this.filePath, url),
+            (level, stage, details) => this.reportAssetPreviewDiagnostic(level, stage, details),
+          ),
           fileUpload: async (source: File, callback: (url: string, options?: { name?: string }) => void) => {
             try {
               const asset = await saveAssetForMarkdown(this.dirPath, this.filePath, source);
               await addAssetRef(this.dirPath, asset.path, this.filePath);
               callback(asset.markdownUrl, { name: source.name });
               setTimeout(() => {
-                this.scheduleAssetPreviewRefresh();
+                this.scheduleAssetPreviewFallback();
                 this.saveFile();
               }, 0);
             } catch (e: any) {
@@ -346,10 +350,9 @@ editorMode: 'edit&preview' as 'edit&preview' | 'editOnly' | 'previewOnly',
               this.isDirty = true;
               this.scheduleSave();
             }
-            this.scheduleAssetPreviewRefresh();
+            this.scheduleAssetPreviewFallback();
           },
-          afterInit: () => this.scheduleAssetPreviewRefresh(),
-          afterAsyncRender: () => this.scheduleAssetPreviewRefresh(),
+          afterInit: () => this.scheduleAssetPreviewFallback(),
         },
       });
       this.autoSaveTimer = window.setInterval(() => { if (this.isDirty) this.saveFile(); }, 30000);
@@ -359,8 +362,9 @@ editorMode: 'edit&preview' as 'edit&preview' | 'editOnly' | 'previewOnly',
       try {
         const oldContent = this.fileContent;
         const content = this.cherryInstance.getMarkdown();
-        const db = getTreasure();
-        await db.writeFile(this.filePath, content);
+        const slash = this.filePath.lastIndexOf('/');
+        const saved = await workspace.writeText(slash < 0 ? '' : this.filePath.slice(0, slash), slash < 0 ? this.filePath : this.filePath.slice(slash + 1), content);
+        if (!saved) throw new Error('文件引用已失效或没有写入权限');
         try {
           await cleanupRemovedAssets(this.dirPath, this.filePath, oldContent, content);
         } catch (e: any) {
@@ -374,23 +378,13 @@ editorMode: 'edit&preview' as 'edit&preview' | 'editOnly' | 'previewOnly',
     },
     async checkAndSetDirectory(): Promise<boolean> {
       try {
-        const res = await setting.getByKey('storage_dir');
-        if (res.code === 1 && res.data?.param_value) {
-          this.dirPath = res.data.param_value;
+        if (await workspace.restore()) {
+          this.dirPath = workspace.getRoot()?.name || '工作目录';
           await this.loadDirectoryStructure();
           return true;
         }
-
-        const selected = await getTreasure().selectDirectory('请选择石玉录文件存储目录');
-        if (!selected) return false;
-
-        const saveRes = await setting.saveByKey('storage_dir', selected);
-        if (saveRes.code !== 1) {
-          ElMessage.error('保存目录设置失败：' + (saveRes.msg || '未知错误'));
-          return false;
-        }
-
-        this.dirPath = selected;
+        if (!await workspace.choose()) return false;
+        this.dirPath = workspace.getRoot()?.name || '工作目录';
         await this.loadDirectoryStructure();
         return true;
       } catch (e: any) {
@@ -400,172 +394,63 @@ editorMode: 'edit&preview' as 'edit&preview' | 'editOnly' | 'previewOnly',
     },
     handleContextMenu(event: MouseEvent, data: any) {
       this.contextMenu.data = data || null;
-      this.contextMenu.path = data ? data.path : this.dirPath;
+      // The workspace root is represented by an empty relative path. `dirPath`
+      // is only a display label and must never be sent to the SDK as a path.
+      this.contextMenu.path = resolveContextPath(data, '');
       this.contextMenu.x = event.clientX;
       this.contextMenu.y = event.clientY;
       this.contextMenu.visible = true;
     },
     closeContextMenu() { this.contextMenu.visible = false; },
-    async exportAsPdf(fileName: string) {
-      const filePath = await getTreasure().saveDialog({
-        defaultPath: `${fileName}.pdf`,
-        filters: [{ name: 'PDF 文件', extensions: ['pdf'] }],
-      });
-      if (!filePath) return;
-
-      this.exporting = true;
-      this.exportingType = 'pdf';
-
-      const previewer = document.querySelector('.cherry-previewer') as HTMLElement | null;
-      if (!previewer) { ElMessage.error('预览区域未就绪，无法导出 PDF'); return; }
-
+    async renderLocally(previewer: HTMLElement, type: 'pdf' | 'img'): Promise<Uint8Array> {
       const clone = previewer.cloneNode(true) as HTMLElement;
       clone.className = clone.className.replace('cherry-previewer--hidden', '');
-      clone.style.width = '210mm';
-      clone.style.height = 'auto';
-      clone.style.maxHeight = 'none';
-      clone.querySelectorAll('mjx-assistive-mml').forEach(el => {
-        if (el instanceof HTMLElement) el.style.visibility = 'hidden';
-      });
-      clone.innerHTML = clone.innerHTML
-        .replace(/class="cherry-code-unExpand("| )/g, 'class="cherry-code-expand$1')
-        .replace(/<audio [^>]+?>([^\n]*?)<\/audio>/g, '$1')
-        .replace(/<video [^>]+?>([^\n]*?)<\/video>/g, '$1');
-
+      const previewStyle = getComputedStyle(previewer);
+      clone.style.cssText += ';width:210mm;height:auto;max-height:none';
+      clone.style.backgroundColor = previewStyle.backgroundColor === 'rgba(0, 0, 0, 0)' ? '#ffffff' : previewStyle.backgroundColor;
+      clone.style.color = previewStyle.color;
+      clone.style.font = previewStyle.font;
+      clone.style.lineHeight = previewStyle.lineHeight;
       const wrapper = document.createElement('div');
       wrapper.className = 'cherry-export-wrapper';
       const cherryParent = previewer.closest('.cherry');
-      if (cherryParent) wrapper.className += ' ' + cherryParent.className;
-      wrapper.appendChild(clone);
-      document.body.appendChild(wrapper);
-
-      const htmlEl = document.documentElement;
-      const hadExportOnly = htmlEl.classList.contains('cherry-export-only');
-      if (!hadExportOnly) htmlEl.classList.add('cherry-export-only');
-      const bodyOverflow = document.body.style.overflow;
-      document.body.style.overflow = 'visible';
-
-      try {
-        const [html2canvasModule, jsPDFModule] = await Promise.all([
-          import('html2canvas'),
-          import('jspdf'),
-        ]);
-        const html2canvas = html2canvasModule.default;
-        const { jsPDF } = jsPDFModule;
-
-        // 单次渲染整个文档（scale 1.5，比原来 scale 2 减少 ~44% 像素量）
-        const canvas = await html2canvas(clone, {
-          scale: 1.5,
-          useCORS: true,
-          allowTaint: true,
-          scrollY: 0,
-          scrollX: 0,
-          logging: false,
-          backgroundColor: '#ffffff',
-        });
-
-        // Canvas 分片写入 PDF
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        const pdfW = pdf.internal.pageSize.getWidth();
-        const pdfH = pdf.internal.pageSize.getHeight();
-        const aspectRatio = pdfH / pdfW;
-        const pageH = Math.round(canvas.width * aspectRatio);
-        const totalPages = Math.ceil(canvas.height / pageH);
-
-        for (let i = 0; i < totalPages; i++) {
-          const sy = i * pageH;
-          const sh = Math.min(pageH, canvas.height - sy);
-          const pageCanvas = document.createElement('canvas');
-          pageCanvas.width = canvas.width;
-          pageCanvas.height = sh;
-          pageCanvas.getContext('2d')!.drawImage(
-            canvas, 0, sy, canvas.width, sh,
-            0, 0, canvas.width, sh,
-          );
-
-          const imgData = pageCanvas.toDataURL('image/jpeg', 0.95);
-          if (i > 0) pdf.addPage();
-          pdf.addImage(imgData, 'JPEG', 0, 0, pdfW, pdfH * (sh / pageH));
+      if (cherryParent) {
+        wrapper.className += ` ${cherryParent.className}`;
+        wrapper.style.cssText = cherryParent.getAttribute('style') || '';
+        const parentStyle = getComputedStyle(cherryParent);
+        for (const property of Array.from(parentStyle)) {
+          if (property.startsWith('--')) wrapper.style.setProperty(property, parentStyle.getPropertyValue(property));
         }
-
-        const blob = pdf.output('blob');
-        const base64 = await blobToBase64(blob);
-        await getTreasure().writeBinaryFile(filePath, base64);
-        ElMessage.success(`PDF 已保存`);
-      } catch (e: any) {
-        console.error('PDF export failed:', e);
-        ElMessage.error(e.message || 'PDF 导出失败');
-      } finally {
-        this.exporting = false;
-        this.exportingType = '';
-        if (!hadExportOnly) htmlEl.classList.remove('cherry-export-only');
-        document.body.style.overflow = bodyOverflow;
-        wrapper.remove();
       }
-    },
-async exportAsImage(fileName: string) {
-      const filePath = await getTreasure().saveDialog({
-        defaultPath: `${fileName}.png`,
-        filters: [{ name: 'PNG 图片', extensions: ['png'] }],
-      });
-      if (!filePath) return;
-
-      this.exporting = true;
-      this.exportingType = 'img';
-
-      const previewer = document.querySelector('.cherry-previewer') as HTMLElement | null;
-      if (!previewer) { ElMessage.error('预览区域未就绪，无法导出图片'); return; }
-
-      const clone = previewer.cloneNode(true) as HTMLElement;
-      clone.className = clone.className.replace('cherry-previewer--hidden', '');
-      clone.style.width = '210mm';
-      clone.style.height = 'auto';
-      clone.style.maxHeight = 'none';
-      clone.querySelectorAll('mjx-assistive-mml').forEach(el => {
-        if (el instanceof HTMLElement) el.style.visibility = 'hidden';
-      });
-      clone.innerHTML = clone.innerHTML
-        .replace(/class="cherry-code-unExpand("| )/g, 'class="cherry-code-expand$1')
-        .replace(/<audio [^>]+?>([^\n]*?)<\/audio>/g, '$1')
-        .replace(/<video [^>]+?>([^\n]*?)<\/video>/g, '$1');
-
-      const wrapper = document.createElement('div');
-      wrapper.className = 'cherry-export-wrapper';
-      const cherryParent = previewer.closest('.cherry');
-      if (cherryParent) wrapper.className += ' ' + cherryParent.className;
-      wrapper.appendChild(clone);
-      document.body.appendChild(wrapper);
-
-      const htmlEl = document.documentElement;
-      const hadExportOnly = htmlEl.classList.contains('cherry-export-only');
-      if (!hadExportOnly) htmlEl.classList.add('cherry-export-only');
-      const bodyOverflow = document.body.style.overflow;
-      document.body.style.overflow = 'visible';
-
+      wrapper.appendChild(clone); document.body.appendChild(wrapper);
       try {
         const html2canvas = (await import('html2canvas')).default;
-        const canvas = await html2canvas(clone, {
-          scale: 2,
-          useCORS: true,
-          allowTaint: true,
-          scrollY: 0,
-          scrollX: 0,
-          logging: false,
-          backgroundColor: '#ffffff',
-        });
-        const base64 = canvas.toDataURL('image/png').split(',')[1];
-        await getTreasure().writeBinaryFile(filePath, base64);
-        ElMessage.success(`图片已保存`);
-      } catch (e: any) {
-        console.error('Image export failed:', e);
-        ElMessage.error(e.message || '图片导出失败');
-      } finally {
-        this.exporting = false;
-        this.exportingType = '';
-        if (!hadExportOnly) htmlEl.classList.remove('cherry-export-only');
-        document.body.style.overflow = bodyOverflow;
-        wrapper.remove();
-      }
+        if (type === 'img') {
+          const canvas = await html2canvas(clone, { scale: 2, useCORS: true, allowTaint: true, logging: false, backgroundColor: '#ffffff' });
+          const blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob(value => value ? resolve(value) : reject(new Error('生成图片失败')), 'image/png'));
+          return new Uint8Array(await blob.arrayBuffer());
+        }
+        const { jsPDF } = await import('jspdf'); const pdf = new jsPDF('p', 'mm', 'a4');
+        const pageMargin = 10; const pageWidth = pdf.internal.pageSize.getWidth() - pageMargin * 2; const pageHeightMm = pdf.internal.pageSize.getHeight() - pageMargin * 2;
+        const bounds = clone.getBoundingClientRect();
+        const pageHeightPx = bounds.width * (pageHeightMm / pageWidth);
+        const slices = calculatePageSlices(bounds.height, pageHeightPx, measuredBlockStarts(clone));
+        const pages = slices.length ? slices : [{ top: 0, height: bounds.height }];
+        // Capture once for visual consistency with the current preview, then
+        // crop the resulting bitmap at safe Markdown block boundaries.
+        const documentCanvas = await html2canvas(clone, { scale: 1.5, useCORS: true, allowTaint: true, logging: false, backgroundColor: '#ffffff' });
+        const scale = documentCanvas.width / bounds.width;
+        for (let index = 0; index < pages.length; index++) {
+          const slice = pages[index];
+          this.exportStage = `正在处理第 ${index + 1}/${pages.length} 页…`;
+          const crop = canvasSlice(slice, scale);
+          const pageCanvas = document.createElement('canvas'); pageCanvas.width = documentCanvas.width; pageCanvas.height = crop.height;
+          pageCanvas.getContext('2d')!.drawImage(documentCanvas, 0, crop.top, documentCanvas.width, crop.height, 0, 0, documentCanvas.width, crop.height);
+          if (index > 0) pdf.addPage();
+          pdf.addImage(pageCanvas.toDataURL('image/jpeg', 0.95), 'JPEG', pageMargin, pageMargin, pageWidth, pageHeightMm * (slice.height / pageHeightPx));
+        }
+        return new Uint8Array(await pdf.output('blob').arrayBuffer());
+      } finally { wrapper.remove(); }
     },
     async handleExport(data: FileEntry | null, type: 'pdf' | 'img') {
       console.log('handleExport called', { type, data, hasCherry: !!this.cherryInstance, filePath: this.filePath });
@@ -574,6 +459,7 @@ async exportAsImage(fileName: string) {
       if (!targetPath) { ElMessage.warning('未指定导出文件'); return; }
       this.exporting = true;
       this.exportingType = type;
+      this.exportStage = exportStageAfterSave(false);
       try {
         if (targetPath !== this.filePath || !this.cherryInstance) {
           if (this.isDirty) await this.saveFile();
@@ -584,17 +470,25 @@ async exportAsImage(fileName: string) {
         if (!this.cherryInstance) { ElMessage.warning('编辑器未就绪，无法导出'); return; }
         const rawName = data ? data.name : (targetPath.split('/').pop() || 'export');
         const fileName = rawName.replace(/\.(md|markdown)$/i, '');
-        if (type === 'pdf') {
-          await this.exportAsPdf(fileName);
-        } else {
-          await this.exportAsImage(fileName);
-        }
+        const destination = await files.saveDialog({ title: type === 'pdf' ? '导出 PDF' : '导出图片', defaultFileName: `${fileName}.${type === 'pdf' ? 'pdf' : 'png'}`, filters: [{ name: type === 'pdf' ? 'PDF 文档' : 'PNG 图片', extensions: [type === 'pdf' ? 'pdf' : 'png'] }] });
+        if (!destination.ok) return;
+        const previewer = document.querySelector('.cherry-previewer') as HTMLElement | null;
+        if (!previewer) throw new Error('预览区域未就绪，无法导出');
+        this.exportStage = exportStageAfterSave(true);
+        const rendered = await this.renderLocally(previewer, type);
+        this.exportStage = '正在保存文件…';
+        const output = await files.writeFile({ file: destination.value, data: rendered });
+        if (!output.ok) throw new Error(output.error.message);
+        this.exportStage = type === 'pdf' ? 'PDF 导出完成' : '图片导出完成';
+        ElMessage.success(`${type === 'pdf' ? 'PDF' : '图片'} 已保存`);
       } catch (e: any) { ElMessage.error(e.message || '导出失败'); }
       finally {
         this.exporting = false;
         this.exportingType = '';
+        this.exportStage = '';
       }
     },
+    getExportStatus() { return exportStatus(this.exportStage, this.exportingType); },
     handleKeydown(e: KeyboardEvent) {
       // Cmd/Ctrl + S 保存快捷键，防止浏览器默认保存对话框弹出
       const isSave = (e.metaKey || e.ctrlKey) && (e.key === 's' || e.key === 'S');
@@ -605,7 +499,7 @@ async exportAsImage(fileName: string) {
     },
     async handleCloseCurrentFile() {
       if (this.isDirty) await this.saveFile();
-      revokeAssetObjectUrls();
+      clearAssetPreviewCache();
       this.filePath = ''; this.fileContent = ''; this.isDirty = false;
       if (this.cherryInstance) this.cherryInstance.setMarkdown('');
     },
@@ -640,7 +534,7 @@ async exportAsImage(fileName: string) {
     async registerHostMenu() {
       try {
         const modeReg = { menuId: this.modeMenuId, rootLabel: 'View', submenuLabel: 'Mode', items: this.modeItems.map(it => ({
-          id: it.id, label: it.labelEN, type: 'check', checked: it.id === this.editorMode,
+          id: it.id, label: it.labelEN, type: 'check' as const, checked: it.id === this.editorMode,
         })) };
         const exportReg = { menuId: this.exportMenuId, rootLabel: 'File', submenuLabel: 'Export', items: [
           { id: 'pdf', label: 'Export as PDF', type: 'normal' as const },
@@ -650,18 +544,18 @@ async exportAsImage(fileName: string) {
           { id: 'close', label: 'Close Current File', type: 'normal' as const },
         ]};
         // 注册顺序决定菜单在 File 下的排列顺序：Close Current File 放在 Export 之前
-        await getTreasure().request('registerMenu', { reg: closeFileReg });
-        await getTreasure().request('registerMenu', { reg: exportReg });
-        await getTreasure().request('registerMenu', { reg: modeReg });
+        await menus.register(closeFileReg);
+        await menus.register(exportReg);
+        await menus.register(modeReg);
         this.menuRegistered = true;
       } catch (e) { /* 静默 */ }
     },
     async unregisterHostMenu() {
       if (!this.menuRegistered) return;
       try {
-        await getTreasure().request('unregisterMenu', { menuId: this.modeMenuId });
-        await getTreasure().request('unregisterMenu', { menuId: this.exportMenuId });
-        await getTreasure().request('unregisterMenu', { menuId: this.closeFileMenuId });
+        await menus.unregister(this.modeMenuId);
+        await menus.unregister(this.exportMenuId);
+        await menus.unregister(this.closeFileMenuId);
         this.menuRegistered = false;
       } catch (e) { /* 静默 */ }
     },
@@ -669,9 +563,9 @@ async exportAsImage(fileName: string) {
       if (!this.menuRegistered) return;
       try {
         const modeReg = { menuId: this.modeMenuId, rootLabel: 'View', submenuLabel: 'Mode', items: this.modeItems.map(it => ({
-          id: it.id, label: it.labelEN, type: 'check', checked: it.id === this.editorMode,
+          id: it.id, label: it.labelEN, type: 'check' as const, checked: it.id === this.editorMode,
         })) };
-        await getTreasure().request('registerMenu', { reg: modeReg });
+        await menus.register(modeReg);
       } catch (e) { /* 静默 */ }
     },
     handleHostMenuEvent(event: MessageEvent) {
@@ -688,7 +582,7 @@ async exportAsImage(fileName: string) {
     },
     async handleCreateFile(parentPath: string) {
       this.closeContextMenu();
-      if (!parentPath) parentPath = this.dirPath;
+      if (!parentPath) parentPath = '';
       try {
         const { value } = await ElMessageBox.prompt('请输入文件名 (.md)', '新建文件', {
           confirmButtonText: '确定',
@@ -696,11 +590,10 @@ async exportAsImage(fileName: string) {
           inputPattern: /\S+/,
           inputErrorMessage: '文件名不能为空',
         });
-        let fullPath = `${parentPath}/${value}`;
-        if (!fullPath.endsWith('.md') && !fullPath.endsWith('.markdown')) fullPath += '.md';
-        const res = await file.createFile(fullPath, '');
-        if (res.code !== 1) {
-          ElMessage.error(res.msg || '创建文件失败');
+        let name = value;
+        if (!name.endsWith('.md') && !name.endsWith('.markdown')) name += '.md';
+        if (!await workspace.writeText(parentPath, name, '')) {
+          ElMessage.error(`创建文件失败：${workspace.getLastError() || '未知错误'}`);
           return;
         }
         await this.loadDirectoryStructure();
@@ -710,7 +603,7 @@ async exportAsImage(fileName: string) {
     },
     async handleCreateFolder(parentPath: string) {
       this.closeContextMenu();
-      if (!parentPath) parentPath = this.dirPath;
+      if (!parentPath) parentPath = '';
       try {
         const { value } = await ElMessageBox.prompt('请输入文件夹名', '新建文件夹', {
           confirmButtonText: '确定',
@@ -718,9 +611,8 @@ async exportAsImage(fileName: string) {
           inputPattern: /\S+/,
           inputErrorMessage: '文件夹名不能为空',
         });
-        const res = await file.createDir(`${parentPath}/${value}`);
-        if (res.code !== 1) {
-          ElMessage.error(res.msg || '创建文件夹失败');
+        if (!await workspace.createDirectory(parentPath, value)) {
+          ElMessage.error('创建文件夹失败');
           return;
         }
         await this.loadDirectoryStructure();
@@ -745,11 +637,8 @@ async exportAsImage(fileName: string) {
           if (!indexReady) return;
           await cleanupAssetsBeforeMarkdownDelete(this.dirPath, data.path);
         }
-        const res = data.isDirectory
-          ? await file.deleteDir(data.path, { recursive: true })
-          : await file.deleteFile(data.path);
-        if (res.code !== 1) {
-          ElMessage.error(res.msg || '删除失败');
+        if (!await workspace.remove(data.path)) {
+          ElMessage.error('删除失败');
           return;
         }
         await this.loadDirectoryStructure();
@@ -1049,7 +938,8 @@ async exportAsImage(fileName: string) {
 }
 
 .menu-item.has-submenu { position: relative; }
-.menu-item.has-submenu > .submenu { display: none; position: absolute; left: 100%; top: -8px; z-index: 2002; min-width: 148px; padding: 8px; margin-left: 8px; background: rgba(235,230,245,0.90); border-radius: 14px; box-shadow: 0 22px 44px rgba(96,74,110,0.18); }
+/* No horizontal gap: the pointer travels from the parent straight into the child menu. */
+.menu-item.has-submenu > .submenu { display: none; position: absolute; left: 100%; top: -8px; z-index: 2002; min-width: 148px; padding: 8px; color: #594b68; background: rgba(235, 230, 245, 0.90); border: 1px solid rgba(154, 132, 189, 0.40); border-radius: 18px; box-shadow: 0 22px 44px rgba(96, 74, 110, 0.18); backdrop-filter: blur(18px); }
 .menu-item.has-submenu:hover > .submenu { display: block; }
 .menu-item.has-submenu > .submenu-arrow { position: absolute; right: 0px; top: 50%; transform: translateY(-50%); font-size: 18px; font-weight: 700; pointer-events: none; }
 
@@ -1396,7 +1286,9 @@ div[data-type=codeBlock] pre[class*=language-] {
   align-items: center;
   justify-content: center;
   background: rgba(75, 66, 87, 0.16);
-  backdrop-filter: blur(8px);
+  /* A native save sheet remains crisp while this phase indicator is visible. */
+  backdrop-filter: none;
+  pointer-events: none;
 }
 
 .rebuild-panel {
@@ -1517,4 +1409,5 @@ div[data-type=codeBlock] pre[class*=language-] {
   top: 0;
   z-index: -1;
 }
+
 </style>

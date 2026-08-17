@@ -155,8 +155,8 @@
 <script setup lang="ts">
 import { reactive, ref, watch, onMounted, onUnmounted } from 'vue';
 import { db } from '@/db';
-import { file, getTreasure } from 'treasure-sdk';
 import { ElMessage, ElMessageBox } from 'element-plus';
+import { downloadAttachment } from '@/db/attachmentDownload';
 import TagIcon from '@/icon/tag.svg?component';
 import type { Task, UpdateTaskInput, Priority, TaskStatus, Tag, TaskAttachment } from '@/types';
 
@@ -248,18 +248,9 @@ async function handleUploadAttachment() {
 async function handleDownloadAttachment(item: TaskAttachment) {
   if (!isMounted) return;
   try {
-    const res = await file.readBinaryFile(item.file_path);
-    if (res.code !== 1 || !res.data) {
-      ElMessage.error('读取文件失败');
-      return;
-    }
-    const bridge = getTreasure();
-    const saveRes = await bridge.request('saveBinaryFile', {
-      defaultPath: item.file_name,
-      content: res.data,
-    });
-    if (saveRes?.code !== 1) {
-      ElMessage.error(saveRes?.msg || '保存文件失败');
+    const saved = await downloadAttachment(item);
+    if (!saved.ok) {
+      if (saved.error.code !== 'CANCELLED') ElMessage.error(saved.error.message);
       return;
     }
     ElMessage.success('下载成功');

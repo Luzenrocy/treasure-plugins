@@ -1,7 +1,7 @@
 {
   "name": "kao-cheng-ce",
   "private": true,
-  "version": "1.0.0",
+  "version": "2.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,12 +10,13 @@
     "build:plugin:zip": "node scripts/clean-build-output.mjs && npm run build && node scripts/build-plugin.mjs --zip",
     "db:reset": "node scripts/reset-dev-db.mjs",
     "test": "vitest run",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
     "element-plus": "^2.11.9",
-    "treasure-sdk": "^1.0.7",
+    "treasure-sdk": "^2.0.0",
     "vue": "^3.5.13"
   },
   "devDependencies": {
@@ -24,6 +25,7 @@
     "typescript": "~5.6.2",
     "vite": "^6.0.3",
     "vite-svg-loader": "^5.1.1",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.10",
+    "vue-tsc": "^2.1.10"
   }
 }

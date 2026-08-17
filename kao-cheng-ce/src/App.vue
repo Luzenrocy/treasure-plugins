@@ -381,6 +381,7 @@ async function handleDrawerDelete(id: number) {
       ElMessage.success('已删除');
       detailDrawerTask.value = null;
       await statsHook.loadStats();
+      await tagsHook.loadTags();
       loadSubtasks();
     }
   } catch (e) { /* cancelled */ }
@@ -412,6 +413,7 @@ async function handleDelete(id: number) {
     if (ok) {
       ElMessage.success('已删除');
       await statsHook.loadStats();
+      await tagsHook.loadTags();
       _skipFullSubtaskReload = false;
       if (parentId) loadSubtasksFor(parentId);
       else loadSubtasks();
@@ -467,7 +469,7 @@ async function handleCreate(input: CreateTaskInput, files: File[] = []) {
       loadSubtasks();
     }
   } else {
-    ElMessage.error('创建失败');
+    ElMessage.error(`创建失败：${db.tasks.getLastCreateError() || '请查看宿主日志'}`);
   }
 }
 
@@ -489,10 +491,10 @@ async function handleUpdateTags(taskId: number, tagIds: number[], updatedTask: T
   tasksHook.patchTask(updatedTask);
   
   // 同步更新 subtaskMap（子任务标签）
-  for (const [parentId, children] of Object.entries(subtaskMap.value)) {
+  for (const [parentId, children] of Object.entries(subtaskMap.value) as [string, Task[]][]) {
     const idx = children.findIndex(t => t.id === taskId);
     if (idx >= 0) {
-      subtaskMap.value[parentId] = [
+      subtaskMap.value[Number(parentId)] = [
         ...children.slice(0, idx),
         updatedTask,
         ...children.slice(idx + 1)

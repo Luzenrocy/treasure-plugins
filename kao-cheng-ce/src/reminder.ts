@@ -13,7 +13,7 @@
  * @packageDocumentation
  */
 
-import { getTreasure } from 'treasure-sdk';
+import { database, notifications, settings } from 'treasure-sdk';
 
 /** 提醒配置 */
 interface ReminderSettings {
@@ -79,12 +79,11 @@ export class ReminderChecker {
   /** 从宿主设置中读取用户配置 */
   private async loadSettings(): Promise<void> {
     try {
-      const bridge = getTreasure();
-      const all = await bridge.getSettings();
-      if (all.code !== 1 || !all.data) return;
+      const all = await settings.list();
+      if (!all.ok) return;
 
       const map = new Map(
-        (all.data as any[]).map((s: any) => [s.param_key, s.param_value])
+        all.value.map((s: any) => [s.key, s.value])
       );
 
       this.settings.enabled = map.get('reminder_enabled') !== '0';
@@ -149,7 +148,6 @@ export class ReminderChecker {
   /** 执行提醒：查询到期任务 → 发送通知 */
   private async doRemind(slotKey: string): Promise<void> {
     try {
-      const bridge = getTreasure();
       const tasks = await this.queryExpiringTasks();
 
       // 标记该时间槽已触发（无论有无到期任务，避免空轮询）
@@ -161,7 +159,7 @@ export class ReminderChecker {
       const title = '考成策 - 任务到期提醒';
       const body = this.formatReminderBody(tasks);
 
-      await bridge.sendNotification?.(title, body);
+      await notifications.send({ title, body });
     } catch {
       // 静默失败，不影响主流程
     }
@@ -169,7 +167,6 @@ export class ReminderChecker {
 
   /** 查询即将到期的任务 */
   private async queryExpiringTasks(): Promise<Array<{ title: string; due_date: string }>> {
-    const bridge = getTreasure();
     const days = this.settings.daysBefore;
 
     const sql = `
@@ -183,9 +180,9 @@ export class ReminderChecker {
       ORDER BY due_date ASC
     `;
 
-    const res = await bridge.query(sql, ['tasks']);
-    if (res.code !== 1 || !res.data) return [];
-    return res.data.map((r: any) => ({ title: r.title, due_date: r.due_date }));
+    const res = await database.query<{ title: string; due_date: string }>({ sql, tables: ['tasks'] });
+    if (!res.ok) return [];
+    return res.value.rows.map((r) => ({ title: r.title, due_date: r.due_date }));
   }
 
   /** 格式化通知体 */

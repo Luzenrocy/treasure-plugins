@@ -139,8 +139,6 @@ async function saveCardTags(taskId: number) {
     const tags = tagIds.map(id => props.allTags.find(t => t.id === id)).filter((tag): tag is Tag => tag !== undefined);
     if (task) {
       props.onUpdateTags?.(taskId, tagIds, { ...task, tags });
-    } else {
-      props.onUpdateTags?.(taskId, tagIds, null);
     }
   }
 }
@@ -221,6 +219,22 @@ function formatDate(iso: string): string {
   padding: 16px;
   height: 100%;
   overflow-x: auto;
+}
+.kanban-board::-webkit-scrollbar {
+  height: 7px;
+}
+.kanban-board::-webkit-scrollbar:hover {
+  background-color: rgba(128, 128, 128, 0.1);
+}
+.kanban-board::-webkit-scrollbar-track {
+  background: transparent;
+}
+.kanban-board::-webkit-scrollbar-thumb {
+  background-color: #d3d7da;
+  border-radius: 4px;
+}
+.kanban-board::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.6);
 }
 .kanban-column {
   flex: 1;

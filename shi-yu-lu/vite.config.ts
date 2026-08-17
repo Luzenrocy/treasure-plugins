@@ -43,7 +43,6 @@ function treasureDevEndpoints(): any {
           }
         }
       }
-
       // ── 中间件 ──
       server.middlewares.use('/treasure-manifest.json', (req: any, res: any) => {
         // CORS 统一处理
@@ -102,6 +101,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
+      'treasure-sdk': fileURLToPath(new URL('../../treasure-sdk/src/index.ts', import.meta.url)),
     },
   },
   build: {

@@ -43,7 +43,6 @@ function freezePluginCode(manifestPath, root) {
   console.log(`❄️  plugin_code 已冻结并写回源文件: ${manifest.name}`);
   return manifest;
 }
-/** 同步源码 index.html 的 treasure-plugin-code 与 manifest.name 一致 */
 function syncPluginCodeInHtml(root, pluginName) {
   const htmlPath = join(root, 'index.html');
   if (!existsSync(htmlPath)) return;
@@ -67,7 +66,6 @@ if (!existsSync(manifestPath)) { console.error('❌ manifest.json not found'); p
 const frozenManifest = freezePluginCode(manifestPath, root);
 const pluginName = frozenManifest.name;
 const packageName = basename(root);
-// 同步源码 index.html 的 plugin-code
 syncPluginCodeInHtml(root, pluginName);
 if (!pluginName) { console.error('❌ manifest.name is required'); process.exit(1); }
 if (!/^[a-z][a-z0-9-]*$/.test(pluginName)) { console.error('❌ manifest.name 必须为 kebab-case'); process.exit(1); }

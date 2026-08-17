@@ -25,7 +25,6 @@ function treasureDevEndpoints(): any {
       const manifestPath = resolve(root, 'manifest.json');
       const htmlPath = resolve(root, 'index.html');
 
-      /** 同步 index.html 的 treasure-plugin-code 与 manifest.name 一致 */
       function syncHtmlPluginCode(code: string) {
         if (!existsSync(htmlPath)) return;
         const html = readFileSync(htmlPath, 'utf-8');
@@ -42,7 +41,6 @@ function treasureDevEndpoints(): any {
       if (existsSync(manifestPath)) {
         const raw = readFileSync(manifestPath, 'utf-8');
         const manifest = JSON.parse(raw);
-
         if (!manifest._frozen) {
           let slug = manifest.alias ? slugify(manifest.alias) : '';
           if (!slug) slug = slugify(basename(root));

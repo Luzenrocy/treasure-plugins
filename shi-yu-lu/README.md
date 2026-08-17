@@ -2,7 +2,7 @@
 
 > 面向本地 Markdown 文件的笔记编辑与资产管理插件。
 
-石玉录将目录中的 Markdown 文件组织为可浏览、可编辑、可导出的笔记工作区。它使用 Cherry Markdown 提供编辑与预览能力，通过 `treasure-sdk` 调用宿主文件、设置、对话框和菜单能力。
+石玉录将目录中的 Markdown 文件组织为可浏览、可编辑、可导出的笔记工作区。它使用 Cherry Markdown 提供编辑与预览能力，通过 `treasure-sdk` 调用宿主文件、系统设置、对话框和菜单能力。
 
 ## 产品原型与核心流程
 
@@ -54,13 +54,13 @@ flowchart LR
 
 深色导航属于宿主外壳，石玉录仅在自身页面内使用柔和的米色、紫灰与低对比度边界，避免产生第二层强导航。
 
-## 配置与数据
+## 系统设置与数据
 
-| 配置 | 用途 |
+| 系统设置项 | 用途 |
 | --- | --- |
-| `storage_dir` | 用户选择的 Markdown 文件存储目录。 |
+| `storage_dir` | manifest 中声明的目录展示项；Treasure 系统设置页面用于回显当前选择，插件不通过 `settings` 读取其中的路径或授权 ID。 |
 
-笔记正文与附件存储在用户选择的目录中，不复制进插件数据库。插件通过 SDK 请求文件操作；资产索引用于判断附件引用并辅助安全清理。
+笔记正文与附件存储在用户选择的目录中，不复制进插件数据库。首次选择时，业务代码以 `settings.set({ key: 'storage_dir', directory })` 保存设置，再调用 `permissions.grantDirectory` 建立目录授权；后续启动读取设置中的授权 ID 与路径摘要，并用 `permissions.verifyDirectoryGrant` 取得根目录引用。绝对路径及宿主授权记录不进入插件状态。更换目录、重新授权或主动撤销会保留旧授权并标记为 `revoked`；仅插件卸载会物理删除该插件的权限记录。插件通过 SDK 请求文件操作；资产索引用于判断附件引用并辅助安全清理。
 
 ## 开发、联调与打包
 
@@ -77,7 +77,11 @@ npm run build:plugin:zip
 
 打包产物为 `build-output/shi-yu-lu/` 和 `build-output/shi-yu-lu.zip`。
 
-独立模式用于调试界面和常规逻辑；涉及真实目录、附件、导出、原生菜单或设置时，应在 Treasure 中通过调试入口或导入包完成联调。完整流程见 [插件研发指南](../docs/PLUGIN-DEVELOPMENT-GUIDE.md)。
+`npm run dev` 只启动可注册的插件开发服务。石玉录应在 Treasure 中通过“注册调试插件”完成所有调试；打包后可导入目录包或 ZIP 包。完整流程见 [插件研发指南](../docs/PLUGIN-DEVELOPMENT-GUIDE.md)。
+
+本插件要求 Treasure 2.0.0+。本地可验证工作区树、私有资产索引和错误处理；请人工验证原生文件/目录选择、重启后的授权、撤销授权、导出覆盖与回收站行为。
+
+石玉录当前通过宿主内部 `treasure-menu-event` 接收原生菜单点击，因为 SDK 2.0 尚未公开类型化菜单事件订阅。该实现与 Treasure 2.0.0 宿主协议绑定；SDK 提供正式事件 API 后应优先迁移，不应复制到新的第三方插件。
 
 ## 关联文档
 

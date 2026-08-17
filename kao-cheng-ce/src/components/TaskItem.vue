@@ -162,7 +162,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
-import { getTreasure } from 'treasure-sdk';
+import { logs } from 'treasure-sdk';
 import { ElMessageBox } from 'element-plus';
 import { db } from '@/db';
 import type { Task, Priority, TaskStatus, Tag } from '@/types';
@@ -318,7 +318,7 @@ function getPrioColor(p: string): string {
 
 function handleToggle() {
   if (props.task.status === 'done') return;
-  getTreasure().log?.('info', 'biz', 'TaskItem.handleToggle', { taskId: props.task.id, status: props.task.status }).catch(() => {})
+  logs.write({ level: 'info', category: 'biz', message: 'TaskItem.handleToggle', details: { taskId: props.task.id, status: props.task.status } }).catch(() => {})
   emit('toggle', props.task);
 }
 
@@ -328,14 +328,14 @@ async function toggleInlineTag(tagId: number) {
   if (idx >= 0) localSelectedTags.value.splice(idx, 1);
   else localSelectedTags.value.push(tagId);
   
-  getTreasure().log?.('info', 'biz', 'TaskItem.toggleInlineTag', { taskId: props.task.id, tagId }).catch(() => {})
+  logs.write({ level: 'info', category: 'biz', message: 'TaskItem.toggleInlineTag', details: { taskId: props.task.id, tagId } }).catch(() => {})
   // 即时保存
   await saveInlineTags();
 }
 
 async function saveInlineTags() {
   if (!isMounted || !props.task.id) return;
-  getTreasure().log?.('info', 'biz', 'TaskItem.saveInlineTags', { taskId: props.task.id, tagIds: localSelectedTags.value }).catch(() => {})
+  logs.write({ level: 'info', category: 'biz', message: 'TaskItem.saveInlineTags', details: { taskId: props.task.id, tagIds: localSelectedTags.value } }).catch(() => {})
   const ok = await db.taskTags.set(props.task.id, localSelectedTags.value);
   if (!isMounted) return;
   const tags = await db.taskTags.getByTask(props.task.id);

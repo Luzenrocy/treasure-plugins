@@ -1,34 +1,19 @@
-import { getTreasure } from 'treasure-sdk';
+import { workspace, type WorkspaceEntry } from './workspace';
 
 export interface FileEntry {
   name: string;
+  /** Workspace-relative display key, never an absolute host path. */
   path: string;
   isDirectory: boolean;
   children?: FileEntry[];
 }
 
-export async function scanMarkdownDirectory(dirPath: string): Promise<FileEntry[]> {
-  const api = getTreasure();
-  const entries: FileEntry[] = [];
-  const dirEntries = await api.readDir(dirPath);
-  console.log(dirPath + ' 下的文件列表：' + JSON.stringify(dirEntries));
-  for (const entry of dirEntries) {
-    if (entry.name.startsWith('.')) continue;
-    if (entry.isDirectory) {
-      entries.push({
-        name: entry.name,
-        path: entry.path,
-        isDirectory: true,
-        children: await scanMarkdownDirectory(entry.path),
-      });
-    } else if (entry.isFile && /\.(md|markdown)$/i.test(entry.name)) {
-      entries.push({ name: entry.name, path: entry.path, isDirectory: false });
-    }
-  }
+function mapEntry(entry: WorkspaceEntry): FileEntry | null {
+  if ('directory' in entry) return { name: entry.name, path: entry.path, isDirectory: true, children: entry.children.map(mapEntry).filter((value): value is FileEntry => value !== null) };
+  return /\.(md|markdown)$/i.test(entry.name) ? { name: entry.name, path: entry.path, isDirectory: false } : null;
+}
 
-  return entries.sort((a, b) => {
-    if (a.isDirectory && !b.isDirectory) return -1;
-    if (!a.isDirectory && b.isDirectory) return 1;
-    return a.name.localeCompare(b.name);
-  });
+/** The path argument is retained only for UI compatibility; host access uses workspace references. */
+export async function scanMarkdownDirectory(_path?: string): Promise<FileEntry[]> {
+  return (await workspace.refresh()).map(mapEntry).filter((value): value is FileEntry => value !== null);
 }

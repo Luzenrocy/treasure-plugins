@@ -103,7 +103,7 @@ export function useTasks() {
       const dbResult = await db.tasks.toggleAtomic(task.id, nextStatus);
       // 5. 以数据库返回结果修正缓存（处理并发修改场景）
       cache.applyDbResult(dbResult, now);
-      cache.patchArray(tasks.value, dbResult, now);
+      cache.patchArray(tasks.value, { updatedIds: dbResult.updatedTaskIds, statusMap: dbResult.statusMap, progressMap: dbResult.progressMap }, now);
     } catch (e) {
       console.error('cycleStatus optimistic update failed, rollback:', e);
       // 失败回滚：重新从数据库加载最新状态

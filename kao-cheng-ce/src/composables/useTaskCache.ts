@@ -150,12 +150,13 @@ export class TaskCache {
     for (const id of result.updatedIds) {
       const task = this.byId.get(id);
       if (!task) continue;
-      task.status = result.statusMap[id];
+      const status = result.statusMap[id];
+      task.status = status;
       task.progress = result.progressMap[id];
       task.updated_at = now;
-      if (task.status === 'done') {
+      if (status === 'done') {
         task.completed_at = now;
-      } else if (task.status !== 'done') {
+      } else {
         task.completed_at = null;
       }
     }
@@ -170,12 +171,13 @@ export class TaskCache {
     for (const id of result.updatedTaskIds) {
       const task = this.byId.get(id);
       if (!task) continue;
-      task.status = result.statusMap[id];
+      const status = result.statusMap[id];
+      task.status = status;
       task.progress = result.progressMap[id];
       task.updated_at = now;
-      if (task.status === 'done') {
+      if (status === 'done') {
         task.completed_at = now;
-      } else if (task.status !== 'done') {
+      } else {
         task.completed_at = null;
       }
     }

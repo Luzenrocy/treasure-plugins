@@ -54,7 +54,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
-import { getTreasure } from 'treasure-sdk';
+import { database } from 'treasure-sdk';
 import { ElMessage } from 'element-plus';
 import { db } from '@/db';
 import type { TaskLog } from '@/types';
@@ -115,18 +115,13 @@ function formatLogDate(dateStr: string): string {
 
 async function submitLog() {
   if (!isMounted || !newLogContent.value.trim() || !newLogDate.value) return;
-  const bridge = getTreasure();
   const ts = new Date().toISOString();
   const logDate = newLogDate.value.replace('T', ' ');
-  const res = await bridge.execute(
-    `INSERT INTO task_logs (task_id, content, log_date, sort_order, is_deleted, created_at, updated_at)
-     VALUES (?, ?, ?, 0, 0, ?, ?)`,
-    ['task_logs'],
-    [props.taskId, newLogContent.value.trim(), logDate, ts, ts]
-  );
-  if (res.code !== 1) {
-    console.error('task_logs INSERT failed:', res.msg);
-    ElMessage.error('保存失败: ' + (res.msg || ''));
+  const res = await database.execute({ sql: `INSERT INTO task_logs (task_id, content, log_date, sort_order, is_deleted, created_at, updated_at)
+     VALUES (?, ?, ?, 0, 0, ?, ?)`, tables: ['task_logs'], params: [props.taskId, newLogContent.value.trim(), logDate, ts, ts] });
+  if (!res.ok) {
+    console.error('task_logs INSERT failed:', res.error.message);
+    ElMessage.error('保存失败: ' + res.error.message);
     return;
   }
   await loadLogs();

@@ -31,11 +31,9 @@ function generateRandomSuffix(length = 6) {
   for (let i = 0; i < length; i++) result += chars[bytes[i] % 36];
   return result;
 }
-
 function slugify(text) {
   return text.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]+/g, '-').replace(/^-|-$/g, '').replace(/[\u4e00-\u9fa5]/g, '');
 }
-
 function freezePluginCode(manifestPath, root) {
   const manifest = JSON.parse(readFileSync(manifestPath, 'utf-8'));
   if (manifest._frozen) return manifest;
@@ -47,6 +45,20 @@ function freezePluginCode(manifestPath, root) {
   writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
   console.log(`❄️  plugin_code 已冻结并写回源文件: ${manifest.name}`);
   return manifest;
+}
+
+function syncPluginCodeInHtml(root, pluginName) {
+  const htmlPath = join(root, 'index.html');
+  if (!existsSync(htmlPath)) return;
+  const html = readFileSync(htmlPath, 'utf-8');
+  const updated = html.replace(
+    /<meta\s+name=["']treasure-plugin-code["']\s+content=["'][^"']*["']/,
+    `<meta name="treasure-plugin-code" content="${pluginName}"`
+  );
+  if (html !== updated) {
+    writeFileSync(htmlPath, updated);
+    console.log(`✅ 源码 index.html 的 treasure-plugin-code 已同步为: ${pluginName}`);
+  }
 }
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -63,6 +75,7 @@ if (!existsSync(manifestPath)) {
 const frozenManifest = freezePluginCode(manifestPath, root);
 const pluginName = frozenManifest.name;
 const packageName = basename(root);
+syncPluginCodeInHtml(root, pluginName);
 if (!pluginName) {
   console.error('❌ manifest.name is required');
   process.exit(1);

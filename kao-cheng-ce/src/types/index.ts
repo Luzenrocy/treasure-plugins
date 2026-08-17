@@ -51,6 +51,13 @@ export interface UpdateTaskInput {
   parent_id?: number | null;
   sort_order?: number;
   completed_at?: string | null;
+  tag_ids?: number[];
+}
+
+export interface ToggleTaskResult {
+  updatedTaskIds: number[];
+  statusMap: Record<number, TaskStatus>;
+  progressMap: Record<number, number>;
 }
 
 /** 标签实体 */

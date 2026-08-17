@@ -8,6 +8,7 @@ import {
 import App from './App.vue';
 import { initTreasure } from 'treasure-sdk';
 import { ReminderChecker } from './reminder';
+import { db } from './db';
 
 const app = createApp(App);
 
@@ -17,6 +18,8 @@ for (const [key, component] of Object.entries(icons)) {
 }
 app.use(ElementPlus);
 initTreasure();
+// Best-effort retry for files left after a previous SQL/file compensation failure.
+db.attachments.retryPendingCleanup().catch(() => {});
 app.mount('#app');
 
 const checker = new ReminderChecker();

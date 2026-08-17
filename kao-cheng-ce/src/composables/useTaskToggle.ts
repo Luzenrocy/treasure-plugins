@@ -226,7 +226,7 @@ export function useTaskToggle(tasksHook?: ReturnType<typeof useTasks>, subtaskMa
       const updated: Task = { ...t, status: newStatus, progress: newProgress, updated_at: now };
       if (newStatus === 'done') {
         updated.completed_at = now;
-      } else if (t.status === 'done' && newStatus !== 'done') {
+      } else if (t.status === 'done') {
         updated.completed_at = null;
       }
       arr[i] = updated;
@@ -249,7 +249,7 @@ export function useTaskToggle(tasksHook?: ReturnType<typeof useTasks>, subtaskMa
           const updated: Task = { ...c, status: newStatus, progress: newProgress, updated_at: now };
           if (newStatus === 'done') {
             updated.completed_at = now;
-          } else if (c.status === 'done' && newStatus !== 'done') {
+          } else if (c.status === 'done') {
             updated.completed_at = null;
           }
           nextChildren.push(updated);
