@@ -95,13 +95,15 @@ function treasureDevEndpoints(): any {
   };
 }
 
+const localSdkEntry = fileURLToPath(new URL('../../treasure-sdk/src/index.ts', import.meta.url));
+
 export default defineConfig({
   base: './',
   plugins: [vue(), treasureDevEndpoints()],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
-      'treasure-sdk': fileURLToPath(new URL('../../treasure-sdk/src/index.ts', import.meta.url)),
+      ...(existsSync(localSdkEntry) ? { 'treasure-sdk': localSdkEntry } : {}),
     },
   },
   build: {
