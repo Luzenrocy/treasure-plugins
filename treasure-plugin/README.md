@@ -7,7 +7,7 @@
 ## 适用场景
 
 - 学习 Treasure 插件的目录和安装包结构；
-- 验证 SDK 文件 API 在独立开发与宿主环境中的行为；
+- 验证 SDK 文件 API 在 Treasure 桌面宿主中的行为；
 - 作为自定义插件的起点，而不是向已有业务插件复制相对路径或业务代码。
 
 ## 原型与功能
@@ -15,7 +15,7 @@
 当前演示页提供创建目录、创建文件、读取、更新与删除文件的按钮，并显示调用结果。它刻意保持简单：重点是展示 SDK 调用边界，而非提供完整产品功能。
 
 ```text
-演示页面 → treasure-sdk file 模块 → Treasure 宿主文件能力
+演示页面 → treasure-sdk 的 `files` / `directories` 模块 → Treasure 宿主文件能力
 ```
 
 ## 工程结构
@@ -56,3 +56,7 @@ npx treasure-sdk create my-plugin --alias "我的插件"
 ```
 
 完整研发流程见 [插件研发指南](../docs/PLUGIN-DEVELOPMENT-GUIDE.md)，SDK 方法见 [API 参考](https://github.com/Luzenrocy/treasure-sdk/blob/main/docs/API-REFERENCE.md)。
+
+## SDK 2.0 联调边界
+
+模板使用 SDK 2.0 的 `Result<T>`、文件引用和参数化数据库操作，不使用裸路径或 `request(action, payload)`。`npm run dev` 只启动可注册的插件开发服务；组件、数据库、私有存储、设置与原生能力均须在 Treasure 2.0.0+ 桌面宿主中通过“注册调试插件”验证。

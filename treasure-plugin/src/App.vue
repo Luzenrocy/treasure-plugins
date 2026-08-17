@@ -1,60 +1,41 @@
 <template>
-  <div class="app">
-    <h1>{{ title }}</h1>
-    <p>插件已加载</p>
-    <div class="demo-section">
-      <h2>文件操作演示</h2>
-      <div class="demo-actions">
-        <button @click="demoCreateDir">创建文件夹</button>
-        <button @click="demoCreateFile">创建文件</button>
-        <button @click="demoReadFile">读取文件</button>
-        <button @click="demoUpdateFile">更新文件</button>
-        <button @click="demoDeleteFile">删除文件</button>
-        <button @click="demoDeleteDir">删除文件夹</button>
-      </div>
-      <pre class="demo-output">{{ output }}</pre>
+  <main class="app">
+    <h1>我的插件</h1>
+    <p>SDK 2.0 原子能力示例：选择文件、读取文件、选择导出目录并写入。</p>
+    <div class="demo-actions">
+      <button @click="chooseFile">选择并读取文件</button>
+      <button :disabled="!selectedFile" @click="chooseOutputDirectory">选择目录并导出副本</button>
     </div>
-  </div>
+    <pre class="demo-output">{{ output }}</pre>
+  </main>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { file } from 'treasure-sdk';
+import { files, type FileReference } from 'treasure-sdk';
 
 export default defineComponent({
   name: 'App',
-  data() {
-    return {
-      title: '我的插件',
-      output: '',
-      demoDir: '/plugins/my-plugin/demo',
-      demoFile: '/plugins/my-plugin/demo/hello.md',
-    };
-  },
+  data: () => ({ output: '', selectedFile: null as FileReference | null, bytes: new Uint8Array() }),
   methods: {
-    async demoCreateDir() {
-      const res = await file.createDir(this.demoDir);
-      this.output = `createDir: ${JSON.stringify(res)}`;
+    async chooseFile() {
+      const selected = await files.openDialog({ kind: 'file', title: '选择要读取的文件' });
+      if (!selected.ok) { this.output = `${selected.error.code}: ${selected.error.message}`; return; }
+      if (!Array.isArray(selected.value)) { this.output = '选择结果无效'; return; }
+      const file = selected.value[0];
+      if (!file) { this.output = '没有选择文件'; return; }
+      const content = await files.readFile(file);
+      if (!content.ok) { this.output = `${content.error.code}: ${content.error.message}`; return; }
+      this.selectedFile = file;
+      this.bytes = content.value;
+      this.output = `已读取 ${file.name}（${content.value.byteLength} 字节）`;
     },
-    async demoCreateFile() {
-      const res = await file.createFile(this.demoFile, '# Hello Plugin');
-      this.output = `createFile: ${JSON.stringify(res)}`;
-    },
-    async demoReadFile() {
-      const res = await file.readFile(this.demoFile);
-      this.output = `readFile: ${JSON.stringify(res)}`;
-    },
-    async demoUpdateFile() {
-      const res = await file.updateFile(this.demoFile, '# Updated Content');
-      this.output = `updateFile: ${JSON.stringify(res)}`;
-    },
-    async demoDeleteFile() {
-      const res = await file.deleteFile(this.demoFile);
-      this.output = `deleteFile: ${JSON.stringify(res)}`;
-    },
-    async demoDeleteDir() {
-      const res = await file.deleteDir(this.demoDir, { recursive: true });
-      this.output = `deleteDir: ${JSON.stringify(res)}`;
+    async chooseOutputDirectory() {
+      const selected = await files.openDialog({ kind: 'directory', title: '选择导出目录' });
+      if (!selected.ok) { this.output = `${selected.error.code}: ${selected.error.message}`; return; }
+      if (Array.isArray(selected.value)) { this.output = '选择结果无效'; return; }
+      const exported = await files.writeFile({ directory: selected.value, fileName: this.selectedFile!.name, data: this.bytes });
+      this.output = exported.ok ? `已导出 ${exported.value.name}` : `${exported.error.code}: ${exported.error.message}`;
     },
   },
 });
@@ -63,8 +44,7 @@ export default defineComponent({
 <style>
 html, body, #app { width: 100%; height: 100%; margin: 0; }
 * { box-sizing: border-box; }
-.app { display: flex; flex-direction: column; height: 100%; padding: 20px; font-family: sans-serif; }
-.demo-section { flex: 1; min-height: 0; overflow: auto; }
+.app { padding: 20px; font-family: sans-serif; }
 .demo-actions { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0; }
 .demo-actions button { padding: 6px 12px; cursor: pointer; }
 .demo-output { background: #f5f5f5; padding: 12px; border-radius: 4px; white-space: pre-wrap; min-height: 60px; }

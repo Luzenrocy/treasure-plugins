@@ -1,5 +1,5 @@
 {
-  "name": "my-plugin",
+  "name": "treasure-plugin-ug3dlv",
   "alias": "我的插件",
   "version": "1.0.0",
   "description": "插件描述",
@@ -21,5 +21,6 @@
       "param_value": "",
       "param_placeholder": "请输入配置值"
     }
-  ]
+  ],
+  "_frozen": true
 }

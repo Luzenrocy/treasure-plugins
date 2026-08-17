@@ -6,6 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "vue-tsc --noEmit",
     "build:plugin": "npm run build && node scripts/build-plugin.mjs",
     "build:plugin:zip": "npm run build && node scripts/build-plugin.mjs --zip",
     "db:reset": "node scripts/reset-dev-db.mjs"
@@ -13,12 +16,15 @@
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
     "element-plus": "^2.11.9",
-    "sql.js": "^1.11.0",
-    "treasure-sdk": "^1.0.7"
+    "treasure-sdk": "^2.1.0",
+    "vue": "^3.5.13"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.1",
+    "@vitest/coverage-v8": "^4.1.10",
     "typescript": "~5.6.2",
-    "vite": "^6.0.3"
+    "vite": "^6.0.3",
+    "vitest": "^4.1.10",
+    "vue-tsc": "^2.1.10"
   }
 }
