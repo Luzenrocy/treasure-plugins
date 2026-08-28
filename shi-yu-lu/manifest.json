@@ -9,7 +9,7 @@
   "minPlatformVersion": "2.1.0",
   "menu": {
     "name": "石玉录",
-    "icon": "Notebook",
+    "icon": "assets/shi-yu-lu-menu.svg",
     "order": 1
   },
   "settings": [

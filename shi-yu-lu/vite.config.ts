@@ -106,6 +106,10 @@ export default defineConfig({
       ...(existsSync(localSdkEntry) ? { 'treasure-sdk': localSdkEntry } : {}),
     },
   },
+  // Treasure 桌面端以 tauri://localhost 作为来源，需允许它拉取静态图标资源。
+  server: {
+    cors: true,
+  },
   build: {
     outDir: 'dist',
     assetsInlineLimit: 0,
