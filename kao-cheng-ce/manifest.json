@@ -4,12 +4,12 @@
   "version": "2.0.0",
   "description": "任务与进度管理插件",
   "author": "Treasure",
-  "icon": "assets/schedule.svg",
+  "icon": "icon.svg",
   "entry": "index.html",
   "minPlatformVersion": "2.0.0",
   "menu": {
     "name": "考成策",
-    "icon": "assets/schedule.svg",
+    "icon": "assets/kao-cheng-ce-menu.svg",
     "order": 2
   },
   "settings": [

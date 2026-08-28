@@ -1,4 +1,31 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
-  <rect width="64" height="64" rx="14" fill="#6366f1"/>
-  <path d="M18 34l10 10 18-18" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="kcc-root-bg" x1="5" y1="5" x2="59" y2="59" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF5E8"/>
+      <stop offset="0.5" stop-color="#F3ECFF"/>
+      <stop offset="1" stop-color="#E9F9F1"/>
+    </linearGradient>
+    <linearGradient id="kcc-root-task" x1="22" y1="10" x2="43" y2="27" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#AAA9FF"/>
+      <stop offset="1" stop-color="#6967D6"/>
+    </linearGradient>
+    <linearGradient id="kcc-root-card" x1="11" y1="35" x2="52" y2="51" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFDF8"/>
+      <stop offset="1" stop-color="#EEE9F6"/>
+    </linearGradient>
+  </defs>
+  <rect x="1" y="1" width="62" height="62" rx="15" fill="url(#kcc-root-bg)" stroke="#E3DAEA" stroke-width="2"/>
+  <rect x="21" y="9.5" width="22" height="15" rx="5" fill="url(#kcc-root-task)" stroke="#6562C1" stroke-width="1.6"/>
+  <path d="M26.5 15h11M26.5 19h7" stroke="#F8F7FF" stroke-width="1.7" stroke-linecap="round" opacity="0.9"/>
+  <path d="M32 24.5v7.2M14.5 34v-2.3h35V34" stroke="#C0A46F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="32" cy="31.7" r="2.1" fill="#F2D8A4" stroke="#A98755" stroke-width="1"/>
+  <rect x="7.5" y="34" width="14" height="17" rx="4" fill="url(#kcc-root-card)" stroke="#9187A0" stroke-width="1.4"/>
+  <rect x="25" y="34" width="14" height="17" rx="4" fill="url(#kcc-root-card)" stroke="#7773D3" stroke-width="1.4"/>
+  <rect x="42.5" y="34" width="14" height="17" rx="4" fill="#E7F9EE" stroke="#55AD7A" stroke-width="1.4"/>
+  <circle cx="12" cy="40" r="2" fill="#E5E1EA" stroke="#9D96A6" stroke-width="1"/>
+  <path d="M16 40h2.5M11 46h7" stroke="#8B8198" stroke-width="1.4" stroke-linecap="round" opacity="0.62"/>
+  <circle cx="29.5" cy="40" r="2" fill="#E1E0FF" stroke="#7471D2" stroke-width="1"/>
+  <path d="M33.5 40h2.5M28.5 46h7" stroke="#6865CC" stroke-width="1.4" stroke-linecap="round" opacity="0.72"/>
+  <path d="m46.5 42.2 2.1 2.1 4.2-4.4" stroke="#22A95A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M10.5 54c13.8 2 28.2 2 43 0" stroke="#554B68" stroke-width="3.5" stroke-linecap="round" opacity="0.08"/>
 </svg>
