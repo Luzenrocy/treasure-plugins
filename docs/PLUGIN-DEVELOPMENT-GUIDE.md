@@ -216,6 +216,21 @@ CREATE INDEX IF NOT EXISTS idx_tasks_parent_id ON tasks(parent_id);
 - 宿主色彩与布局约束见 [Treasure 宿主视觉参考](TREASURE-HOST-DESIGN.md)。
 - 每个插件应在自己的 README 中列出主色、背景、文字、语义色及其用途，避免颜色只散落在源码中。
 
+### 5.1 统一滚动条与页面滚动边界
+
+插件中的可滚动业务区域必须使用 Treasure 系统设置页的滚动条样式；不要自定义颜色、悬停态、宽度或全局 `scrollbar-color`。仅为实际可滚动容器声明以下规则：
+
+```css
+.scrollable-region::-webkit-scrollbar { width: 6px; }
+.scrollable-region::-webkit-scrollbar-track { background: transparent; }
+.scrollable-region::-webkit-scrollbar-thumb {
+  background: #d3d7da;
+  border-radius: 3px;
+}
+```
+
+页面级容器应固定在宿主 iframe 可用高度内并设为 `overflow: hidden`，再由唯一的主要数据区（例如列表、画布或瀑布流）承担 `overflow-y: auto`。不得让 `body`、插件根节点与业务列表同时出现滚动条；弹窗、抽屉等独立浮层可在自身内容溢出时使用同一滚动条规则。
+
 ## 6. 运行模式与验证路径
 
 插件项目的 `npm run dev` 只启动供 Treasure 注册调试插件的本地开发服务。插件页面通过 Treasure 应用调试，SDK 能力也由该应用提供。
