@@ -1,0 +1,12 @@
+{
+  "name": "google-authenticator",
+  "alias": "谷歌验证器",
+  "version": "1.0.0",
+  "description": "离线加密的 TOTP 与 HOTP 验证码管理器，支持 Google Authenticator 转移二维码图片导入。",
+  "author": "Treasure",
+  "icon": "icon.png",
+  "entry": "index.html",
+  "minPlatformVersion": "2.1.2",
+  "menu": { "name": "谷歌验证器", "icon": "menu-icon.png", "order": 130 },
+  "_frozen": true
+}
