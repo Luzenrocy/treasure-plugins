@@ -1,0 +1,31 @@
+{
+  "name": "text-diff",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "用于本地双栏文本差异比较与编辑",
+  "author": "OpenAI",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "test": "vitest run",
+    "test:visual": "vitest run --pool=threads --no-file-parallelism test/*Visual*.spec.ts test/visual*.spec.ts",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "vue-tsc --noEmit",
+    "build:plugin": "node scripts/clean-build-output.mjs && npm run build && node scripts/build-plugin.mjs",
+    "build:plugin:zip": "node scripts/clean-build-output.mjs && npm run build && node scripts/build-plugin.mjs --zip"
+  },
+  "dependencies": {
+    "treasure-sdk": "^2.1.1",
+    "vue": "^3.5.13",
+    "element-plus": "^2.11.9"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "@vitest/coverage-v8": "^2.1.9",
+    "typescript": "~5.6.2",
+    "vite": "^6.0.3",
+    "vitest": "^2.1.9",
+    "vue-tsc": "^2.1.10"
+  }
+}

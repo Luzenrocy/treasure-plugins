@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
+  <defs><linearGradient id="json-c-bg" x1="5" y1="5" x2="59" y2="59"><stop stop-color="#FFF1E6"/><stop offset=".5" stop-color="#FFF7D8"/><stop offset="1" stop-color="#E9F5FF"/></linearGradient><linearGradient id="json-c-code" x1="21" y1="15" x2="48" y2="49"><stop stop-color="#F29B55"/><stop offset="1" stop-color="#D65B6F"/></linearGradient></defs>
+  <rect x="1" y="1" width="62" height="62" rx="15" fill="url(#json-c-bg)" stroke="#F1D5B8" stroke-width="1.5"/>
+  <g transform="translate(3 0)">
+    <path d="M17 12h22l8 8v29a5 5 0 0 1-5 5H17a5 5 0 0 1-5-5V17a5 5 0 0 1 5-5Z" fill="#FFFDF7" stroke="#E9C58B"/><path d="M39 12v10h10" fill="#FFE5B8" stroke="#E9C58B"/>
+    <g transform="translate(-3 0)"><path d="m25 26-5 6 5 6M39 26l5 6-5 6" stroke="url(#json-c-code)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M29 24v16" stroke="#F0B04B" stroke-width="2.3" stroke-linecap="round"/><path d="M19 45h25" stroke="#7AB4D9" stroke-width="2" stroke-linecap="round"/><path d="M23 49h14" stroke="#B0D6EA" stroke-width="2" stroke-linecap="round"/></g>
+  </g>
+</svg>

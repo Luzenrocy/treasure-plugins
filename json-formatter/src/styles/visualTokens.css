@@ -1,0 +1,18 @@
+:root {
+  --json-canvas: #f5efe3;
+  --json-panel: #fffaf1;
+  --json-panel-strong: #f0e7d5;
+  --json-border: #ddcba5;
+  --json-border-strong: #cfb878;
+  --json-ink: #302c4a;
+  --json-muted: #746d88;
+  --json-purple: #7350ad;
+  --json-purple-dark: #403355;
+  --json-local: #28774f;
+  --json-disabled: #b8afbd;
+  --json-key: #7b50b7;
+  --json-string: #2c8159;
+  --json-number: #bd7541;
+  --json-literal: #a24c75;
+  --json-error: #aa4c4c;
+}

@@ -1,0 +1,16 @@
+{
+  "name": "text-diff-vc0eva",
+  "alias": "文本对比",
+  "version": "1.0.0",
+  "description": "用于本地双栏文本差异比较与编辑",
+  "author": "OpenAI",
+  "icon": "icon.svg",
+  "entry": "index.html",
+  "minPlatformVersion": "2.0.0",
+  "menu": {
+    "name": "文本对比",
+    "icon": "assets/text-diff-menu.svg",
+    "order": 100
+  },
+  "_frozen": true
+}

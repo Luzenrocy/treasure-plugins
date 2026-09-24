@@ -1,0 +1,16 @@
+{
+  "name": "json--j9i283",
+  "alias": "JSON 格式化",
+  "version": "1.0.0",
+  "description": "用于本地 JSON 文本格式化、校验、压缩与转义",
+  "author": "OpenAI",
+  "icon": "icon.svg",
+  "entry": "index.html",
+  "minPlatformVersion": "2.0.0",
+  "menu": {
+    "name": "JSON 格式化",
+    "icon": "assets/json-formatter-menu.svg",
+    "order": 100
+  },
+  "_frozen": true
+}

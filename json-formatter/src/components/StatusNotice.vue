@@ -1,0 +1,3 @@
+<template><p class="status-notice" :class="`state-${state}`" role="status" aria-live="polite"><span v-if="state === 'processing'" class="status-dot" aria-hidden="true" />{{ message }}</p></template>
+<script setup lang="ts">defineProps<{ message: string; state: 'empty' | 'content' | 'processing' | 'error' }>();</script>
+<style scoped>.status-notice { display: inline-flex; align-items: center; gap: 7px; margin: 0; font-size: 12px; } .state-empty, .state-content { color: var(--json-muted); } .state-processing { color: var(--json-purple); } .state-error { color: var(--json-error); } .status-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }</style>
