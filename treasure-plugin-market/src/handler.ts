@@ -20,9 +20,21 @@ async function currentUser(request: Request, requireRole: Role = 'admin', requir
   const rawToken = bearer(request);
   const claims = await verifyAccessToken(rawToken);
   if (!claims) {
-    // 诊断：区分"token 根本没到 / 签名不匹配"与"用户查询失败"，避免黑盒猜测
-    console.error('[auth:reject] 令牌校验失败（未携带 / 签名不匹配 / 已过期）', {
-      tokenPrefix: rawToken.slice(0, 24),
+    // 诊断：解码 token 头/载荷，区分 签名不匹配 / 已过期 / 非本应用签发
+    let decodedHeader = '';
+    let decodedPayload = '';
+    try {
+      const parts = rawToken.split('.');
+      if (parts.length >= 2) {
+        decodedHeader = new TextDecoder().decode(Uint8Array.from(atob(parts[0].replaceAll('-', '+').replaceAll('_', '/') + '='.repeat((4 - (parts[0].length % 4)) % 4)), (c) => c.charCodeAt(0)));
+        decodedPayload = new TextDecoder().decode(Uint8Array.from(atob(parts[1].replaceAll('-', '+').replaceAll('_', '/') + '='.repeat((4 - (parts[1].length % 4)) % 4)), (c) => c.charCodeAt(0)));
+      }
+    } catch { /* 非 base64 / 非法结构时忽略 */ }
+    console.error('[auth:reject] 令牌校验失败', {
+      tokenPrefix: rawToken.slice(0, 48),
+      header: decodedHeader.slice(0, 120),
+      payload: decodedPayload.slice(0, 200),
+      now: Math.floor(Date.now() / 1000),
       envSecretPrefix: (process.env.AUTH_JWT_SECRET ?? '').slice(0, 8),
       path: new URL(request.url).pathname,
     });
@@ -51,6 +63,7 @@ async function currentUser(request: Request, requireRole: Role = 'admin', requir
     const security = await settings.byUserId(user.id);
     if (needsMfaVerification(true, security?.mfa_enabled, claims.aal)) throw new Error('该操作必须完成 MFA 验证');
   }
+  console.log(`[app] auth OK sub=${claims.sub} aal=${claims.aal} path=${new URL(request.url).pathname}`);
   return { claims, user };
 }
 
