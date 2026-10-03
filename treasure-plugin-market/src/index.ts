@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { extname, join, normalize } from 'node:path';
 import { handle } from './handler.js';
 
-const port = Number(process.env.PORT ?? 8787);
+const port = Number(process.env.PORT ?? 7860);
 const host = process.env.HOST ?? '127.0.0.1';
 const staticDir = process.env.STATIC_DIR ?? 'dist';
 

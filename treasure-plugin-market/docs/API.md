@@ -1,6 +1,6 @@
 # Treasure Plugin Market · API 文档
 
-服务地址：`http://127.0.0.1:8787`（生产环境替换为部署域名）。所有接口经 `/api` 前缀暴露（服务入口 `index.ts` 剥离前缀后进入业务路由）。
+服务地址：`http://127.0.0.1:7860`（生产环境替换为部署域名）。所有接口经 `/api` 前缀暴露（服务入口 `index.ts` 剥离前缀后进入业务路由）。
 
 统一响应包装：
 
@@ -47,7 +47,7 @@ GET /api/plugins
 ```
 
 ```bash
-curl 'http://127.0.0.1:8787/api/plugins'
+curl 'http://127.0.0.1:7860/api/plugins'
 ```
 
 ### 1.2 插件详情
@@ -59,7 +59,7 @@ GET /api/plugins/{pluginCode}
 单个已发布插件元信息。插件不存在或未发布返回 `404 插件不存在`。
 
 ```bash
-curl 'http://127.0.0.1:8787/api/plugins/text-diff'
+curl 'http://127.0.0.1:7860/api/plugins/text-diff'
 ```
 
 ### 1.3 插件已发布版本列表
@@ -90,7 +90,7 @@ GET /api/plugins/{pluginCode}/releases
 ```
 
 ```bash
-curl 'http://127.0.0.1:8787/api/plugins/text-diff/releases'
+curl 'http://127.0.0.1:7860/api/plugins/text-diff/releases'
 ```
 
 ---
@@ -147,7 +147,7 @@ Content-Type: application/json
 ```
 
 ```bash
-curl -X POST 'http://127.0.0.1:8787/api/plugins/with-release' \
+curl -X POST 'http://127.0.0.1:7860/api/plugins/with-release' \
   -H 'Authorization: Bearer tpm_xxxxxxxx' \
   -H 'Content-Type: application/json' \
   -d '{ "plugin": { "pluginCode": "text-diff", "alias": "Text Diff", "description": "文本差异对比工具", "author": "Luzenrocy" }, "release": { "version": "1.0.0", "downloadUrl": "https://github.com/Luzenrocy/treasure-plugins/releases/download/plugin/text-diff/v1.0.0/text-diff.zip", "sha256": "049fb3aec026e1c9e73eeaf2836ba9cfd1da6617cf80023a6bfd8dc1a3cbcb13", "sizeBytes": 395093, "manifest": { "name": "text-diff", "version": "1.0.0" } } }'

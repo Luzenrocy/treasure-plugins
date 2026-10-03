@@ -67,9 +67,9 @@ src/
 npm install
 cp .env.example .env   # 填入 VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY 与密钥
 
-# A：Node 应用（页面 + API + 数据库，端口 8787）
+# A：Node 应用（页面 + API + 数据库，端口 7860）
 npm run dev:api
-# B：Vite 热更新（/api 代理到 8787）
+# B：Vite 热更新（/api 代理到 7860）
 npm run dev
 ```
 
@@ -84,14 +84,14 @@ Docker：
 
 ```bash
 docker build -t treasure-plugin-market .
-docker run -p 8787:8787 \
+docker run -p 7860:7860 \
   -e VITE_SUPABASE_URL=https://<ref>.supabase.co \
   -e VITE_SUPABASE_PUBLISHABLE_KEY=<anon key> \
   -e AUTH_JWT_SECRET=<随机 32+ 字符> \
   treasure-plugin-market
 ```
 
-容器内只有一个 Node 进程，仅暴露 8787 端口（镜像内已设 `HOST=0.0.0.0`，可被容器/平台反向代理访问）。
+容器内只有一个 Node 进程，仅暴露 7860 端口（镜像内已设 `HOST=0.0.0.0`，可被容器/平台反向代理访问）。
 
 > 运行时必需环境变量：`VITE_SUPABASE_URL`、`VITE_SUPABASE_PUBLISHABLE_KEY`（服务端 `supabase.ts` 以 `process.env` 读取）、`AUTH_JWT_SECRET`（JWT 签名）。这三个在部署平台注入即可生效，**无需重新构建**。
 > `VITE_API_BASE_URL` 是构建期变量，默认 `/api`（同源部署无需设置）。
@@ -108,7 +108,7 @@ docker run -p 8787:8787 \
    | `AUTH_JWT_SECRET` | 任意随机长字符串（≥32 字符）|
 
    > 这两个 `VITE_` 参数是**服务端运行时读取**（`process.env`，非构建期），以 Secrets 注入即可生效，改值无需重建 Space。
-3. 端口：Dockerfile `EXPOSE 8787`，Hugging Face 会自动读取该端口并把 `PORT` 环境变量设为 `8787`（应用监听 `0.0.0.0:8787`），无需其它配置；
+3. 端口：Dockerfile `EXPOSE 7860`，Hugging Face 会自动读取该端口并把 `PORT` 环境变量设为 `7860`（应用监听 `0.0.0.0:7860`），无需其它配置；
 4. 首次启动后，管理员账号为迁移脚本种子 `treasure / 123456`，**请立即在"安全设置"修改密码**；
 5. 若后续前端需要构建期变量（如 `VITE_API_BASE_URL` 自定义域名），请在 HF Space 的 **Variables**（构建期变量）中设置并重启构建。
 
