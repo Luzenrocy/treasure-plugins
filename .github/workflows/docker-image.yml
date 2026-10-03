@@ -10,6 +10,9 @@ on:
     paths:
       - 'treasure-plugin-market/**'
       - '.github/workflows/docker-image.yml'
+    # 版本发布：tag 形如 treasure-plugin-market/v1.0.0（tag 推送不评估 paths 过滤）
+    tags:
+      - 'treasure-plugin-market/v*'
   workflow_dispatch:
 
 jobs:
@@ -25,6 +28,26 @@ jobs:
       - name: Compute image name
         id: img
         run: echo "image=ghcr.io/${GITHUB_REPOSITORY,,}/treasure-plugin-market" >> "$GITHUB_OUTPUT"
+
+      # 分支/手动推送：latest + 短 sha + 分支名；版本 tag 推送：treasure-plugin-market/v1.0.0 → 1.0.0
+      - name: Compute image tags
+        id: tags
+        env:
+          IMAGE: ${{ steps.img.outputs.image }}
+          REF_TYPE: ${{ github.ref_type }}
+          REF_NAME: ${{ github.ref_name }}
+          SHA: ${{ github.sha }}
+        run: |
+          if [ "$REF_TYPE" = "tag" ]; then
+            set -- "$IMAGE:${REF_NAME#treasure-plugin-market/v}"
+          else
+            set -- "$IMAGE:latest" "$IMAGE:$SHA" "$IMAGE:$REF_NAME"
+          fi
+          {
+            echo "tags<<EOF"
+            printf '%s\n' "$@"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Set up Buildx
         uses: docker/setup-buildx-action@v3
@@ -42,10 +65,7 @@ jobs:
           context: ./treasure-plugin-market
           file: ./treasure-plugin-market/Dockerfile
           push: true
-          tags: |
-            ${{ steps.img.outputs.image }}:latest
-            ${{ steps.img.outputs.image }}:${{ github.sha }}
-            ${{ steps.img.outputs.image }}:${{ github.ref_name }}
+          tags: ${{ steps.tags.outputs.tags }}
           labels: |
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
             org.opencontainers.image.revision=${{ github.sha }}
