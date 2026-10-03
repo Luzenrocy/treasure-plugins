@@ -2,7 +2,7 @@ import { auditLogs } from './db/audit-logs.js';
 import { dashboard } from './db/dashboard.js';
 import { developerTokens } from './db/developer-tokens.js';
 import { plugins } from './db/plugins.js';
-import { readBody, roleAtLeast, canManagePlugin, type ReleaseReviewAction, type ReviewAction, type Role } from './db/query-utils.js';
+import { extractBearer, readBody, roleAtLeast, canManagePlugin, type ReleaseReviewAction, type ReviewAction, type Role } from './db/query-utils.js';
 import { settings } from './db/settings.js';
 import { users } from './db/users.js';
 import { buildTotpUri, createAccessToken, createMfaKey, createTotpSecret, decryptMfaSecret, encryptMfaSecret, hashPassword, needsMfaVerification, verifyAccessToken, verifyPassword, verifyTotp } from './security.js';
@@ -10,7 +10,7 @@ import { buildTotpUri, createAccessToken, createMfaKey, createTotpSecret, decryp
 const cors = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': 'same-origin', 'Access-Control-Allow-Headers': 'authorization, content-type' };
 const ok = (data: unknown, status = 200) => new Response(JSON.stringify({ code: 0, message: 'success', data }), { status, headers: cors });
 const fail = (message: string, status = 400) => new Response(JSON.stringify({ code: 'REQUEST_FAILED', message, data: null }), { status, headers: cors });
-const bearer = (request: Request) => request.headers.get('authorization')?.replace(/^Bearer\s+/i, '') ?? '';
+const bearer = extractBearer;
 const route = (request: Request) => new URL(request.url).pathname.replace(/^.*\/market-admin/, '') || '/';
 const digest = async (value: string) => { const bytes = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value)); return [...new Uint8Array(bytes)].map((x) => x.toString(16).padStart(2, '0')).join(''); };
 
