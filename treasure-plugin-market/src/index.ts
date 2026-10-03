@@ -77,8 +77,16 @@ async function serveStatic(pathname: string, response: ServerResponse): Promise<
 }
 
 const server = createServer((incoming, outgoing) => {
+  const startedAt = Date.now();
   const url = new URL(incoming.url ?? '/', `http://${incoming.headers.host ?? 'localhost'}`);
   const pathname = url.pathname;
+  const method = incoming.method ?? '?';
+
+  // 每请求一条访问日志：方法、路径、最终状态码、耗时。托管平台（FC 等）日志里
+  // 只有平台生命周期日志时，靠这里确认请求确实到达了应用。
+  const log = (status: number) => {
+    console.log(`[app] ${method} ${pathname} -> ${status} ${Date.now() - startedAt}ms`);
+  };
 
   if (pathname === '/api' || pathname.startsWith('/api/')) {
     const apiPath = pathname === '/api' ? '/' : pathname.replace(/^\/api/, '');
@@ -87,7 +95,9 @@ const server = createServer((incoming, outgoing) => {
     apiUrl.search = url.search;
     toRequest(incoming, apiUrl)
       .then((request) => handle(request))
-      .then((result) => writeResponse(outgoing, result))
+      .then((result) => {
+        writeResponse(outgoing, result).finally(() => log(result.status));
+      })
       .catch((error: unknown) => {
         console.error('[app] api request failed', error);
         if (!outgoing.headersSent) {
@@ -95,27 +105,42 @@ const server = createServer((incoming, outgoing) => {
           outgoing.setHeader('Content-Type', 'application/json');
         }
         outgoing.end(JSON.stringify({ code: 1, message: 'INTERNAL_ERROR', data: null }));
+        log(500);
       });
     return;
   }
 
   if (incoming.method === 'GET' || incoming.method === 'HEAD') {
-    serveStatic(pathname, outgoing).catch((error: unknown) => {
-      console.error('[app] static request failed', error);
-      if (!outgoing.headersSent) {
-        outgoing.statusCode = 500;
-        outgoing.setHeader('Content-Type', 'text/plain; charset=utf-8');
-      }
-      outgoing.end('Internal Server Error');
-    });
+    serveStatic(pathname, outgoing)
+      .then(() => log(200))
+      .catch((error: unknown) => {
+        console.error('[app] static request failed', error);
+        if (!outgoing.headersSent) {
+          outgoing.statusCode = 500;
+          outgoing.setHeader('Content-Type', 'text/plain; charset=utf-8');
+        }
+        outgoing.end('Internal Server Error');
+        log(500);
+      });
     return;
   }
 
   outgoing.statusCode = 405;
   outgoing.setHeader('Allow', 'GET, HEAD, POST, PATCH, DELETE');
   outgoing.end('Method Not Allowed');
+  log(405);
 });
 
 server.listen(port, host, () => {
+  // 启动诊断：不泄露完整密钥，只输出前缀与长度，便于跨实例核对配置一致性
+  const secret = process.env.AUTH_JWT_SECRET ?? '';
+  const supabaseUrl = process.env.VITE_SUPABASE_URL ?? '';
+  const supabaseHost = (() => {
+    try { return new URL(supabaseUrl).host; } catch { return '(非法URL)'; }
+  })();
   console.log(`[app] treasure-plugin-market listening on http://${host}:${port} (static: ${staticDir})`);
+  console.log(`[app] env: PORT=${port} HOST=${host} STATIC_DIR=${staticDir}`);
+  console.log(`[app] env: SUPABASE_HOST=${supabaseHost}`);
+  console.log(`[app] env: AUTH_JWT_SECRET=${secret.slice(0, 8)}...(长度 ${secret.length}, ${secret.length >= 32 ? '合格' : '不合格(<32)'})`);
+  console.log(`[app] env: AUTH_JWT_PREVIOUS_SECRETS=${(process.env.AUTH_JWT_PREVIOUS_SECRETS ?? '(未配置)').split(',').map((s) => s.trim().slice(0, 8)).join(',')}`);
 });

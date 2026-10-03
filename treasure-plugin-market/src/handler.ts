@@ -76,12 +76,16 @@ export async function handle(request: Request): Promise<Response> {
 
     if (path === '/admin/login' && request.method === 'POST') {
       const user = await users.byLogin(String(body.username ?? '').trim());
-      if (!user || user.status !== 'active' || !(await verifyPassword(String(body.password ?? ''), user.password_hash, user.password_salt))) return fail('账号或密码无效', 401);
+      if (!user || user.status !== 'active' || !(await verifyPassword(String(body.password ?? ''), user.password_hash, user.password_salt))) {
+        console.error(`[app] 登录失败: 账号密码无效 (username=${String(body.username ?? '').slice(0, 32)})`);
+        return fail('账号或密码无效', 401);
+      }
       const security = await settings.byUserId(user.id);
       const ttl = Number(security?.token_ttl_seconds ?? 600);
       const token = await createAccessToken(user.id, 'aal1', ttl);
       await users.markLogin(user.id);
       await audit(user.id, 'auth.login', 'users', user.id);
+      console.log(`[app] 登录成功: user=${user.username} id=${user.id} ttl=${ttl}s`);
       return ok({ token, aal: 'aal1', mfaRequired: security?.mfa_enabled === true, expiresAt: Date.now() + ttl * 1000 });
     }
 
