@@ -105,7 +105,7 @@ Content-Type: application/json
 ```
 
 - **认证**：`?token=` 查询参数携带开发者 Token（形如 `tpm_...`），认证链路唯一通道，头通道（`Authorization`/`X-Access-Token`）与 `access_token`/`sessionId` 参数一律不消费。Token 在管理控制台右上角"重置 Token"获取，哈希存库、带有效期（默认 600 秒，可经安全设置调整）。
-- **ModelScope 注意**：部署在 `*.ms.show` 时，网关会拦截 `Authorization: Bearer *` 及部分自定义头；本接口只用查询参数，天然免疫网关头拦截。
+- **ModelScope 注意**：部署在 `*.ms.show` 时，网关会拦截 `Authorization: Bearer *` 及部分自定义头；本接口只用查询参数，天然免疫网关头拦截。**另需携带浏览器 User-Agent**：`.ms.show` 网关会按 UA 判定——非浏览器 UA（如 curl 默认 UA）的请求返回 `{"Code":10010101007,"Message":"当前接口不支持通过SDK Token直接访问..."}` 且到不了应用。脚本/CI 调用时加 `-H 'User-Agent: Mozilla/5.0 ...'`（或 curl `-A`）即可穿透；自建部署（非 ms.show）无此限制，可省略。
 - **行为**：插件不存在 → 创建插件并登记首个版本；插件已存在（未删除）→ 追加版本。登记结果均为 `status=pending_review`，进入管理台"待办中心"审核，通过后市场公开可见。
 - **字段约束**：`pluginCode` 匹配 `^[a-z][a-z0-9-]*$`；`version` 匹配 `^\d+\.\d+\.\d+$`；`downloadUrl` 必须 `https://` 开头；`sha256` 为 64 位十六进制；`sizeBytes` > 0。
 
@@ -147,8 +147,15 @@ Content-Type: application/json
 ```
 
 ```bash
+# 自建部署（非 ms.show）
 curl -X POST 'http://127.0.0.1:7860/api/plugins/with-release?token=tpm_xxxxxxxx' \
   -H 'Content-Type: application/json' \
+  -d '{ "plugin": { "pluginCode": "text-diff", "alias": "Text Diff", "description": "文本差异对比工具", "author": "Luzenrocy" }, "release": { "version": "1.0.0", "downloadUrl": "https://github.com/Luzenrocy/treasure-plugins/releases/download/plugin/text-diff/v1.0.0/text-diff.zip", "sha256": "049fb3aec026e1c9e73eeaf2836ba9cfd1da6617cf80023a6bfd8dc1a3cbcb13", "sizeBytes": 395093, "manifest": { "name": "text-diff", "version": "1.0.0" } } }'
+
+# ModelScope *.ms.show 部署：额外携带浏览器 User-Agent（否则网关返回 10010101007）
+curl -X POST 'https://<host>.ms.show/api/plugins/with-release?token=tpm_xxxxxxxx' \
+  -H 'Content-Type: application/json' \
+  -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36' \
   -d '{ "plugin": { "pluginCode": "text-diff", "alias": "Text Diff", "description": "文本差异对比工具", "author": "Luzenrocy" }, "release": { "version": "1.0.0", "downloadUrl": "https://github.com/Luzenrocy/treasure-plugins/releases/download/plugin/text-diff/v1.0.0/text-diff.zip", "sha256": "049fb3aec026e1c9e73eeaf2836ba9cfd1da6617cf80023a6bfd8dc1a3cbcb13", "sizeBytes": 395093, "manifest": { "name": "text-diff", "version": "1.0.0" } } }'
 ```
 

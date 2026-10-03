@@ -182,7 +182,7 @@ export async function handle(request: Request): Promise<Response> {
       const rows = await users.list();
       return ok({ items: rows.map((row) => ({ id: row.id, username: row.username, displayName: row.display_name ?? row.username, email: row.email, role: row.role, status: row.status, mfaEnabled: row.mfa_required, lastLoginAt: row.last_login_at })) });
     }
-    if (/^\/admin\/users\/[^/]+$/.test(path) && request.method === 'PATCH') {
+    if (/^\/admin\/users\/[^/]+$/.test(path) && (request.method === 'PATCH' || (request.method === 'POST' && new URL(request.url).searchParams.get('action') === 'patch'))) {
       const { user: actor } = await currentUser(request, 'admin', true);
       const id = path.split('/').at(-1)!;
       if (body.mfaEnabled !== undefined) {
@@ -234,7 +234,7 @@ export async function handle(request: Request): Promise<Response> {
       await audit(actor.id, 'user.password.reset', 'users', id);
       return ok({ updated: true });
     }
-    if (/^\/admin\/users\/[^/]+$/.test(path) && request.method === 'DELETE') {
+    if (/^\/admin\/users\/[^/]+$/.test(path) && (request.method === 'DELETE' || (request.method === 'POST' && new URL(request.url).searchParams.get('action') === 'delete'))) {
       const { user: actor } = await currentUser(request, 'admin', true);
       const id = path.split('/').at(-1)!;
       if (actor.id === id) return fail('不能删除当前登录账户');
@@ -248,7 +248,7 @@ export async function handle(request: Request): Promise<Response> {
       const security = await settings.byUserId(user.id);
       return ok({ items: { id: user.id, username: user.username, displayName: user.display_name, role: user.role, mfaEnabled: security?.mfa_enabled ?? false, tokenTtlSeconds: security?.token_ttl_seconds ?? 600, mfaKeyword: security?.mfa_keyword ?? '' } });
     }
-    if (path === '/admin/settings' && request.method === 'PUT') {
+    if (path === '/admin/settings' && (request.method === 'PUT' || (request.method === 'POST' && new URL(request.url).searchParams.get('action') === 'put'))) {
       const { user } = await currentUser(request, 'admin');
       await settings.upsert(user.id, { mfaEnabled: Boolean(body.mfaEnabled), tokenTtlSeconds: Number(body.tokenTtlSeconds ?? 600), mfaKeyword: body.mfaKeyword ?? null });
       return ok({ items: body });
@@ -331,7 +331,7 @@ export async function handle(request: Request): Promise<Response> {
       await audit(user.id, 'plugin.disable', 'plugins', result.id);
       return ok(result);
     }
-    if (/^\/admin\/plugins\/[^/]+$/.test(path) && request.method === 'DELETE') {
+    if (/^\/admin\/plugins\/[^/]+$/.test(path) && (request.method === 'DELETE' || (request.method === 'POST' && new URL(request.url).searchParams.get('action') === 'delete'))) {
       const { user } = await currentUser(request, 'user', true);
       const code = path.split('/').at(-1)!;
       const plugin = (await plugins.adminList()).find((item) => item.plugin_code === code);
@@ -351,7 +351,7 @@ export async function handle(request: Request): Promise<Response> {
       await audit(user.id, 'release.revoke', 'plugin_releases', id);
       return ok(rows[0]);
     }
-    if (/^\/admin\/releases\/[^/]+$/.test(path) && request.method === 'DELETE') {
+    if (/^\/admin\/releases\/[^/]+$/.test(path) && (request.method === 'DELETE' || (request.method === 'POST' && new URL(request.url).searchParams.get('action') === 'delete'))) {
       const { user } = await currentUser(request, 'user', true);
       const id = path.split('/').at(-1)!;
       const owner = await plugins.releaseOwner(id);

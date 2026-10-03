@@ -117,6 +117,7 @@ jobs:
           MARKET_TOKEN: ${{ secrets.MARKET_TOKEN }}
         run: |
           curl -X POST "https://<market-host>/api/plugins/with-release?token=$MARKET_TOKEN" \
+            -A "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36" \
             -H "Content-Type: application/json" \
             -d "$(jq -c '{plugin:{...},release:{...}}' release.json)"
 ```
@@ -127,6 +128,8 @@ jobs:
 - 登记后状态为待审核，需管理员在"待办中心"通过后市场可见；
 - 同（插件, 版本）不可重复提交（换版本号即可）；
 - **认证只走 `?token=` 查询参数单通道**：任何头通道（`Authorization`/`X-Access-Token`）与旧 `?access_token=` 参数后端一律不读；ModelScope（`*.ms.show`）等托管平台网关拦截/注入鉴权头对本接口无影响。
+- **ModelScope（`*.ms.show`）必须携带浏览器 UA**（示例中 `-A ...Mozilla/5.0...`）：该平台网关按 User-Agent 判定，curl 默认 UA 的请求返回 `{"Code":10010101007,...}`（"当前接口不支持通过SDK Token直接访问"）且到不了应用；自建部署（非 ms.show）可去掉 `-A`。
+- 若登记时报 `10010101007`，先确认是否加上了浏览器 UA 且 Token 未过期（`?token=` 在 URL 中）。
 
 ## 七、常见问题
 
