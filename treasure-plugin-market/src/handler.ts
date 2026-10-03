@@ -17,10 +17,35 @@ const digest = async (value: string) => { const bytes = await crypto.subtle.dige
 // 角色门槛：admin > operator > user。operator/user 都是合法登录角色，
 // 是否放行由路由标注的 requireRole 决定；requireMfa 遵循"开启时验证、关闭时不验证"。
 async function currentUser(request: Request, requireRole: Role = 'admin', requireMfa = false) {
-  const claims = await verifyAccessToken(bearer(request));
-  if (!claims) throw new Error('登录已过期');
-  const user = await users.byId(claims.sub);
-  if (!user || user.status !== 'active') throw new Error('登录已过期');
+  const rawToken = bearer(request);
+  const claims = await verifyAccessToken(rawToken);
+  if (!claims) {
+    // 诊断：区分"token 根本没到 / 签名不匹配"与"用户查询失败"，避免黑盒猜测
+    console.error('[auth:reject] 令牌校验失败（未携带 / 签名不匹配 / 已过期）', {
+      tokenPrefix: rawToken.slice(0, 24),
+      envSecretPrefix: (process.env.AUTH_JWT_SECRET ?? '').slice(0, 8),
+      path: new URL(request.url).pathname,
+    });
+    throw new Error('登录已过期');
+  }
+  let user: Awaited<ReturnType<typeof users.byId>>;
+  try {
+    user = await users.byId(claims.sub);
+  } catch (error) {
+    console.error('[auth:reject] 查询用户异常', {
+      sub: claims.sub,
+      error: error instanceof Error ? error.message : String(error),
+    });
+    throw error;
+  }
+  if (!user) {
+    console.error('[auth:reject] 用户不存在或已停用', { sub: claims.sub });
+    throw new Error('登录已过期：用户不存在或已停用');
+  }
+  if (user.status !== 'active') {
+    console.error('[auth:reject] 用户非启用状态', { sub: claims.sub, status: user.status });
+    throw new Error('登录已过期：用户不存在或已停用');
+  }
   if (!roleAtLeast(user.role, requireRole)) throw new Error('没有管理员权限');
   if (requireMfa) {
     const security = await settings.byUserId(user.id);
