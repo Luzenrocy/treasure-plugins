@@ -9,12 +9,12 @@ create extension if not exists pgcrypto;
 -- ============================================================
 -- 1) 表：先删后建（按外键依赖从子表到父表）
 -- ============================================================
-drop table if exists public.audit_logs;
-drop table if exists public.developer_tokens;
-drop table if exists public.plugin_releases;
-drop table if exists public.plugins;
-drop table if exists public.user_settings;
-drop table if exists public.users;
+drop table if exists public.audit_logs CASCADE;
+drop table if exists public.developer_tokens CASCADE;
+drop table if exists public.plugin_releases CASCADE;
+drop table if exists public.plugins CASCADE;
+drop table if exists public.user_settings CASCADE;
+drop table if exists public.users CASCADE;
 
 create table public.users (
   id uuid primary key default gen_random_uuid(),

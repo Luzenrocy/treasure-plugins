@@ -2,6 +2,7 @@
 -- 解决 FC 多实例 AUTH_JWT_SECRET 不一致导致"刚登录就提示已过期"：校验只依赖共享 DB，
 -- 与任何实例的密钥/内存无关。表结构幂等，可重复执行。
 
+drop table if exists public.auth_sessions CASCADE;
 create table if not exists public.auth_sessions (
   session_id   text primary key,          -- 服务端生成的 32 字节随机数（base64url，43 字符）
   user_id      uuid not null references public.users(id) on delete cascade,
