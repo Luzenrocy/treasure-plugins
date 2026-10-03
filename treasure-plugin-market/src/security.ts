@@ -31,11 +31,29 @@ export async function verifyPassword(password: string, hash: string, encodedSalt
   return constantTimeEqual(base64UrlToBytes(result.hash), base64UrlToBytes(hash));
 }
 
-async function signJwtPart(value: string) {
-  const secret = process.env.AUTH_JWT_SECRET;
-  if (!secret || secret.length < 32) throw new Error('AUTH_JWT_SECRET 未配置或长度不足 32 位');
+/**
+ * 参与 HMAC 校验的密钥列表：主密钥 + 轮换期的旧密钥（AUTH_JWT_PREVIOUS_SECRETS，逗号分隔）。
+ * 托管平台滚动更新/多实例场景下，签发与校验可能落在持有不同密钥的实例上，
+ * 支持旧密钥仅校验、不签发，可避免"刚登录就提示已过期"。
+ * 长度不足 32 的密钥从未能签发过（签发端强校验），校验时同样忽略。
+ */
+function hmacSecrets(): string[] {
+  const primary = process.env.AUTH_JWT_SECRET ?? '';
+  const previous = (process.env.AUTH_JWT_PREVIOUS_SECRETS ?? '')
+    .split(',')
+    .map((value) => value.trim());
+  return [...new Set([primary, ...previous])].filter((secret) => secret.length >= 32);
+}
+
+async function signJwtPart(value: string, secret: string) {
   const key = await crypto.subtle.importKey('raw', encoder.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
   return new Uint8Array(await crypto.subtle.sign('HMAC', key, encoder.encode(value)));
+}
+
+function primarySecret(): string {
+  const secret = process.env.AUTH_JWT_SECRET;
+  if (!secret || secret.length < 32) throw new Error('AUTH_JWT_SECRET 未配置或长度不足 32 位');
+  return secret;
 }
 
 export function createMfaKey(): string {
@@ -75,17 +93,21 @@ export async function createAccessToken(userId: string, aal: 'aal1' | 'aal2' = '
   const header = bytesToBase64Url(encoder.encode(JSON.stringify({ alg: 'HS256', typ: 'JWT' })));
   const payload = bytesToBase64Url(encoder.encode(JSON.stringify({ sub: userId, aal, iat: Math.floor(Date.now() / 1000), exp: Math.floor(Date.now() / 1000) + ttlSeconds })));
   const signingInput = `${header}.${payload}`;
-  return `${signingInput}.${bytesToBase64Url(await signJwtPart(signingInput))}`;
+  return `${signingInput}.${bytesToBase64Url(await signJwtPart(signingInput, primarySecret()))}`;
 }
 
 export async function verifyAccessToken(token: string) {
   const [header, payload, signature] = token.split('.');
   if (!header || !payload || !signature) return null;
-  const expected = await signJwtPart(`${header}.${payload}`);
-  if (!constantTimeEqual(expected, base64UrlToBytes(signature))) return null;
-  const claims = JSON.parse(new TextDecoder().decode(base64UrlToBytes(payload))) as { sub?: string; aal?: 'aal1' | 'aal2'; exp?: number };
-  if (!claims.sub || !claims.exp || claims.exp <= Math.floor(Date.now() / 1000)) return null;
-  return claims;
+  for (const secret of hmacSecrets()) {
+    const expected = await signJwtPart(`${header}.${payload}`, secret);
+    if (constantTimeEqual(expected, base64UrlToBytes(signature))) {
+      const claims = JSON.parse(new TextDecoder().decode(base64UrlToBytes(payload))) as { sub?: string; aal?: 'aal1' | 'aal2'; exp?: number };
+      if (!claims.sub || !claims.exp || claims.exp <= Math.floor(Date.now() / 1000)) return null;
+      return claims;
+    }
+  }
+  return null;
 }
 
 const base32Alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
