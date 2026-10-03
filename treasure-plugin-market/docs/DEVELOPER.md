@@ -126,7 +126,7 @@ jobs:
 - 插件编码/版本/下载 URL/SHA-256 必须与 release 资产一致；
 - 登记后状态为待审核，需管理员在"待办中心"通过后市场可见；
 - 同（插件, 版本）不可重复提交（换版本号即可）；
-- **市场部署在 ModelScope（`*.ms.show`）时该 curl 会 403**：其边缘网关拦截 `Authorization: Bearer *`。改用 `-H "X-Access-Token: $MARKET_TOKEN"`（后端等价支持），或把市场服务部署在不受该网关限制的域名下。
+- **市场部署在 ModelScope（`*.ms.show`）时该 curl 会 403**：其边缘网关拦截 `Authorization: Bearer *`（部分平台连自定义头也拦）。改用查询参数 `?access_token=$MARKET_TOKEN`（后端等价支持），或把市场服务部署在不受该网关限制的域名下。
 
 ## 七、常见问题
 

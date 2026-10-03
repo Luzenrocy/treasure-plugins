@@ -91,18 +91,19 @@ export async function readBody(request: Request): Promise<unknown> {
 }
 
 /**
- * 取请求携带的持有者令牌。
- * 优先读标准的 `Authorization` 头（CI / 开发者 Token 走这条），去掉 `Bearer ` 前缀；
- * `Authorization` 缺失或为空白时回退到 `X-Access-Token`。
- * 回退是必需的：ModelScope 等托管平台的边缘网关会拦截 `Authorization: Bearer *`
- * （判定为 SDK Token 访问）并直接返回 403，请求根本到不了应用，表现为"登录后一律提示已过期"。
- * `X-Access-Token` 不是 CORS 简单头，跨源 JS 无法在无预检授权时携带，安全性与 Bearer 一致。
+ * 取请求携带的持有者令牌，优先级：`Authorization` > `X-Access-Token` > `access_token` 查询参数。
+ * 头通道被托管平台边缘网关拦截（ModelScope 会拦截 `Authorization: Bearer *` 并返回 403，
+ * 请求根本到不了应用，表现为"登录后一律提示已过期"）时，回退到查询参数通道。
+ * `X-Access-Token` 不是 CORS 简单头，跨源 JS 无法在无预检授权时携带，安全性与 Bearer 一致；
+ * 查询参数不受网关头拦截影响，但会进入访问日志/浏览器历史，仅作头通道不可用的兜底。
  */
 export function extractBearer(request: Request): string {
   const authorization = request.headers.get('authorization')?.trim() ?? '';
   const credential = authorization.replace(/^Bearer\s+/i, '');
   if (credential) return credential;
-  return request.headers.get('x-access-token')?.trim() ?? '';
+  const xToken = request.headers.get('x-access-token')?.trim() ?? '';
+  if (xToken) return xToken;
+  return new URL(request.url).searchParams.get('access_token')?.trim() ?? '';
 }
 
 /**

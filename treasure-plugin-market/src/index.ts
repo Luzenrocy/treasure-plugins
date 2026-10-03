@@ -25,8 +25,8 @@ const MIME: Record<string, string> = {
   '.ttf': 'font/ttf',
 };
 
-async function toRequest(request: IncomingMessage, pathname: string): Promise<Request> {
-  const url = new URL(pathname, `http://${request.headers.host ?? 'localhost'}`);
+async function toRequest(request: IncomingMessage, targetUrl: URL): Promise<Request> {
+  const url = targetUrl;
   const headers = new Headers();
   for (const [key, value] of Object.entries(request.headers)) {
     if (Array.isArray(value)) headers.set(key, value.join(', '));
@@ -77,11 +77,15 @@ async function serveStatic(pathname: string, response: ServerResponse): Promise<
 }
 
 const server = createServer((incoming, outgoing) => {
-  const pathname = new URL(incoming.url ?? '/', `http://${incoming.headers.host ?? 'localhost'}`).pathname;
+  const url = new URL(incoming.url ?? '/', `http://${incoming.headers.host ?? 'localhost'}`);
+  const pathname = url.pathname;
 
   if (pathname === '/api' || pathname.startsWith('/api/')) {
     const apiPath = pathname === '/api' ? '/' : pathname.replace(/^\/api/, '');
-    toRequest(incoming, apiPath)
+    // 保留查询字符串（access_token 令牌经查询参数传入，需透传给 handler）
+    const apiUrl = new URL(apiPath, `http://${incoming.headers.host ?? 'localhost'}`);
+    apiUrl.search = url.search;
+    toRequest(incoming, apiUrl)
       .then((request) => handle(request))
       .then((result) => writeResponse(outgoing, result))
       .catch((error: unknown) => {

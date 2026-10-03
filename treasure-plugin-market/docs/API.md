@@ -105,8 +105,8 @@ Authorization: Bearer <developer token>
 Content-Type: application/json
 ```
 
-- **认证**：`Authorization` 头携带开发者 Token（形如 `tpm_...`），也可用 `X-Access-Token` 头等价传递。Token 在管理控制台右上角"重置 Token"获取，哈希存库、带有效期（默认 600 秒，可经安全设置调整）。
-- **ModelScope 注意**：部署在 `*.ms.show` 时，网关会拦截 `Authorization: Bearer *`，CI 需改用 `X-Access-Token: tpm_...`；或把市场服务部署在不受该网关限制的域名下。
+- **认证**：`Authorization` 头携带开发者 Token（形如 `tpm_...`），也可用 `X-Access-Token` 头或 `?access_token=` 查询参数等价传递。Token 在管理控制台右上角"重置 Token"获取，哈希存库、带有效期（默认 600 秒，可经安全设置调整）。
+- **ModelScope 注意**：部署在 `*.ms.show` 时，网关会拦截 `Authorization: Bearer *` 及部分自定义头，CI 需改用 `?access_token=tpm_...`；或把市场服务部署在不受该网关限制的域名下。
 - **行为**：插件不存在 → 创建插件并登记首个版本；插件已存在（未删除）→ 追加版本。登记结果均为 `status=pending_review`，进入管理台"待办中心"审核，通过后市场公开可见。
 - **字段约束**：`pluginCode` 匹配 `^[a-z][a-z0-9-]*$`；`version` 匹配 `^\d+\.\d+\.\d+$`；`downloadUrl` 必须 `https://` 开头；`sha256` 为 64 位十六进制；`sizeBytes` > 0。
 
@@ -170,14 +170,15 @@ curl -X POST 'http://127.0.0.1:7860/api/plugins/with-release' \
 
 管理接口均要求登录 JWT（`POST /api/admin/login` 获取），并按角色鉴权；**用户已开启 MFA 时**，敏感操作会要求先完成验证码（令牌升级 `aal2`）。
 
-**令牌传递方式（重要）**：后端同时接受两种头，`Authorization` 优先，`X-Access-Token` 为回退：
+**令牌传递方式（重要）**：后端按 `Authorization` > `X-Access-Token` > `access_token` 查询参数的顺序取令牌：
 
 ```
-X-Access-Token: <登录 JWT>          # 管理台前端使用
-Authorization: Bearer <登录 JWT>     # 等价，CI / 命令行可用
+?access_token=<登录 JWT>            # 管理台前端使用（ModelScope 推荐）
+X-Access-Token: <登录 JWT>          # 等价，命令行/脚本可用
+Authorization: Bearer <登录 JWT>     # 等价，CI 可用（自建部署无网关拦截时）
 ```
 
-必须用 `X-Access-Token` 的场景：**部署在 ModelScope（`*.ms.show`）时必须使用它**。该平台的边缘网关会拦截所有 `Authorization: Bearer *` 请求（判定为 SDK Token 访问）并直接返回 `403 {"Code":10010101007,...}`，请求根本到不了本服务，表现为"登录成功、后续一律提示登录已过期"。因此管理台前端只发 `X-Access-Token`，不与 `Authorization` 同时发送。
+**部署在 ModelScope（`*.ms.show`）时只能使用 `access_token` 查询参数**：该平台边缘网关会拦截所有 `Authorization: Bearer *` 请求（判定为 SDK Token 访问）并直接返回 `403 {"Code":10010101007,...}`，请求根本到不了本服务，表现为"登录成功、后续一律提示登录已过期"；部分平台对自定义头（如 `X-Access-Token`）也可能拦截。因此管理台前端把令牌放在 `access_token` 查询参数里（已实测可穿透网关）。代价：令牌会出现在访问日志与浏览器历史中，仅建议在头通道不可用的托管平台上使用；自建部署仍优先用 `X-Access-Token` / `Authorization`。
 
 角色：`admin`（管理员）/ `operator`（运营）/ `user`（用户）。
 
