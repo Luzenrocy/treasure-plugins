@@ -81,6 +81,13 @@ test('被篡改的 token 返回 null', async () => {
   });
 });
 
+test('畸形 token（非法 base64 签名）返回 null 而非抛错', async () => {
+  await withJwtEnv(SECRET_A, undefined, async () => {
+    assert.equal(await verifyAccessToken('x.y.z'), null);
+    assert.equal(await verifyAccessToken('eyJhbGciOiJIUzI1NiJ9.e30.!!!'), null);
+  });
+});
+
 test('createMfaKey 返回 32 字节熵的 base64url 字符串', () => {
   const key = createMfaKey();
   assert.equal(typeof key, 'string');

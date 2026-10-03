@@ -2,6 +2,7 @@ import { auditLogs } from './db/audit-logs.js';
 import { dashboard } from './db/dashboard.js';
 import { developerTokens } from './db/developer-tokens.js';
 import { plugins } from './db/plugins.js';
+import { createHash } from 'node:crypto';
 import { extractBearer, readBody, roleAtLeast, canManagePlugin, type ReleaseReviewAction, type ReviewAction, type Role } from './db/query-utils.js';
 import { settings } from './db/settings.js';
 import { users } from './db/users.js';
@@ -35,7 +36,7 @@ async function currentUser(request: Request, requireRole: Role = 'admin', requir
       header: decodedHeader.slice(0, 120),
       payload: decodedPayload.slice(0, 200),
       now: Math.floor(Date.now() / 1000),
-      envSecretPrefix: (process.env.AUTH_JWT_SECRET ?? '').slice(0, 8),
+      envSecretSha256: createHash('sha256').update(process.env.AUTH_JWT_SECRET ?? '').digest('hex'),
       path: new URL(request.url).pathname,
     });
     throw new Error('登录已过期');

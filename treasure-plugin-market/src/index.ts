@@ -1,6 +1,7 @@
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { extname, join, normalize } from 'node:path';
+import { createHash } from 'node:crypto';
 import { handle } from './handler.js';
 
 const port = Number(process.env.PORT ?? 7860);
@@ -141,6 +142,6 @@ server.listen(port, host, () => {
   console.log(`[app] treasure-plugin-market listening on http://${host}:${port} (static: ${staticDir})`);
   console.log(`[app] env: PORT=${port} HOST=${host} STATIC_DIR=${staticDir}`);
   console.log(`[app] env: SUPABASE_HOST=${supabaseHost}`);
-  console.log(`[app] env: AUTH_JWT_SECRET=${secret.slice(0, 8)}...(长度 ${secret.length}, ${secret.length >= 32 ? '合格' : '不合格(<32)'})`);
-  console.log(`[app] env: AUTH_JWT_PREVIOUS_SECRETS=${(process.env.AUTH_JWT_PREVIOUS_SECRETS ?? '(未配置)').split(',').map((s) => s.trim().slice(0, 8)).join(',')}`);
+  console.log(`[app] env: AUTH_JWT_SECRET_SHA256=${createHash('sha256').update(secret).digest('hex')}${secret.length >= 32 ? '' : '(密钥长度不足32!)'}`);
+  console.log(`[app] env: AUTH_JWT_PREVIOUS_SECRETS_SHA256=${(process.env.AUTH_JWT_PREVIOUS_SECRETS ?? '').split(',').map((s) => s.trim()).filter(Boolean).map((s) => createHash('sha256').update(s).digest('hex').slice(0, 16)).join(',') || '(未配置)'}`);
 });

@@ -101,10 +101,20 @@ export async function verifyAccessToken(token: string) {
   if (!header || !payload || !signature) return null;
   for (const secret of hmacSecrets()) {
     const expected = await signJwtPart(`${header}.${payload}`, secret);
-    if (constantTimeEqual(expected, base64UrlToBytes(signature))) {
-      const claims = JSON.parse(new TextDecoder().decode(base64UrlToBytes(payload))) as { sub?: string; aal?: 'aal1' | 'aal2'; exp?: number };
-      if (!claims.sub || !claims.exp || claims.exp <= Math.floor(Date.now() / 1000)) return null;
-      return claims;
+    let signatureBytes: Uint8Array;
+    try {
+      signatureBytes = base64UrlToBytes(signature);
+    } catch {
+      return null;
+    }
+    if (constantTimeEqual(expected, signatureBytes)) {
+      try {
+        const claims = JSON.parse(new TextDecoder().decode(base64UrlToBytes(payload))) as { sub?: string; aal?: 'aal1' | 'aal2'; exp?: number };
+        if (!claims.sub || !claims.exp || claims.exp <= Math.floor(Date.now() / 1000)) return null;
+        return claims;
+      } catch {
+        return null;
+      }
     }
   }
   return null;
