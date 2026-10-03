@@ -1,10 +1,10 @@
-export async function api<T>(path: string, options: RequestInit = {}, token = ''): Promise<T> {
+export async function api<T>(path: string, options: RequestInit = {}, sessionId = ''): Promise<T> {
   const base = String(import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/$/, '');
-  // 令牌走 access_token 查询参数而不是 header：ModelScope 等托管平台的边缘网关会拦截
-  // `Authorization: Bearer *`（判定为 SDK Token 访问）并直接返回 403；部分平台连 X-Access-Token 等
-  // 自定义头也可能拦截。查询参数实测可穿透网关。代价是令牌会进入访问日志/浏览器历史，仅作为
-  // 头通道不可用时的兜底方案。
-  const url = token ? `${base}${path}${path.includes('?') ? '&' : '?'}access_token=${encodeURIComponent(token)}` : `${base}${path}`;
+  // 会话凭证（sessionId，服务端随机会话存储）走 access_token 查询参数而不是 header：
+  // ModelScope/阿里云盾等托管平台的边缘网关会拦截 `Authorization: Bearer *`（判定为 SDK Token
+  // 访问）并直接返回 403，请求根本到不了应用；部分平台连 X-Access-Token 等自定义头也可能拦截。
+  // 查询参数实测可穿透网关。代价是会进入访问日志/浏览器历史，仅作为头通道不可用时的兜底方案。
+  const url = sessionId ? `${base}${path}${path.includes('?') ? '&' : '?'}access_token=${encodeURIComponent(sessionId)}` : `${base}${path}`;
   const response = await fetch(url, { ...options, headers: { 'Content-Type': 'application/json', ...(options.headers ?? {}) }, body: options.body && typeof options.body !== 'string' ? JSON.stringify(options.body) : options.body });
   const payload = await response.json().catch(() => ({}));
   if (!response.ok) {

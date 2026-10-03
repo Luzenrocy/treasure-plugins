@@ -4,12 +4,12 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import QRCode from 'qrcode';
 import { api } from '../services/api';
 
-type Session = { token: string; mfaRequired?: boolean; expiresAt?: number };
+type Session = { sessionId: string; mfaRequired?: boolean; expiresAt?: number };
 type User = { id: string; username: string; displayName: string; email?: string; role: string; status: string; mfaEnabled: boolean; lastLoginAt?: string };
 type Plugin = { id?: string; pluginCode: string; alias: string; description?: string; author: string; status: string; createdBy?: string; latestVersion?: string; latestReleaseId?: string; updatedAt?: string };
 type Release = { id: string; version: string; status: string; sizeBytes?: number | null; createdAt?: string; publishedAt?: string };
 type Todo = { type: 'plugin' | 'release'; id: string; pluginCode: string; alias: string; author?: string | null; version?: string | null; createdAt?: string };
-const token = ref(''); const loggedIn = ref(false); const mfaPending = ref(false); const page = ref('dashboard'); const loading = ref(false); const loginError = ref('');
+const sessionId = ref(''); const loggedIn = ref(false); const mfaPending = ref(false); const page = ref('dashboard'); const loading = ref(false); const loginError = ref('');
 const loginForm = reactive({ username: 'treasure', password: '', code: '' });
 const dashboard = ref({ publishedPlugins: 0, releases: 0, activeUsers: 0, pending: 0, mfaRequired: false }); const users = ref<User[]>([]); const plugins = ref<Plugin[]>([]); const audits = ref<any[]>([]); const settings = ref<any>({}); const userInfo = ref<{ id: string; username: string; role: string }>({ id: '', username: 'admin', role: 'admin' });
 const userQuery = ref(''); const pluginQuery = ref(''); const showUserDialog = ref(false); const showPluginDialog = ref(false); const showReleaseDialog = ref(false); const showVersionsDialog = ref(false); const versionsOf = ref<Plugin | null>(null); const versionRows = ref<Release[]>([]); const newToken = ref(''); const mfaSetup = ref<any>(null); const showMfaDialog = ref(false); const mfaCode = ref(''); const mfaBindDone = ref(false);
@@ -18,7 +18,7 @@ const filteredUsers = computed(() => users.value.filter((u) => `${u.username} ${
 const todoItems = ref<Todo[]>([]);
 async function request<T>(path: string, options: RequestInit = {}, retried = false): Promise<T> {
   try {
-    return await api<T>(path, options, token.value);
+    return await api<T>(path, options, sessionId.value);
   } catch (error) {
     // 敏感操作被 MFA 阻断（raio aal2）：弹验证码 -> 提升会话 -> 重放原请求（仅一次）
     if (!retried && error instanceof Error && error.message === '该操作必须完成 MFA 验证') {
@@ -28,8 +28,8 @@ async function request<T>(path: string, options: RequestInit = {}, retried = fal
         code = String(result.value ?? '').trim();
       } catch { throw error; }
       try {
-        const session = await api<Session>('/admin/mfa/verify', { method: 'POST', body: JSON.stringify({ code }) }, token.value);
-        token.value = session.token;
+        const session = await api<Session>('/admin/mfa/verify', { method: 'POST', body: JSON.stringify({ code }) }, sessionId.value);
+        sessionId.value = session.sessionId;
         persistSession(session.expiresAt);
         return await request<T>(path, options, true);
       } catch (verifyError) {
@@ -40,10 +40,13 @@ async function request<T>(path: string, options: RequestInit = {}, retried = fal
     throw error;
   }
 }
-const SESSION_KEY = 'tpm_admin_session'; function persistSession(expiresAt?: number) { localStorage.setItem(SESSION_KEY, JSON.stringify({ token: token.value, expiresAt: Number(expiresAt) || Date.now() })); } function clearSession() { localStorage.removeItem(SESSION_KEY); } function restoreSession() { try { const raw = localStorage.getItem(SESSION_KEY); if (!raw) return; const saved = JSON.parse(raw) as { token?: string; expiresAt?: number }; if (!saved.token) return; if (typeof saved.expiresAt !== 'number' || saved.expiresAt <= Date.now()) { clearSession(); return; } token.value = saved.token; loggedIn.value = true; } catch { clearSession(); } }
-async function login() { loginError.value = ''; loading.value = true; try { const data = await api<Session>('/admin/login', { method: 'POST', body: JSON.stringify({ username: loginForm.username, password: loginForm.password }) }); token.value = data.token; if (data.mfaRequired) { mfaPending.value = true; return; } loggedIn.value = true; persistSession(data.expiresAt); await loadDashboard(); loadUserInfo().catch(() => {}); } catch (error) { loginError.value = error instanceof Error ? error.message : '登录失败'; } finally { loading.value = false; } }
-async function verifyMfa() { try { const data = await request<Session>('/admin/mfa/verify', { method: 'POST', body: JSON.stringify({ code: loginForm.code }) }); token.value = data.token; mfaPending.value = false; loggedIn.value = true; persistSession(data.expiresAt); await loadDashboard(); loadUserInfo().catch(() => {}); } catch (error) { ElMessage.error(error instanceof Error ? error.message : '验证码错误'); } }
-function logout() { token.value = ''; loggedIn.value = false; mfaPending.value = false; loginForm.password = ''; loginForm.code = ''; clearSession(); }
+const SESSION_KEY = 'tpm_admin_session'; const SESSION_ID_PATTERN = /^[A-Za-z0-9_-]{43}$/; function persistSession(expiresAt?: number) { localStorage.setItem(SESSION_KEY, JSON.stringify({ sessionId: sessionId.value, expiresAt: Number(expiresAt) || Date.now() })); } function clearSession() { localStorage.removeItem(SESSION_KEY); }
+// 恢复前校验格式：sessionId 必须是 43 字符 base64url，防 Vapor 等垃圾值污染自动"已登录"
+function restoreSession() { try { const raw = localStorage.getItem(SESSION_KEY); if (!raw) return; const saved = JSON.parse(raw) as { sessionId?: string; expiresAt?: number }; if (typeof saved.sessionId !== 'string' || !SESSION_ID_PATTERN.test(saved.sessionId)) { clearSession(); return; } if (typeof saved.expiresAt !== 'number' || saved.expiresAt <= Date.now()) { clearSession(); return; } sessionId.value = saved.sessionId; loggedIn.value = true; } catch { clearSession(); } }
+async function login() { loginError.value = ''; loading.value = true; try { const data = await api<Session>('/admin/login', { method: 'POST', body: JSON.stringify({ username: loginForm.username, password: loginForm.password }) }); sessionId.value = data.sessionId; if (data.mfaRequired) { mfaPending.value = true; return; } loggedIn.value = true; persistSession(data.expiresAt); await loadDashboard(); loadUserInfo().catch(() => {}); } catch (error) { loginError.value = error instanceof Error ? error.message : '登录失败'; } finally { loading.value = false; } }
+async function verifyMfa() { try { const data = await request<Session>('/admin/mfa/verify', { method: 'POST', body: JSON.stringify({ code: loginForm.code }) }); sessionId.value = data.sessionId; mfaPending.value = false; loggedIn.value = true; persistSession(data.expiresAt); await loadDashboard(); loadUserInfo().catch(() => {}); } catch (error) { ElMessage.error(error instanceof Error ? error.message : '验证码错误'); } }
+// 先作废服务端会话再清本地（尽力而为，失败不阻塞登出）
+function logout() { api('/admin/logout', { method: 'POST' }, sessionId.value).catch(() => {}); sessionId.value = ''; loggedIn.value = false; mfaPending.value = false; loginForm.password = ''; loginForm.code = ''; clearSession(); }
 async function loadDashboard() { dashboard.value = await request('/admin/dashboard'); } async function loadUsers() { users.value = (await request<{ items: User[] }>('/admin/users')).items; } async function loadPlugins() { plugins.value = (await request<{ items: Plugin[] }>('/admin/plugins')).items; } async function loadAudits() { audits.value = (await request<{ items: any[] }>('/admin/audits')).items; } async function loadSettings() { settings.value = (await request<{ items: any }>('/admin/settings')).items; }
 async function go(next: string) { page.value = next; if (next === 'dashboard') await loadDashboard(); if (next === 'todos') await loadTodos(); if (next === 'users') await loadUsers(); if (next === 'plugins') await loadPlugins(); if (next === 'audit') await loadAudits(); if (next === 'security') await loadSettings(); }
 async function loadTodos() { todoItems.value = (await request<{ items: Todo[] }>('/admin/todos')).items; }
@@ -55,7 +58,7 @@ async function afterTodoAction() { await loadTodos(); await loadDashboard(); awa
 function statusText(s: string) { return ({ active: '正常', disabled: '已禁用', draft: '草稿', pending_review: '待审核', published: '已发布', revoked: '已下线', deleted: '已删除' } as any)[s] ?? s; } function statusType(s: string) { return s === 'published' || s === 'active' ? 'success' : s === 'disabled' || s === 'revoked' || s === 'deleted' ? 'danger' : 'warning'; }
 function openUserForm() { Object.assign(userForm, { username: '', displayName: '', email: '', role: 'user', password: '666666' }); showUserDialog.value = true; } async function createUser() { await request('/admin/users', { method: 'POST', body: JSON.stringify(userForm) }); showUserDialog.value = false; ElMessage.success('用户已创建'); await loadUsers(); }
 async function toggleUser(user: User) { await request(`/admin/users/${user.id}`, { method: 'PATCH', body: JSON.stringify({ status: user.status === 'active' ? 'disabled' : 'active' }) }); await loadUsers(); }
-async function confirmMfaClose() { try { const self = await request<{ items: { mfaEnabled?: boolean } }>('/admin/settings'); if (self.items?.mfaEnabled !== true) return true; } catch { return true; } try { const result = await ElMessageBox.prompt('关闭 MFA 需要验证，请输入当前账户的 6 位验证码。', 'MFA 验证', { inputPattern: /^\d{6}$/, inputErrorMessage: '请输入 6 位数字验证码', confirmButtonText: '确认', cancelButtonText: '取消' }); const session = await api<Session>('/admin/mfa/verify', { method: 'POST', body: JSON.stringify({ code: String(result.value ?? '').trim() }) }, token.value); token.value = session.token; persistSession(session.expiresAt); return true; } catch (error) { if (error instanceof Error) ElMessage.error(error.message); return false; } }
+async function confirmMfaClose() { try { const self = await request<{ items: { mfaEnabled?: boolean } }>('/admin/settings'); if (self.items?.mfaEnabled !== true) return true; } catch { return true; } try { const result = await ElMessageBox.prompt('关闭 MFA 需要验证，请输入当前账户的 6 位验证码。', 'MFA 验证', { inputPattern: /^\d{6}$/, inputErrorMessage: '请输入 6 位数字验证码', confirmButtonText: '确认', cancelButtonText: '取消' }); const session = await api<Session>('/admin/mfa/verify', { method: 'POST', body: JSON.stringify({ code: String(result.value ?? '').trim() }) }, sessionId.value); sessionId.value = session.sessionId; persistSession(session.expiresAt); return true; } catch (error) { if (error instanceof Error) ElMessage.error(error.message); return false; } }
 async function toggleUserMfa(user: User) { if (user.mfaEnabled) { if (!(await confirmMfaClose())) return; const result = await request<any>(`/admin/users/${user.id}`, { method: 'PATCH', body: JSON.stringify({ mfaEnabled: false }) }); showMfaDialog.value = false; mfaSetup.value = null; mfaCode.value = ''; ElMessage.success('MFA 已关闭'); await loadUsers(); return; } try { const setup = await request<{ uri: string; secret: string }>('/admin/mfa/enroll', { method: 'POST', body: JSON.stringify({ userId: user.id }) }); mfaSetup.value = { ...setup, qr: await QRCode.toDataURL(setup.uri), userId: user.id }; mfaCode.value = ''; mfaBindDone.value = false; showMfaDialog.value = true; } catch (error) { if (error instanceof Error) ElMessage.error(error.message); } }
 async function verifyMfaBind() { const code = mfaCode.value.trim(); if (!/^\d{6}$/.test(code)) return ElMessage.warning('请输入 6 位验证码'); try { await request('/admin/mfa/verify-bind', { method: 'POST', body: JSON.stringify({ userId: mfaSetup.value?.userId, code }) }); } catch (error) { if (error instanceof Error) ElMessage.error(error.message); return; } mfaBindDone.value = true; settings.value.mfaEnabled = true; ElMessage.success('MFA 绑定成功，已开启'); showMfaDialog.value = false; mfaSetup.value = null; mfaCode.value = ''; await loadUsers().catch(() => {}); await loadSettings().catch(() => {}); }
 function onMfaDialogClose() { if (!mfaBindDone.value) settings.value.mfaEnabled = false; mfaSetup.value = null; mfaCode.value = ''; mfaBindDone.value = false; }

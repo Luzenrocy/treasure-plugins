@@ -30,3 +30,14 @@ export const supabase = createClient(url, key, {
   auth: { persistSession: false, autoRefreshToken: false },
   global: { fetch: retryFetch },
 });
+
+// service-role 客户端：仅供会话存储认证（auth_sessions 表）使用，全库全权，绕过 RLS。
+// 密钥只存服务端环境变量/FC Secret，绝不进入前端 bundle。未配置时置 null，
+// 登录/会话接口会报错（JWT 过渡路径与开发者 token 接口不受影响）。
+const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+export const supabaseService = serviceKey
+  ? createClient(url, serviceKey, {
+      auth: { persistSession: false, autoRefreshToken: false },
+      global: { fetch: retryFetch },
+    })
+  : null;

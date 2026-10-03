@@ -11,7 +11,7 @@
 
 - **插件市场管理**：插件登记、版本管理、待办审核（通过/驳回）、下线/恢复/删除（先下线再删除状态机）、公开市场查询。
 - **角色化权限**：`admin`（管理员）/ `operator`（运营只读）/ `user`（用户：登记 + 自有插件管理 + 安全设置）；插件写操作按 `created_by` 归属判定，后端兜底。
-- **统一安全**：PBKDF2 密码、HMAC JWT（无状态）、TOTP MFA（开启时验证、关闭时不验证）、开发者 Token（哈希+有效期）、审计日志。
+- **统一安全**：PBKDF2 密码、服务端会话存储认证（`auth_sessions`，多实例共享 DB）、TOTP MFA（开启时验证、关闭时不验证）、开发者 Token（哈希+有效期）、审计日志。
 - **开发者接入**：`POST /api/plugins/with-release` 供 CI（GitHub Actions）自动登记插件，进入待审后管理员发布。
 - **逻辑删除**：插件/版本/用户采用 `deleted_at` 逻辑删除 + 部分唯一索引，删除后可重建同名/同版本，同时保留审计与归属引用。
 
@@ -87,13 +87,14 @@ docker build -t treasure-plugin-market .
 docker run -p 7860:7860 \
   -e VITE_SUPABASE_URL=https://<ref>.supabase.co \
   -e VITE_SUPABASE_PUBLISHABLE_KEY=<anon key> \
+  -e SUPABASE_SERVICE_ROLE_KEY=<service role key> \
   -e AUTH_JWT_SECRET=<随机 32+ 字符> \
   treasure-plugin-market
 ```
 
 容器内只有一个 Node 进程，仅暴露 7860 端口（镜像内已设 `HOST=0.0.0.0`，可被容器/平台反向代理访问）。
 
-> 运行时必需环境变量：`VITE_SUPABASE_URL`、`VITE_SUPABASE_PUBLISHABLE_KEY`（服务端 `supabase.ts` 以 `process.env` 读取）、`AUTH_JWT_SECRET`（JWT 签名）。这三个在部署平台注入即可生效，**无需重新构建**。
+> 运行时必需环境变量：`VITE_SUPABASE_URL`、`VITE_SUPABASE_PUBLISHABLE_KEY`（服务端 `supabase.ts` 以 `process.env` 读取）、`SUPABASE_SERVICE_ROLE_KEY`（会话存储认证专用，全库全权，仅存服务端 Secret）、`AUTH_JWT_SECRET`（JWT 过渡路径签名）。这些在部署平台注入即可生效，**无需重新构建**。
 > `VITE_API_BASE_URL` 是构建期变量，默认 `/api`（同源部署无需设置）。
 
 ### Hugging Face Space 部署
@@ -112,14 +113,15 @@ docker run -p 7860:7860 \
 4. 首次启动后，管理员账号为迁移脚本种子 `treasure / 123456`，**请立即在"安全设置"修改密码**；
 5. 若后续前端需要构建期变量（如 `VITE_API_BASE_URL` 自定义域名），请在 HF Space 的 **Variables**（构建期变量）中设置并重启构建。
 
-## 认证设计（统一基于用户表）
+## 认证设计（会话存储 + JWT 过渡）
 
-所有登录认证与授权都只读取 `users` 表（MFA/TTL 存 `user_settings` 表），无其它认证来源、无独立会话表：
+登录认证与授权以 `users` 表为准（MFA/TTL 存 `user_settings` 表）；登录凭证为**服务端随机会话**（`auth_sessions` 表，service-role 客户端访问、RLS 拒绝 anon），JWT 仅保留作过渡兼容路径：
 
-1. `POST /admin/login`：`users.byLogin()` 归一化后 REST 查用户（大小写不敏感在 TS 层处理）→`verifyPassword()`（PBKDF2 210k 迭代）→校验`status='active'`
-2. MFA 启用者需再走 `/admin/mfa/verify`（TOTP 验证码），令牌升级为 `aal2`
-3. 令牌是 HMAC-SHA256 JWT（无状态，`AUTH_JWT_SECRET` 签名，TTL 10 分钟，可经 `user_settings.token_ttl_seconds` 调整）
-4. 每个请求由 `handler.ts` 的 `currentUser()` 统一验签、查用户、校验角色与 AAL 等级
+1. `POST /admin/login`：`users.byLogin()` 归一化后 REST 查用户（大小写不敏感在 TS 层处理）→`verifyPassword()`（PBKDF2 210k 迭代）→校验`status='active'` → 创建 256 位随机 `sessionId`（`expires_at = now + token_ttl_seconds`），响应不再包含 JWT
+2. MFA 启用者需再走 `/admin/mfa/verify`（TOTP 验证码），会话 `aal` 升级为 `aal2` 并顺延有效期
+3. 会话凭证经 `access_token` 查询参数透传（可穿透托管平台边缘网关）；每个请求由 `handler.ts` 的 `currentUser()` 查 `auth_sessions`（未撤销、未过期、用户 active）统一校验角色与 AAL 等级；格式非法/伪造/过期一律 `登录已过期`
+4. 登出走 `POST /admin/logout` 置 `revoked_at`；修改密码 / 重置 Token 作废该用户全部未过期会话
+5. 会话校验只依赖共享 DB，与实例密钥/内存无关 → 托管平台多实例、密钥轮换、滚动更新均不影响认证（根治"刚登录就提示已过期"）
 
 ### 角色权限摘要
 

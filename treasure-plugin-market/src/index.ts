@@ -142,6 +142,7 @@ server.listen(port, host, () => {
   console.log(`[app] treasure-plugin-market listening on http://${host}:${port} (static: ${staticDir})`);
   console.log(`[app] env: PORT=${port} HOST=${host} STATIC_DIR=${staticDir}`);
   console.log(`[app] env: SUPABASE_HOST=${supabaseHost}`);
+  console.log(`[app] env: SUPABASE_SERVICE_ROLE_KEY=${process.env.SUPABASE_SERVICE_ROLE_KEY ? '已配置' : '(未配置!)'}`);
   console.log(`[app] env: AUTH_JWT_SECRET_SHA256=${createHash('sha256').update(secret).digest('hex')}${secret.length >= 32 ? '' : '(密钥长度不足32!)'}`);
   console.log(`[app] env: AUTH_JWT_PREVIOUS_SECRETS_SHA256=${(process.env.AUTH_JWT_PREVIOUS_SECRETS ?? '').split(',').map((s) => s.trim()).filter(Boolean).map((s) => createHash('sha256').update(s).digest('hex').slice(0, 16)).join(',') || '(未配置)'}`);
 });

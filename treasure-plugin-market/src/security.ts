@@ -61,6 +61,15 @@ export function createMfaKey(): string {
 }
 
 /**
+ * 服务端随机会话 id：32 字节熵的 base64url（43 字符）。
+ * 会话存储认证（auth_sessions 表）的凭证，不可从客户端信息推导，
+ * 每次登录重新生成，作为"登录已过期"根治方案的服务端凭证。
+ */
+export function createSessionId(): string {
+  return bytesToBase64Url(crypto.getRandomValues(new Uint8Array(32)));
+}
+
+/**
  * 判断高敏操作是否必须完成 MFA 二次验证（达到 aal2 级别）。
  * 仅当用户已开启 MFA（mfa_enabled === true）且操作声明需要 MFA 时，
  * 才要求 token 的 aal 为 aal2；MFA 未开启时无需二次验证，避免死锁。
