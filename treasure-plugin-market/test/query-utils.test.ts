@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { normalizeLogin, pickLatestVersion, planPluginReview, planReleaseReview, readBody, roleAtLeast, canManagePlugin, extractBearer } from '../src/db/query-utils.ts';
+import { normalizeLogin, pickLatestVersion, planPluginReview, planReleaseReview, readBody, roleAtLeast, canManagePlugin, extractSessionId, extractDeveloperToken } from '../src/db/query-utils.ts';
 
 test('normalizeLogin 去除首尾空白并转小写', () => {
   assert.equal(normalizeLogin('  Treasure  '), 'treasure');
@@ -150,62 +150,50 @@ test('readBody POST 非法 JSON 返回空对象而非抛错', async () => {
   assert.deepEqual(await readBody(req), {});
 });
 
-test('extractBearer 读取 Authorization: Bearer 的令牌', () => {
-  const req = new Request('http://test/x', { headers: { authorization: 'Bearer jwt-abc' } });
-  assert.equal(extractBearer(req), 'jwt-abc');
+test('extractSessionId 读取 sessionId 查询参数', () => {
+  const req = new Request('http://test/x?sessionId=abc123');
+  assert.equal(extractSessionId(req), 'abc123');
 });
 
-test('extractBearer Authorization 缺失时回退 X-Access-Token（ModelScope 网关会拦截 Bearer 方案）', () => {
-  const req = new Request('http://test/x', { headers: { 'x-access-token': 'jwt-abc' } });
-  assert.equal(extractBearer(req), 'jwt-abc');
+test('extractSessionId 去除首尾空白', () => {
+  const req = new Request('http://test/x?sessionId=%20%20abc123%20%20');
+  assert.equal(extractSessionId(req), 'abc123');
 });
 
-test('extractBearer Authorization 为空白时回退 X-Access-Token', () => {
-  const req = new Request('http://test/x', { headers: { authorization: '   ', 'x-access-token': 'jwt-abc' } });
-  assert.equal(extractBearer(req), 'jwt-abc');
+test('extractSessionId 缺少参数返回空字符串', () => {
+  assert.equal(extractSessionId(new Request('http://test/x')), '');
+  assert.equal(extractSessionId(new Request('http://test/x?foo=1')), '');
 });
 
-test('extractBearer 两头同时存在时以 Authorization 为准', () => {
-  const req = new Request('http://test/x', { headers: { authorization: 'Bearer from-authz', 'x-access-token': 'from-x' } });
-  assert.equal(extractBearer(req), 'from-authz');
+test('extractSessionId 与其他参数共存时正确取值', () => {
+  const req = new Request('http://test/x?foo=1&sessionId=abc&bar=2');
+  assert.equal(extractSessionId(req), 'abc');
 });
 
-test('extractBearer Authorization 非 Bearer 方案时保持原有行为（返回原值）', () => {
-  const req = new Request('http://test/x', { headers: { authorization: 'Basic zzz' } });
-  assert.equal(extractBearer(req), 'Basic zzz');
+test('extractSessionId 只认 sessionId 参数，不读任何头通道', () => {
+  const req = new Request('http://test/x?sessionId=from-query', { headers: { authorization: 'Bearer from-authz', 'x-access-token': 'from-x' } });
+  assert.equal(extractSessionId(req), 'from-query');
 });
 
-test('extractBearer 两个头都缺失时返回空字符串', () => {
-  assert.equal(extractBearer(new Request('http://test/x')), '');
+test('extractSessionId 不读取 access_token 遗留参数', () => {
+  const req = new Request('http://test/x?access_token=old-token');
+  assert.equal(extractSessionId(req), '');
 });
 
-test('extractBearer X-Access-Token 去除首尾空白', () => {
-  const req = new Request('http://test/x', { headers: { 'x-access-token': '  jwt-abc  ' } });
-  assert.equal(extractBearer(req), 'jwt-abc');
+test('extractDeveloperToken 读取 token 查询参数', () => {
+  const req = new Request('http://test/x?token=tpm_abc');
+  assert.equal(extractDeveloperToken(req), 'tpm_abc');
 });
 
-test('extractBearer 无头时读取 access_token 查询参数（ModelScope 网关会拦截所有鉴权头）', () => {
-  const req = new Request('http://test/x?access_token=jwt-from-query');
-  assert.equal(extractBearer(req), 'jwt-from-query');
+test('extractDeveloperToken 去除首尾空白并缺省返回空串', () => {
+  const req = new Request('http://test/x?token=%20%20tpm_abc%20%20');
+  assert.equal(extractDeveloperToken(req), 'tpm_abc');
+  assert.equal(extractDeveloperToken(new Request('http://test/x')), '');
 });
 
-test('extractBearer access_token 查询参数去除首尾空白', () => {
-  const req = new Request('http://test/x?access_token=%20%20jwt-q%20%20');
-  assert.equal(extractBearer(req), 'jwt-q');
-});
-
-test('extractBearer 头优先于查询参数', () => {
-  const req = new Request('http://test/x?access_token=from-query', { headers: { 'x-access-token': 'from-x' } });
-  assert.equal(extractBearer(req), 'from-x');
-});
-
-test('extractBearer 三个来源都缺失时返回空字符串', () => {
-  assert.equal(extractBearer(new Request('http://test/x')), '');
-});
-
-test('extractBearer 其他查询参数不影响 access_token 提取', () => {
-  const req = new Request('http://test/x?foo=1&access_token=jwt-ok&bar=2');
-  assert.equal(extractBearer(req), 'jwt-ok');
+test('extractDeveloperToken 不读头与 sessionId 参数', () => {
+  const req = new Request('http://test/x?sessionId=abc', { headers: { authorization: 'Bearer tpm_from_authz' } });
+  assert.equal(extractDeveloperToken(req), '');
 });
 
 test('planReleaseReview 通过待审版本后发布', () => {

@@ -91,9 +91,17 @@ const server = createServer((incoming, outgoing) => {
 
   if (pathname === '/api' || pathname.startsWith('/api/')) {
     const apiPath = pathname === '/api' ? '/' : pathname.replace(/^\/api/, '');
-    // 保留查询字符串（access_token 令牌经查询参数传入，需透传给 handler）
+    // 保留查询字符串（sessionId/token 令牌经查询参数传入，需透传给 handler）
     const apiUrl = new URL(apiPath, `http://${incoming.headers.host ?? 'localhost'}`);
     apiUrl.search = url.search;
+    // 每请求诊断日志：只打凭据存在性/前缀，不打完整凭据。头存在性仅作诊断，认证不消费任何头。
+    console.log(`[app:req] ${method} ${pathname}`, {
+      hasAuthorization: !!incoming.headers.authorization,
+      hasXToken: !!incoming.headers['x-access-token'],
+      sessionIdQuery: url.searchParams.get('sessionId')?.slice(0, 12) ?? null,
+      tokenQuery: url.searchParams.get('token')?.slice(0, 12) ?? null,
+      fcRequestId: incoming.headers['x-fc-request-id'] ?? null,
+    });
     toRequest(incoming, apiUrl)
       .then((request) => handle(request))
       .then((result) => {

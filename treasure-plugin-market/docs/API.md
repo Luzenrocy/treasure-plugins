@@ -100,13 +100,12 @@ curl 'http://127.0.0.1:7860/api/plugins/text-diff/releases'
 面向插件作者与 CI（GitHub Actions 等）：**提交插件包版本进入市场审核**。
 
 ```
-POST /api/plugins/with-release
-Authorization: Bearer <developer token>
+POST /api/plugins/with-release?token=<developer token>
 Content-Type: application/json
 ```
 
-- **认证**：`Authorization` 头携带开发者 Token（形如 `tpm_...`），也可用 `X-Access-Token` 头或 `?access_token=` 查询参数等价传递。Token 在管理控制台右上角"重置 Token"获取，哈希存库、带有效期（默认 600 秒，可经安全设置调整）。
-- **ModelScope 注意**：部署在 `*.ms.show` 时，网关会拦截 `Authorization: Bearer *` 及部分自定义头，CI 需改用 `?access_token=tpm_...`；或把市场服务部署在不受该网关限制的域名下。
+- **认证**：`?token=` 查询参数携带开发者 Token（形如 `tpm_...`），认证链路唯一通道，头通道（`Authorization`/`X-Access-Token`）与 `access_token`/`sessionId` 参数一律不消费。Token 在管理控制台右上角"重置 Token"获取，哈希存库、带有效期（默认 600 秒，可经安全设置调整）。
+- **ModelScope 注意**：部署在 `*.ms.show` 时，网关会拦截 `Authorization: Bearer *` 及部分自定义头；本接口只用查询参数，天然免疫网关头拦截。
 - **行为**：插件不存在 → 创建插件并登记首个版本；插件已存在（未删除）→ 追加版本。登记结果均为 `status=pending_review`，进入管理台"待办中心"审核，通过后市场公开可见。
 - **字段约束**：`pluginCode` 匹配 `^[a-z][a-z0-9-]*$`；`version` 匹配 `^\d+\.\d+\.\d+$`；`downloadUrl` 必须 `https://` 开头；`sha256` 为 64 位十六进制；`sizeBytes` > 0。
 
@@ -148,8 +147,7 @@ Content-Type: application/json
 ```
 
 ```bash
-curl -X POST 'http://127.0.0.1:7860/api/plugins/with-release' \
-  -H 'Authorization: Bearer tpm_xxxxxxxx' \
+curl -X POST 'http://127.0.0.1:7860/api/plugins/with-release?token=tpm_xxxxxxxx' \
   -H 'Content-Type: application/json' \
   -d '{ "plugin": { "pluginCode": "text-diff", "alias": "Text Diff", "description": "文本差异对比工具", "author": "Luzenrocy" }, "release": { "version": "1.0.0", "downloadUrl": "https://github.com/Luzenrocy/treasure-plugins/releases/download/plugin/text-diff/v1.0.0/text-diff.zip", "sha256": "049fb3aec026e1c9e73eeaf2836ba9cfd1da6617cf80023a6bfd8dc1a3cbcb13", "sizeBytes": 395093, "manifest": { "name": "text-diff", "version": "1.0.0" } } }'
 ```
@@ -168,24 +166,25 @@ curl -X POST 'http://127.0.0.1:7860/api/plugins/with-release' \
 
 ## 三、管理接口概览（内部角色认证）
 
-管理接口均要求登录 JWT（`POST /api/admin/login` 获取），并按角色鉴权；**用户已开启 MFA 时**，敏感操作会要求先完成验证码（令牌升级 `aal2`）。
+管理接口均要求登录会话（`POST /api/admin/login` 获取），并按角色鉴权；**用户已开启 MFA 时**，敏感操作会要求先完成验证码（会话 `aal` 升级 `aal2`）。
 
-**令牌传递方式（重要）**：后端按 `Authorization` > `X-Access-Token` > `access_token` 查询参数的顺序取令牌：
+**令牌传递方式（重要）**：后端认证链路只消费查询参数，两套凭据互不混用、任何头通道（`Authorization`/`X-Access-Token`）与 `access_token` 参数一律不读：
 
 ```
-?access_token=<登录 JWT>            # 管理台前端使用（ModelScope 推荐）
-X-Access-Token: <登录 JWT>          # 等价，命令行/脚本可用
-Authorization: Bearer <登录 JWT>     # 等价，CI 可用（自建部署无网关拦截时）
+?sessionId=<43字符base64url>     # 登录状态唯一通道：管理台前端使用（会话存储认证）
+?token=tpm_...                    # 开发者 Token 唯一通道：CI 插件登记 /plugins/with-release 使用
 ```
 
-**部署在 ModelScope（`*.ms.show`）时只能使用 `access_token` 查询参数**：该平台边缘网关会拦截所有 `Authorization: Bearer *` 请求（判定为 SDK Token 访问）并直接返回 `403 {"Code":10010101007,...}`，请求根本到不了本服务，表现为"登录成功、后续一律提示登录已过期"；部分平台对自定义头（如 `X-Access-Token`）也可能拦截。因此管理台前端把令牌放在 `access_token` 查询参数里（已实测可穿透网关）。代价：令牌会出现在访问日志与浏览器历史中，仅建议在头通道不可用的托管平台上使用；自建部署仍优先用 `X-Access-Token` / `Authorization`。
+**部署在 ModelScope（`*.ms.show`）等托管平台时无需任何特殊处理**：该平台边缘网关会拦截所有 `Authorization: Bearer *` 请求（判定为 SDK Token 访问）并直接返回 `403 {"Code":10010101007,...}`，部分平台还会注入/屏蔽自定义头——本服务认证不消费任何头，凭据只从查询参数读取，天然免疫头通道污染/拦截。代价：`sessionId`/`token` 会出现在访问日志与浏览器历史中（已知代价；如需更强可后续迁移同源 Cookie）。
+
+> 说明：带毒旧请求（携带被注入头、旧 `access_token` 参数或旧 JWT）会被干净拒绝并记录 `[app:req]`/`[auth:debug]` 诊断日志，应用无视其头通道凭据。
 
 角色：`admin`（管理员）/ `operator`（运营）/ `user`（用户）。
 
 | 接口 | 方法 | 最低角色 | 说明 |
 |---|---|---|---|
-| `/api/admin/login` | POST | 公开 | 登录（MFA 已开启则返回 `mfaRequired`）|
-| `/api/admin/mfa/verify` | POST | 登录 | 提交验证码，令牌升级 aal2 |
+| `/api/admin/login` | POST | 公开 | 登录（返回 `sessionId`；MFA 已开启则返回 `mfaRequired`）|
+| `/api/admin/mfa/verify` | POST | 登录 | 提交验证码，会话 `aal` 升级 aal2 |
 | `/api/admin/dashboard` | GET | user | 概览统计 |
 | `/api/admin/todos` | GET | admin | 待办中心（待审核插件/版本）|
 | `/api/admin/todos/releases/{id}/review` | POST | admin | 版本审核（approve/reject）|

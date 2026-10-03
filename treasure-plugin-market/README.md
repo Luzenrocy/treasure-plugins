@@ -113,15 +113,16 @@ docker run -p 7860:7860 \
 4. 首次启动后，管理员账号为迁移脚本种子 `treasure / 123456`，**请立即在"安全设置"修改密码**；
 5. 若后续前端需要构建期变量（如 `VITE_API_BASE_URL` 自定义域名），请在 HF Space 的 **Variables**（构建期变量）中设置并重启构建。
 
-## 认证设计（会话存储 + JWT 过渡）
+## 认证设计（会话存储认证 · sessionId 单通道）
 
-登录认证与授权以 `users` 表为准（MFA/TTL 存 `user_settings` 表）；登录凭证为**服务端随机会话**（`auth_sessions` 表，service-role 客户端访问、RLS 拒绝 anon），JWT 仅保留作过渡兼容路径：
+登录认证与授权以 `users` 表为准（MFA/TTL 存 `user_settings` 表）；登录凭证为**服务端随机会话**（`auth_sessions` 表，service-role 客户端访问、RLS 拒绝 anon）。登录状态认证链路只消费 `sessionId` 查询参数，开发者登记只消费 `token` 查询参数——任何头通道（`Authorization`/`X-Access-Token`）与 `access_token` 参数一律不读（托管平台网关可能拦截或注入头，头通道不可信）：
 
-1. `POST /admin/login`：`users.byLogin()` 归一化后 REST 查用户（大小写不敏感在 TS 层处理）→`verifyPassword()`（PBKDF2 210k 迭代）→校验`status='active'` → 创建 256 位随机 `sessionId`（`expires_at = now + token_ttl_seconds`），响应不再包含 JWT
+1. `POST /admin/login`：`users.byLogin()` 归一化后 REST 查用户（大小写不敏感在 TS 层处理）→`verifyPassword()`（PBKDF2 210k 迭代）→校验`status='active'` → 创建 256 位随机 `sessionId`（`expires_at = now + token_ttl_seconds`），响应为 `{ sessionId, aal, mfaRequired, expiresAt }`
 2. MFA 启用者需再走 `/admin/mfa/verify`（TOTP 验证码），会话 `aal` 升级为 `aal2` 并顺延有效期
-3. 会话凭证经 `access_token` 查询参数透传（可穿透托管平台边缘网关）；每个请求由 `handler.ts` 的 `currentUser()` 查 `auth_sessions`（未撤销、未过期、用户 active）统一校验角色与 AAL 等级；格式非法/伪造/过期一律 `登录已过期`
-4. 登出走 `POST /admin/logout` 置 `revoked_at`；修改密码 / 重置 Token 作废该用户全部未过期会话
+3. 会话凭证经 `?sessionId=` 查询参数透传（可穿透托管平台边缘网关，且不被注入头污染）；每个请求由 `handler.ts` 的 `currentUser()` 查 `auth_sessions`（未撤销、未过期、用户 active）统一校验角色与 AAL 等级；缺参/格式非法/伪造/过期一律 `登录已过期`
+4. 登出走 `POST /admin/logout?sessionId=...` 置 `revoked_at`；修改密码 / 重置 Token 作废该用户全部未过期会话
 5. 会话校验只依赖共享 DB，与实例密钥/内存无关 → 托管平台多实例、密钥轮换、滚动更新均不影响认证（根治"刚登录就提示已过期"）
+6. CI 插件登记走 `POST /plugins/with-release?token=tpm_...`（开发者 Token 仅查询参数通道）
 
 ### 角色权限摘要
 

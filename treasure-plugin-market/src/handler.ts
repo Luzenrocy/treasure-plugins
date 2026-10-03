@@ -3,96 +3,56 @@ import { authSessions, isSessionActive, isValidSessionId } from './db/auth-sessi
 import { dashboard } from './db/dashboard.js';
 import { developerTokens } from './db/developer-tokens.js';
 import { plugins } from './db/plugins.js';
-import { createHash } from 'node:crypto';
-import { extractBearer, readBody, roleAtLeast, canManagePlugin, type ReleaseReviewAction, type ReviewAction, type Role } from './db/query-utils.js';
+import { extractDeveloperToken, extractSessionId, readBody, roleAtLeast, canManagePlugin, type ReleaseReviewAction, type ReviewAction, type Role } from './db/query-utils.js';
 import { settings } from './db/settings.js';
 import { users } from './db/users.js';
-import { buildTotpUri, createAccessToken, createMfaKey, createTotpSecret, decryptMfaSecret, encryptMfaSecret, hashPassword, needsMfaVerification, verifyAccessToken, verifyPassword, verifyTotp } from './security.js';
+import { buildTotpUri, createMfaKey, createTotpSecret, decryptMfaSecret, encryptMfaSecret, hashPassword, needsMfaVerification, verifyPassword, verifyTotp } from './security.js';
 
-const cors = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': 'same-origin', 'Access-Control-Allow-Headers': 'authorization, content-type' };
+const cors = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': 'same-origin', 'Access-Control-Allow-Headers': 'content-type' };
 const ok = (data: unknown, status = 200) => new Response(JSON.stringify({ code: 0, message: 'success', data }), { status, headers: cors });
 const fail = (message: string, status = 400) => new Response(JSON.stringify({ code: 'REQUEST_FAILED', message, data: null }), { status, headers: cors });
-const bearer = extractBearer;
 const route = (request: Request) => new URL(request.url).pathname.replace(/^.*\/market-admin/, '') || '/';
 const digest = async (value: string) => { const bytes = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value)); return [...new Uint8Array(bytes)].map((x) => x.toString(16).padStart(2, '0')).join(''); };
 
 // 角色门槛：admin > operator > user。operator/user 都是合法登录角色，
 // 是否放行由路由标注的 requireRole 决定；requireMfa 遵循"开启时验证、关闭时不验证"。
-// 认证双轨：凭据若是合法 sessionId（43 字符 base64url）走会话存储认证（auth_sessions，
-// 多实例共享 DB，根治"刚登录就提示已过期"）；否则走 JWT 过渡兼容路径（旧客户端/开发者调试）。
+// 认证单通道：登录状态只信 ?sessionId= 查询参数（auth_sessions 表，多实例共享 DB，
+// 根治"刚登录就提示已过期"）。Authorization/X-Access-Token/access_token/JWT 一律不消费。
 async function currentUser(request: Request, requireRole: Role = 'admin', requireMfa = false) {
-  const credential = bearer(request);
-  let sub = '';
-  let aal: 'aal1' | 'aal2' = 'aal1';
-  let sessionId: string | undefined;
-  let user: Awaited<ReturnType<typeof users.byId>>;
-
-  if (isValidSessionId(credential)) {
-    const session = await authSessions.byId(credential);
-    if (!session || !isSessionActive(session)) {
-      console.error('[auth:reject] 会话不存在或已失效', {
-        sessionPrefix: credential.slice(0, 12),
-        now: Math.floor(Date.now() / 1000),
-        path: new URL(request.url).pathname,
-      });
-      throw new Error('登录已过期');
-    }
-    try {
-      user = await users.byId(session.user_id);
-    } catch (error) {
-      console.error('[auth:reject] 查询用户异常', { sub: session.user_id, error: error instanceof Error ? error.message : String(error) });
-      throw error;
-    }
-    sub = session.user_id;
-    aal = session.aal;
-    sessionId = session.session_id;
-  } else {
-    const claims = await verifyAccessToken(credential);
-    if (!claims) {
-      // 诊断：解码 token 头/载荷，区分 签名不匹配 / 已过期 / 非本应用签发
-      let decodedHeader = '';
-      let decodedPayload = '';
-      try {
-        const parts = credential.split('.');
-        if (parts.length >= 2) {
-          decodedHeader = new TextDecoder().decode(Uint8Array.from(atob(parts[0].replaceAll('-', '+').replaceAll('_', '/') + '='.repeat((4 - (parts[0].length % 4)) % 4)), (c) => c.charCodeAt(0)));
-          decodedPayload = new TextDecoder().decode(Uint8Array.from(atob(parts[1].replaceAll('-', '+').replaceAll('_', '/') + '='.repeat((4 - (parts[1].length % 4)) % 4)), (c) => c.charCodeAt(0)));
-        }
-      } catch { /* 非 base64 / 非法结构时忽略 */ }
-      console.error('[auth:reject] 令牌校验失败', {
-        tokenPrefix: credential.slice(0, 48),
-        header: decodedHeader.slice(0, 120),
-        payload: decodedPayload.slice(0, 200),
-        now: Math.floor(Date.now() / 1000),
-        envSecretSha256: createHash('sha256').update(process.env.AUTH_JWT_SECRET ?? '').digest('hex'),
-        path: new URL(request.url).pathname,
-      });
-      throw new Error('登录已过期');
-    }
-    try {
-      user = await users.byId(claims.sub);
-    } catch (error) {
-      console.error('[auth:reject] 查询用户异常', { sub: claims.sub, error: error instanceof Error ? error.message : String(error) });
-      throw error;
-    }
-    sub = claims.sub;
-    aal = claims.aal ?? 'aal1';
+  const sessionId = extractSessionId(request);
+  console.log('[auth:debug] 会话凭据', { path: new URL(request.url).pathname, sessionIdPrefix: sessionId.slice(0, 12) || null, isSessionFormat: isValidSessionId(sessionId) });
+  const session = await authSessions.byId(sessionId);
+  const now = Math.floor(Date.now() / 1000);
+  if (!session || !isSessionActive(session)) {
+    console.error('[auth:reject] 会话不存在或已失效', { sessionPrefix: sessionId.slice(0, 12), now, path: new URL(request.url).pathname });
+    throw new Error('登录已过期');
   }
-  if (!user) {
-    console.error('[auth:reject] 用户不存在或已停用', { sub });
-    throw new Error('登录已过期：用户不存在或已停用');
-  }
-  if (user.status !== 'active') {
-    console.error('[auth:reject] 用户非启用状态', { sub, status: user.status });
-    throw new Error('登录已过期：用户不存在或已停用');
-  }
+  const user = await users.byId(session.user_id);
+  const security = user ? await settings.byUserId(user.id) : undefined;
+  const roleOk = !!user && user.status === 'active' && roleAtLeast(user.role, requireRole);
+  const mfaNeeded = requireMfa && !!user && needsMfaVerification(true, security?.mfa_enabled, session.aal);
+  console.log('[auth:debug] 会话查询', {
+    sessionPrefix: sessionId.slice(0, 12),
+    found: true,
+    revoked: !!session.revoked_at,
+    expired: Date.parse(session.expires_at) <= Date.now(),
+    aal: session.aal,
+    userId: session.user_id,
+    userStatus: user?.status ?? null,
+    role: user?.role ?? null,
+    requireRole,
+    roleOk,
+    requireMfa,
+    mfaNeeded,
+    now,
+  });
+  if (!user || user.status !== 'active') throw new Error('登录已过期：用户不存在或已停用');
   if (!roleAtLeast(user.role, requireRole)) throw new Error('没有管理员权限');
   if (requireMfa) {
-    const security = await settings.byUserId(user.id);
-    if (needsMfaVerification(true, security?.mfa_enabled, aal)) throw new Error('该操作必须完成 MFA 验证');
+    if (needsMfaVerification(true, security?.mfa_enabled, session.aal)) throw new Error('该操作必须完成 MFA 验证');
   }
-  console.log(`[app] auth OK sub=${sub} aal=${aal} path=${new URL(request.url).pathname}`);
-  return { claims: { sub, aal, sessionId }, user };
+  console.log(`[app] auth OK sub=${user.id} aal=${session.aal} path=${new URL(request.url).pathname}`);
+  return { claims: { sub: user.id, aal: session.aal, sessionId: session.session_id }, user };
 }
 
 // 插件写操作守卫：admin 放行；operator 一律拒绝；user 仅可操作自己创建（created_by）的插件。
@@ -116,9 +76,11 @@ export async function handle(request: Request): Promise<Response> {
     const body: any = await readBody(request);
 
     if (path === '/admin/login' && request.method === 'POST') {
-      const user = await users.byLogin(String(body.username ?? '').trim());
-      if (!user || user.status !== 'active' || !(await verifyPassword(String(body.password ?? ''), user.password_hash, user.password_salt))) {
-        console.error(`[app] 登录失败: 账号密码无效 (username=${String(body.username ?? '').slice(0, 32)})`);
+      const loginName = String(body.username ?? '').trim();
+      const user = await users.byLogin(loginName);
+      const passwordOk = !!user && user.status === 'active' && (await verifyPassword(String(body.password ?? ''), user.password_hash, user.password_salt));
+      if (!user || user.status !== 'active' || !passwordOk) {
+        console.error(`[app] 登录失败: 账号密码无效 (username=${loginName.slice(0, 32)})`);
         return fail('账号或密码无效', 401);
       }
       const security = await settings.byUserId(user.id);
@@ -127,18 +89,18 @@ export async function handle(request: Request): Promise<Response> {
       const session = await authSessions.create({ userId: user.id, aal: 'aal1', ttlSeconds: ttl });
       await users.markLogin(user.id);
       await audit(user.id, 'auth.login', 'users', user.id);
-      console.log(`[app] 登录成功: user=${user.username} id=${user.id} ttl=${ttl}s session=${session.session_id.slice(0, 8)}…`);
+      console.log(`[app:login] 步骤 user=${user.username}`, { userFound: !!user, status: user.status, passwordOk, ttl, cleanupDone: true, sessionPrefix: session.session_id.slice(0, 8) });
       return ok({ sessionId: session.session_id, aal: 'aal1', mfaRequired: security?.mfa_enabled === true, expiresAt: Date.now() + ttl * 1000 });
     }
 
     if (path === '/admin/logout' && request.method === 'POST') {
-      const sessionId = bearer(request);
+      const sessionId = extractSessionId(request);
       const session = isValidSessionId(sessionId) ? await authSessions.byId(sessionId) : null;
       if (session) {
         await authSessions.revoke(sessionId);
         await audit(session.user_id, 'auth.logout', 'users', session.user_id);
-        console.log(`[app] 登出: user=${session.user_id} session=${sessionId.slice(0, 8)}…`);
       }
+      console.log(`[app:logout] 步骤`, { sessionIdPrefix: sessionId.slice(0, 12) || null, sessionFound: !!session, revoked: !!session });
       return ok({ loggedOut: true });
     }
 
@@ -147,18 +109,14 @@ export async function handle(request: Request): Promise<Response> {
       const security = await settings.byUserId(user.id);
       if (!security?.mfa_enabled || !security.mfa_secret || !security.mfa_key || !(await verifyTotp(await decryptMfaSecret(security.mfa_secret, security.mfa_key), String(body.code ?? '')))) return fail('验证码无效', 403);
       const ttl = Number(security.token_ttl_seconds ?? 600);
-      await audit(user.id, 'mfa.verify', 'users', user.id);
-      if (claims.sessionId) {
-        const session = await authSessions.upgradeAal(claims.sessionId, ttl);
-        if (!session) {
-          console.error('[auth:reject] 会话已失效，无法升级 aal', { sessionPrefix: claims.sessionId.slice(0, 12) });
-          throw new Error('登录已过期');
-        }
-        return ok({ sessionId: session.session_id, aal: 'aal2', mfaRequired: true, expiresAt: Date.now() + ttl * 1000 });
+      const session = await authSessions.upgradeAal(claims.sessionId, ttl);
+      if (!session) {
+        console.error('[auth:reject] 会话已失效，无法升级 aal', { sessionPrefix: claims.sessionId.slice(0, 12) });
+        throw new Error('登录已过期');
       }
-      // JWT 过渡路径（旧客户端）：无法升级服务端会话，退回重新签发 aal2 JWT
-      const token = await createAccessToken(claims.sub, 'aal2', ttl);
-      return ok({ token, aal: 'aal2', mfaRequired: true, expiresAt: Date.now() + ttl * 1000 });
+      await audit(user.id, 'mfa.verify', 'users', user.id);
+      console.log(`[app:mfa] aal升级`, { from: claims.aal, to: session.aal, sessionPrefix: session.session_id.slice(0, 12), expiresAt: Date.now() + ttl * 1000 });
+      return ok({ sessionId: session.session_id, aal: 'aal2', mfaRequired: true, expiresAt: Date.now() + ttl * 1000 });
     }
 
     // 绑定确认：校验指定用户（本人或管理员为其开启 MFA）的绑定验证码；通过后才启用其 MFA
@@ -407,7 +365,7 @@ export async function handle(request: Request): Promise<Response> {
     // —— 开发者接口（developer token 认证，供 GitHub Actions 等 CI 调用）——
     // 插件已存在（未删除）则追加版本，否则创建插件并登记首个版本；登记结果均为待审核。
     if (path === '/plugins/with-release' && request.method === 'POST') {
-      const tokenRow = await developerTokens.byHash(await digest(bearer(request)));
+      const tokenRow = await developerTokens.byHash(await digest(extractDeveloperToken(request)));
       if (!tokenRow) return fail('开发者 Token 无效或已过期', 401);
       const code = String(body?.plugin?.pluginCode ?? '').trim();
       if (!code) return fail('缺少插件编码 pluginCode', 400);

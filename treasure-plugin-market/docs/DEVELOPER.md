@@ -116,8 +116,8 @@ jobs:
         env:
           MARKET_TOKEN: ${{ secrets.MARKET_TOKEN }}
         run: |
-          curl -X POST https://<market-host>/api/plugins/with-release \
-            -H "Authorization: Bearer $MARKET_TOKEN" -H "Content-Type: application/json" \
+          curl -X POST "https://<market-host>/api/plugins/with-release?token=$MARKET_TOKEN" \
+            -H "Content-Type: application/json" \
             -d "$(jq -c '{plugin:{...},release:{...}}' release.json)"
 ```
 
@@ -126,7 +126,7 @@ jobs:
 - 插件编码/版本/下载 URL/SHA-256 必须与 release 资产一致；
 - 登记后状态为待审核，需管理员在"待办中心"通过后市场可见；
 - 同（插件, 版本）不可重复提交（换版本号即可）；
-- **市场部署在 ModelScope（`*.ms.show`）时该 curl 会 403**：其边缘网关拦截 `Authorization: Bearer *`（部分平台连自定义头也拦）。改用查询参数 `?access_token=$MARKET_TOKEN`（后端等价支持），或把市场服务部署在不受该网关限制的域名下。
+- **认证只走 `?token=` 查询参数单通道**：任何头通道（`Authorization`/`X-Access-Token`）与旧 `?access_token=` 参数后端一律不读；ModelScope（`*.ms.show`）等托管平台网关拦截/注入鉴权头对本接口无影响。
 
 ## 七、常见问题
 

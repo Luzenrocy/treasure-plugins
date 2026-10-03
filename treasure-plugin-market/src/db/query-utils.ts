@@ -91,19 +91,17 @@ export async function readBody(request: Request): Promise<unknown> {
 }
 
 /**
- * 取请求携带的持有者令牌，优先级：`Authorization` > `X-Access-Token` > `access_token` 查询参数。
- * 头通道被托管平台边缘网关拦截（ModelScope 会拦截 `Authorization: Bearer *` 并返回 403，
- * 请求根本到不了应用，表现为"登录后一律提示已过期"）时，回退到查询参数通道。
- * `X-Access-Token` 不是 CORS 简单头，跨源 JS 无法在无预检授权时携带，安全性与 Bearer 一致；
- * 查询参数不受网关头拦截影响，但会进入访问日志/浏览器历史，仅作头通道不可用的兜底。
+ * 登录状态认证唯一通道：仅 sessionId 查询参数。头通道与 access_token 一律不使用——
+ * 托管平台边缘网关可能注入/拦截鉴权头（ModelScope 会拦截 `Authorization: Bearer *` 并返回
+ * 403），头通道不可信；任何非 sessionId 凭据一律视为未认证。
  */
-export function extractBearer(request: Request): string {
-  const authorization = request.headers.get('authorization')?.trim() ?? '';
-  const credential = authorization.replace(/^Bearer\s+/i, '');
-  if (credential) return credential;
-  const xToken = request.headers.get('x-access-token')?.trim() ?? '';
-  if (xToken) return xToken;
-  return new URL(request.url).searchParams.get('access_token')?.trim() ?? '';
+export function extractSessionId(request: Request): string {
+  return new URL(request.url).searchParams.get('sessionId')?.trim() ?? '';
+}
+
+/** 开发者 Token（CI 插件登记）唯一通道：仅 token 查询参数（tpm_... 个人临时 token）。 */
+export function extractDeveloperToken(request: Request): string {
+  return new URL(request.url).searchParams.get('token')?.trim() ?? '';
 }
 
 /**
