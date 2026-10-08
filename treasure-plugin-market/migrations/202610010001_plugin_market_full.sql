@@ -77,7 +77,7 @@ create table public.plugin_releases (
   version text not null check (version ~ '^[0-9]+\.[0-9]+\.[0-9]+$'),
   download_url text not null check (left(download_url, 8) = 'https://'),
   sha256 text not null check (sha256 ~ '^[a-fA-F0-9]{64}$'),
-  size_bytes bigint not null check (size_bytes > 0),
+  size_bytes float8 not null check (size_bytes > 0),
   manifest_json jsonb not null,
   min_platform_version text,
   changelog text,
