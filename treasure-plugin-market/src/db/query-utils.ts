@@ -32,6 +32,35 @@ export function pickLatestVersion(row: Record<string, any>): Record<string, any>
   return { ...rest, latest_version: latest };
 }
 
+/**
+ * 公共接口插件摘要增强：从嵌入的 plugin_releases 取已发布的最新版本，
+ * 产出 latest_version / latest_published_at / release_count 及最新版本的
+ * 安装数据（download_url/sha256/size_bytes/manifest_json/changelog/min_platform_version），
+ * 供宿主默认安装直接使用（无需再请求版本详情接口）。
+ * 返回新对象：保留行其余字段，删除嵌入数组。
+ */
+export function enrichSummary(row: Record<string, any>): Record<string, any> {
+  const { plugin_releases, ...rest } = row;
+  const releases = Array.isArray(plugin_releases)
+    ? plugin_releases
+        .filter((release) => release?.status === 'published')
+        .sort((a, b) => timeOf(b?.created_at) - timeOf(a?.created_at))
+    : [];
+  const latest = releases.length > 0 ? releases[0] : null;
+  return {
+    ...rest,
+    latest_version: latest?.version ?? null,
+    latest_published_at: latest?.published_at ?? null,
+    release_count: releases.length,
+    min_platform_version: latest?.min_platform_version ?? null,
+    download_url: latest?.download_url ?? null,
+    sha256: latest?.sha256 ?? null,
+    size_bytes: latest?.size_bytes ?? null,
+    manifest_json: latest?.manifest_json ?? null,
+    changelog: latest?.changelog ?? null,
+  };
+}
+
 export type ReviewAction = 'approve' | 'reject' | 'restore';
 
 export type ReleaseReviewAction = 'approve' | 'reject';

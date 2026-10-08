@@ -1,34 +1,36 @@
 import { supabase } from '../supabase.js';
-import { pickLatestVersion, planPluginReview, planReleaseReview, type ReviewAction, type ReleaseReviewAction } from './query-utils.js';
+import { enrichSummary, pickLatestVersion, planPluginReview, planReleaseReview, type ReviewAction, type ReleaseReviewAction } from './query-utils.js';
 
 export const plugins = {
   async publicList() {
     const { data, error } = await supabase
       .from('plugins')
-      .select('plugin_code, alias, description, author, categories, permissions')
+      .select('plugin_code, alias, description, author, icon_url, homepage, categories, permissions, plugin_releases(version, created_at, status, min_platform_version, published_at, download_url, sha256, size_bytes, manifest_json, changelog)')
       .eq('status', 'published')
       .is('deleted_at', null)
       .order('alias');
     if (error) throw error;
-    return data ?? [];
+    return (data ?? []).map((row: any) => enrichSummary(row));
   },
 
   async publicOne(code: string) {
     const { data, error } = await supabase
       .from('plugins')
-      .select('plugin_code, alias, description, author, categories, permissions')
+      .select('plugin_code, alias, description, author, icon_url, homepage, categories, permissions, plugin_releases(version, created_at, status, min_platform_version, published_at, download_url, sha256, size_bytes, manifest_json, changelog)')
       .eq('plugin_code', code)
       .eq('status', 'published')
       .is('deleted_at', null)
       .maybeSingle();
     if (error) throw error;
-    return data ?? null;
+    return data ? enrichSummary(data) : null;
   },
 
+  // 公共版本列表：每个版本返回完整安装数据（宿主详情页切换版本安装用）。
+  // 补插件级 permissions 嵌入供权限声明展示。
   async publicReleases(code: string) {
     const { data, error } = await supabase
       .from('plugin_releases')
-      .select('version, download_url, sha256, size_bytes, manifest_json, min_platform_version, changelog, published_at, plugins!inner(plugin_code, status, deleted_at)')
+      .select('version, download_url, sha256, size_bytes, manifest_json, min_platform_version, changelog, published_at, plugins!inner(plugin_code, permissions, status, deleted_at)')
       .eq('plugins.plugin_code', code)
       .eq('plugins.status', 'published')
       .is('plugins.deleted_at', null)

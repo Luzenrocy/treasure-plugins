@@ -14,6 +14,49 @@ const fail = (message: string, status = 400) => new Response(JSON.stringify({ co
 const route = (request: Request) => new URL(request.url).pathname.replace(/^.*\/market-admin/, '') || '/';
 const digest = async (value: string) => { const bytes = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value)); return [...new Uint8Array(bytes)].map((x) => x.toString(16).padStart(2, '0')).join(''); };
 
+// —— 公共接口字段映射（API 边界做 snake_case → camelCase 重命名，db 层保持原样供 admin 复用）——
+
+// 列表项：档案 + 最新版本概要（不含安装数据，对齐契约 3.2）
+const toPluginCard = (row: any) => ({
+  pluginCode: row.plugin_code,
+  alias: row.alias,
+  description: row.description,
+  author: row.author,
+  iconUrl: row.icon_url,
+  categories: row.categories ?? [],
+  permissions: row.permissions ?? [],
+  minPlatformVersion: row.min_platform_version ?? null,
+  latestVersion: row.latest_version,
+  latestPublishedAt: row.latest_published_at ?? null,
+  releaseCount: row.release_count ?? 0,
+});
+
+// 详情：列表项字段 + 最新版本完整安装数据（默认安装直接使用）
+const toPluginDetail = (row: any) => ({
+  ...toPluginCard(row),
+  homepage: row.homepage,
+  downloadUrl: row.download_url,
+  sha256: row.sha256,
+  size: row.size_bytes,
+  manifest: row.manifest_json,
+  changelog: row.changelog,
+});
+
+// 版本列表项：每个版本完整安装数据（宿主切换版本安装用）
+const toReleaseSummary = (row: any) => ({
+  pluginCode: row.plugins?.plugin_code,
+  version: row.version,
+  status: row.status,
+  downloadUrl: row.download_url,
+  sha256: row.sha256,
+  size: row.size_bytes,
+  manifest: row.manifest_json,
+  minPlatformVersion: row.min_platform_version,
+  permissions: row.plugins?.permissions ?? [],
+  changelog: row.changelog,
+  publishedAt: row.published_at,
+});
+
 // 角色门槛：admin > operator > user。operator/user 都是合法登录角色，
 // 是否放行由路由标注的 requireRole 决定；requireMfa 遵循"开启时验证、关闭时不验证"。
 // 认证单通道：登录状态只信 ?sessionId= 查询参数（auth_sessions 表，多实例共享 DB，
@@ -163,12 +206,27 @@ export async function handle(request: Request): Promise<Response> {
       return ok({ ...(await dashboard.counts()), mfaRequired: security?.mfa_enabled === true });
     }
 
-    if (path === '/plugins' && request.method === 'GET') return ok({ items: await plugins.publicList() });
+    if (path === '/plugins' && request.method === 'GET') {
+      const keyword = new URL(request.url).searchParams.get('keyword')?.trim().toLowerCase();
+      let rows = await plugins.publicList();
+      if (keyword) {
+        // 数据量为小规模（市场插件有限），TS 层内存过滤即可，避免复杂 REST or 查询
+        rows = rows.filter((r: any) =>
+          [r.plugin_code, r.alias, r.description, r.author].some((v) =>
+            String(v ?? '').toLowerCase().includes(keyword),
+          ),
+        );
+      }
+      return ok({ items: rows.map(toPluginCard) });
+    }
     if (/^\/plugins\/[^/]+$/.test(path) && request.method === 'GET') {
       const item = await plugins.publicOne(path.split('/').at(-1)!);
-      return item ? ok(item) : fail('插件不存在', 404);
+      return item ? ok(toPluginDetail(item)) : fail('插件不存在', 404);
     }
-    if (/^\/plugins\/[^/]+\/releases$/.test(path) && request.method === 'GET') return ok({ items: await plugins.publicReleases(path.split('/')[2]!) });
+    if (/^\/plugins\/[^/]+\/releases$/.test(path) && request.method === 'GET') {
+      const rows = await plugins.publicReleases(path.split('/')[2]!);
+      return ok({ items: rows.map(toReleaseSummary) });
+    }
 
     if (path === '/admin/users' && request.method === 'POST') {
       const { user: actor } = await currentUser(request, 'admin', true);

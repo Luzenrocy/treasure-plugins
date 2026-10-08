@@ -53,6 +53,8 @@ create table public.plugins (
   alias text not null,
   description text not null,
   author text not null,
+  icon_url text,
+  homepage text,
   categories jsonb not null default '[]'::jsonb,
   permissions jsonb not null default '[]'::jsonb,
   status text not null default 'pending_review' check (status in ('draft', 'pending_review', 'published', 'disabled', 'deleted')),
