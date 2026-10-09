@@ -1,7 +1,7 @@
 {
   "name": "json-formatter",
   "private": true,
-  "version": "1.0.1",
+  "version": "1.0.0",
   "type": "module",
   "description": "用于本地 JSON 文本格式化、校验、压缩与转义",
   "author": "OpenAI",
