@@ -4,12 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --config vite.config.ts",
+    "dev": "node scripts/dev.mjs",
+    "dev:web": "vite --config vite.config.ts",
+    "dev:api": "node --env-file-if-exists=.env --watch --import tsx src/index.ts",
     "build": "vite build && npm run build:node",
     "build:node": "tsc -p tsconfig.node.json",
     "preview": "vite preview --config vite.config.ts --host 0.0.0.0",
     "start": "node dist-node/index.js",
-    "dev:api": "node --env-file-if-exists=.env --watch --import tsx src/index.ts",
     "typecheck:node": "tsc -p tsconfig.node.json --noEmit",
     "test": "node --import tsx --test test/*.test.ts"
   },

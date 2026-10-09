@@ -206,8 +206,10 @@ curl -X POST 'https://<host>.ms.show/api/plugins/with-release?token=tpm_xxxxxxxx
 | `/api/admin/plugins/{code}/review` | POST | admin | 插件审核（approve/reject/restore）|
 | `/api/admin/plugins/{code}/disable` | POST | user（own）/ admin | 插件下线 |
 | `/api/admin/plugins/{code}` | DELETE | user（own）/ admin | 插件删除（须先下线）|
+| `/api/admin/plugins/{id}` | PATCH | user（own）/ admin | 编辑插件信息（alias/description/author/categories/permissions，按主键 id）|
 | `/api/admin/releases/{id}/revoke` | POST | user（own）/ admin | 版本下线 |
 | `/api/admin/releases/{id}` | DELETE | user（own）/ admin | 版本删除（须先下线）|
+| `/api/admin/releases/{id}` | PATCH | user（own）/ admin | 编辑版本信息（downloadUrl/sha256/sizeBytes/minPlatformVersion，按主键 id）|
 | `/api/admin/settings` | GET | user | 本人安全设置 |
 | `/api/admin/settings` | PUT | admin | 全局 Token 有效期 |
 | `/api/admin/me/password` | POST | user | 修改本人密码 |

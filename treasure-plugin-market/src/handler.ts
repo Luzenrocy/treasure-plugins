@@ -346,7 +346,7 @@ export async function handle(request: Request): Promise<Response> {
     if (path === '/admin/plugins' && request.method === 'GET') {
       await currentUser(request, 'user');
       const rows = await plugins.adminList();
-      return ok({ items: rows.map((row) => ({ id: row.id, pluginCode: row.plugin_code, alias: row.alias, description: row.description, author: row.author, status: row.status, createdBy: row.created_by, updatedAt: row.updated_at, latestVersion: row.latest_version })) });
+      return ok({ items: rows.map((row) => ({ id: row.id, pluginCode: row.plugin_code, alias: row.alias, description: row.description, author: row.author, categories: row.categories ?? [], permissions: row.permissions ?? [], status: row.status, createdBy: row.created_by, updatedAt: row.updated_at, latestVersion: row.latest_version })) });
     }
     if (path === '/admin/plugins/with-release' && request.method === 'POST') {
       const { user } = await currentUser(request, 'user', true);
@@ -359,7 +359,7 @@ export async function handle(request: Request): Promise<Response> {
     if (/^\/admin\/plugins\/[^/]+\/releases$/.test(path) && request.method === 'GET') {
       await currentUser(request, 'user');
       const rows = await plugins.releases(path.split('/')[3]!);
-      return ok({ items: rows.map((row) => ({ id: row.id, version: row.version, status: row.status, sizeBytes: row.size_bytes, createdAt: row.created_at, publishedAt: row.published_at })) });
+      return ok({ items: rows.map((row) => ({ id: row.id, version: row.version, status: row.status, downloadUrl: row.download_url, sha256: row.sha256, sizeBytes: row.size_bytes, minPlatformVersion: row.min_platform_version, changelog: row.changelog, createdAt: row.created_at, publishedAt: row.published_at })) });
     }
     if (/^\/admin\/plugins\/[^/]+\/releases$/.test(path) && request.method === 'POST') {
       const { user } = await currentUser(request, 'user', true);
@@ -389,6 +389,23 @@ export async function handle(request: Request): Promise<Response> {
       await audit(user.id, 'plugin.disable', 'plugins', result.id);
       return ok(result);
     }
+    if (/^\/admin\/plugins\/[^/]+$/.test(path) && (request.method === 'PATCH' || (request.method === 'POST' && new URL(request.url).searchParams.get('action') === 'patch'))) {
+      const { user } = await currentUser(request, 'user', true);
+      // 按数据库主键 id 定位（插件编码非权威键，不可见即可被误用）
+      const id = path.split('/').at(-1)!;
+      const owner = await plugins.pluginOwner(id);
+      if (!owner) return fail('插件不存在', 404);
+      assertPluginWrite(user, owner.createdBy);
+      const result = await plugins.updatePlugin(id, user.id, {
+        alias: body?.alias === undefined ? undefined : String(body.alias),
+        description: body?.description === undefined ? undefined : String(body.description),
+        author: body?.author === undefined ? undefined : String(body.author),
+        categories: body?.categories === undefined ? undefined : body.categories,
+        permissions: body?.permissions === undefined ? undefined : body.permissions,
+      });
+      await audit(user.id, 'plugin.update', 'plugins', id);
+      return ok(result);
+    }
     if (/^\/admin\/plugins\/[^/]+$/.test(path) && (request.method === 'DELETE' || (request.method === 'POST' && new URL(request.url).searchParams.get('action') === 'delete'))) {
       const { user } = await currentUser(request, 'user', true);
       const code = path.split('/').at(-1)!;
@@ -408,6 +425,21 @@ export async function handle(request: Request): Promise<Response> {
       const rows = await plugins.revokeRelease(id, user.id);
       await audit(user.id, 'release.revoke', 'plugin_releases', id);
       return ok(rows[0]);
+    }
+    if (/^\/admin\/releases\/[^/]+$/.test(path) && (request.method === 'PATCH' || (request.method === 'POST' && new URL(request.url).searchParams.get('action') === 'patch'))) {
+      const { user } = await currentUser(request, 'user', true);
+      const id = path.split('/').at(-1)!;
+      const owner = await plugins.releaseOwner(id);
+      if (!owner) return fail('版本不存在', 404);
+      assertPluginWrite(user, owner.createdBy);
+      const result = await plugins.updateRelease(id, {
+        download_url: body?.downloadUrl === undefined ? undefined : String(body.downloadUrl),
+        sha256: body?.sha256 === undefined ? undefined : String(body.sha256),
+        size_bytes: body?.sizeBytes === undefined ? undefined : Number(body.sizeBytes),
+        min_platform_version: body?.minPlatformVersion === undefined ? undefined : (String(body.minPlatformVersion ?? '').trim() || null),
+      });
+      await audit(user.id, 'release.update', 'plugin_releases', id);
+      return ok(result);
     }
     if (/^\/admin\/releases\/[^/]+$/.test(path) && (request.method === 'DELETE' || (request.method === 'POST' && new URL(request.url).searchParams.get('action') === 'delete'))) {
       const { user } = await currentUser(request, 'user', true);

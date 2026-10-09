@@ -91,6 +91,7 @@ export const plugins = {
       download_url: input.release.downloadUrl as string,
       sha256: input.release.sha256 as string,
       size_bytes: input.release.sizeBytes as number,
+      min_platform_version: (input.release.minPlatformVersion as string | null | undefined) ?? null,
       manifest_json: input.release.manifest ?? {},
       submitted_by: actorId,
     };
@@ -116,6 +117,7 @@ export const plugins = {
         download_url: input.downloadUrl as string,
         sha256: input.sha256 as string,
         size_bytes: input.sizeBytes as number,
+        min_platform_version: (input.minPlatformVersion as string | null | undefined) ?? null,
         manifest_json: input.manifest ?? {},
         submitted_by: actorId,
       })
@@ -124,10 +126,60 @@ export const plugins = {
     return data ?? [];
   },
 
+  // 插件唯一归属查询：按主键取创建者与编码，供编辑/删除类写操作的权限守卫使用。
+  async pluginOwner(id: string) {
+    const { data, error } = await supabase
+      .from('plugins')
+      .select('id, plugin_code, created_by')
+      .eq('id', id)
+      .is('deleted_at', null)
+      .maybeSingle();
+    if (error) throw error;
+    return data ? { id: data.id as string, pluginCode: (data as any).plugin_code, createdBy: (data as any).created_by } : null;
+  },
+
+  // 编辑插件信息：按数据库主键 id 定位（plugin_code 为业务编码非权威键），仅更新白名单字段。
+  async updatePlugin(id: string, actorId: string, patch: Record<string, unknown>) {
+    const allowed = ['alias', 'description', 'author', 'categories', 'permissions', 'icon_url', 'homepage'] as const;
+    const keys = allowed.filter((key) => patch[key] !== undefined);
+    if (keys.length === 0) throw new Error('无可更新的字段');
+    const update: Record<string, unknown> = { updated_by: actorId };
+    for (const key of keys) update[key] = patch[key];
+    const { data, error } = await supabase
+      .from('plugins')
+      .update(update)
+      .eq('id', id)
+      .is('deleted_at', null)
+      .select('*')
+      .maybeSingle();
+    if (error) throw error;
+    if (!data) throw new Error('插件不存在');
+    return data;
+  },
+
+  // 编辑版本信息：仅更新白名单字段（version 为 (插件, 版本) 唯一键不可改）
+  async updateRelease(id: string, patch: Record<string, unknown>) {
+    const allowed = ['download_url', 'sha256', 'size_bytes', 'min_platform_version', 'changelog'] as const;
+    const keys = allowed.filter((key) => patch[key] !== undefined);
+    if (keys.length === 0) throw new Error('无可更新的字段');
+    const update: Record<string, unknown> = {};
+    for (const key of keys) update[key] = patch[key];
+    const { data, error } = await supabase
+      .from('plugin_releases')
+      .update(update)
+      .eq('id', id)
+      .is('deleted_at', null)
+      .select('*')
+      .maybeSingle();
+    if (error) throw error;
+    if (!data) throw new Error('版本不存在');
+    return data;
+  },
+
   async releases(code: string) {
     const { data, error } = await supabase
       .from('plugin_releases')
-      .select('id, version, status, size_bytes, created_at, published_at, plugins!inner(plugin_code)')
+      .select('id, version, status, download_url, sha256, size_bytes, min_platform_version, changelog, created_at, published_at, plugins!inner(plugin_code)')
       .eq('plugins.plugin_code', code)
       .is('deleted_at', null)
       .order('created_at', { ascending: false });

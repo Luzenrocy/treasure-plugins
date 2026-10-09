@@ -4,3 +4,5 @@
 /* 登录卡片 label 拆字两端对齐（密左码右，用左名右） */
 .auth-card .el-form-item__label{display:flex;align-items:center}
 .label-justify{display:flex;justify-content:space-between;width:100%}
+/* 高表单弹窗：表单区独立滚动，弹窗不无限增高、滚动条不落到主页面 */
+.dialog-body-scroll{max-height:55vh;overflow-y:auto;padding-right:6px}

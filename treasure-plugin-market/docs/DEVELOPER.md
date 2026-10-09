@@ -24,8 +24,9 @@ cp .env.example .env    # 填入 VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_K
 
 | 命令 | 说明 |
 |---|---|
-| `npm run dev:api` | Node API 服务（端口 7860，含静态页）|
-| `npm run dev` | Vite 热更新（`/api` 代理到 7860）|
+| `npm run dev` | 一键本地调试：同时启动 Node API（7860）与 Vite 前端（5174，`/api` 代理到 7860）|
+| `npm run dev:web` | 仅 Vite 热更新（需配合 `npm run dev:api` 使用）|
+| `npm run dev:api` | 仅 Node API 服务（端口 7860，含静态页）|
 | `npm run build` | `vite build` + `tsc` Node 编译 |
 | `npm start` | 运行 `dist-node/index.js`（单进程）|
 | `npm test` | `node --test` 单元测试（`test/*.test.ts`）|

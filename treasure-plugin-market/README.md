@@ -65,12 +65,16 @@ src/
 
 ```bash
 npm install
-cp .env.example .env   # 填入 VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY 与密钥
+cp .env.example .env   # 填入 VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY / SUPABASE_SERVICE_ROLE_KEY / AUTH_JWT_SECRET
 
-# A：Node 应用（页面 + API + 数据库，端口 7860）
-npm run dev:api
-# B：Vite 热更新（/api 代理到 7860）
-npm run dev
+npm run dev            # 一键启动：后端 API（7860）+ Vite 前端（5174，/api 代理到 7860）
+```
+
+需要单独跑某一端（如只重启后端）时：
+
+```bash
+npm run dev:api        # 仅 Node 应用（页面 + API + 数据库，端口 7860）
+npm run dev:web        # 仅 Vite 热更新（需另开终端运行 dev:api）
 ```
 
 ## 构建与运行
