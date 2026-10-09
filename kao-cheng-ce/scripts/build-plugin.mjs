@@ -29,13 +29,13 @@ function generateRandomSuffix(length = 6) {
   return result;
 }
 function slugify(text) {
-  return text.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]+/g, '-').replace(/^-|-$/g, '').replace(/[\u4e00-\u9fa5]/g, '');
+  return text.toLowerCase().replace(/[\u4e00-\u9fa5]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 }
 function freezePluginCode(manifestPath, root) {
   const manifest = JSON.parse(readFileSync(manifestPath, 'utf-8'));
   if (manifest._frozen) return manifest;
-  let slug = manifest.alias ? slugify(manifest.alias) : '';
-  if (!slug) slug = slugify(basename(root));
+  let slug = slugify(basename(root));
+  if (!slug) slug = manifest.alias ? slugify(manifest.alias) : '';
   if (!slug) slug = 'plugin';
   manifest.name = `${slug}-${generateRandomSuffix(6)}`;
   manifest._frozen = true;

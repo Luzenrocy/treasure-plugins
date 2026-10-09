@@ -3,7 +3,7 @@
   "alias": "文本对比",
   "version": "1.0.0",
   "description": "用于本地双栏文本差异比较与编辑",
-  "author": "OpenAI",
+  "author": "Treasure",
   "icon": "icon.svg",
   "entry": "index.html",
   "minPlatformVersion": "2.0.0",
