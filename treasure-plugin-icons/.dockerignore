@@ -1,0 +1,8 @@
+node_modules/
+dist/
+dist-server/
+public/icons/
+public/icons.json
+.git/
+.env
+.DS_Store

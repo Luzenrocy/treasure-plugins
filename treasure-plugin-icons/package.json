@@ -1,0 +1,24 @@
+{
+  "name": "treasure-plugin-icons",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "collect": "node scripts/collect-icons.mjs",
+    "dev": "node scripts/collect-icons.mjs && vite --config vite.config.ts",
+    "build": "node scripts/collect-icons.mjs && vite build && npm run build:server",
+    "build:server": "tsc -p tsconfig.server.json",
+    "preview": "vite preview --config vite.config.ts --host 0.0.0.0",
+    "start": "node dist-server/index.js",
+    "typecheck:server": "tsc -p tsconfig.server.json --noEmit"
+  },
+  "dependencies": {
+    "vue": "^3.5.43"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@vitejs/plugin-vue": "^6.0.9",
+    "typescript": "^5.8.3",
+    "vite": "^7.3.6"
+  }
+}
