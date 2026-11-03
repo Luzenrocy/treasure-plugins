@@ -88,7 +88,9 @@ jobs:
 
       - name: Install dependencies
         working-directory: ${{ steps.meta.outputs.plugin }}
-        run: npm ci
+        # Plugin packaging invokes Vite and TypeScript from devDependencies.
+        # Include them explicitly even when the runner sets NODE_ENV=production.
+        run: npm ci --include=dev
 
       - name: Build release package
         working-directory: ${{ steps.meta.outputs.plugin }}
