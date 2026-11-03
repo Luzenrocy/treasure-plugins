@@ -1,0 +1,35 @@
+{
+  "name": "excalidraw",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Treasure 本地 Excalidraw 绘图插件",
+  "author": "Treasure Plugins",
+  "scripts": {
+    "dev": "vite",
+    "build": "node scripts/copy-excalidraw-assets.mjs && vite build",
+    "build:plugin": "node scripts/clean-build-output.mjs && npm run build && node scripts/build-plugin.mjs",
+    "build:plugin:zip": "node scripts/clean-build-output.mjs && npm run build && node scripts/build-plugin.mjs --zip",
+    "test": "vitest run",
+    "typecheck": "vue-tsc --noEmit"
+  },
+  "dependencies": {
+    "@excalidraw/excalidraw": "0.18.1",
+    "jszip": "^3.10.2",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "treasure-sdk": "^2.1.1",
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "@vitest/coverage-v8": "^2.1.9",
+    "typescript": "~5.6.2",
+    "vite": "^6.0.3",
+    "vitest": "^2.1.9",
+    "vue-tsc": "^2.1.10"
+  }
+}

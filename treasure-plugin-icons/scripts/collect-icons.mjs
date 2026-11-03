@@ -21,9 +21,12 @@ function isPluginDirectory(name) {
 function pluginItem(name) {
   const manifest = manifestOf(name);
   const iconName = typeof manifest.icon === 'string' && manifest.icon !== '' ? manifest.icon : 'icon.svg';
-  const sourcePath = join(repoRoot, name, 'public', iconName);
-  if (!existsSync(sourcePath)) {
-    console.warn(`[collect] skip ${name}: icon not found at public/${iconName}`);
+  const sourcePath = [
+    join(repoRoot, name, iconName),
+    join(repoRoot, name, 'public', iconName),
+  ].find(existsSync);
+  if (!sourcePath) {
+    console.warn(`[collect] skip ${name}: icon not found at ${iconName} or public/${iconName}`);
     return null;
   }
   return {

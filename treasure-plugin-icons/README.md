@@ -1,6 +1,6 @@
 # treasure-plugin-icons
 
-插件图标静态资源发布站：收集仓库内**已发布插件**的 `public/icon.svg`（无则按 `manifest.icon` 兜底），提供稳定 URL 与元数据清单，供第三方加载展示插件图标。
+插件图标静态资源发布站：收集仓库内**已发布插件**在 `manifest.icon` 指定的图标（优先插件根目录、再兼容 `public/`），提供稳定 URL 与元数据清单，供第三方加载展示插件图标。
 
 ## URL 约定
 

@@ -1,0 +1,39 @@
+{
+  "name": "excalidraw",
+  "alias": "Excalidraw",
+  "version": "1.0.0",
+  "description": "Treasure 本地 Excalidraw 绘图插件",
+  "author": "Treasure Plugins",
+  "icon": "icon.png",
+  "entry": "index.html",
+  "minPlatformVersion": "2.3.0",
+  "menu": {
+    "name": "Excalidraw",
+    "icon": "public/assets/excalidraw-menu.svg",
+    "order": 100
+  },
+  "_frozen": true,
+  "settings": [
+    {
+      "key": "workspace_dir",
+      "param_key": "workspace_dir",
+      "param_type": "dir",
+      "param_name": "绘图目录",
+      "param_value": ""
+    },
+    {
+      "key": "library_url",
+      "param_key": "library_url",
+      "param_type": "input",
+      "param_name": "素材库",
+      "param_value": "https://libraries.excalidraw.com/libraries.json"
+    },
+    {
+      "key": "library_stats_url",
+      "param_key": "library_stats_url",
+      "param_type": "input",
+      "param_name": "素材下载统计",
+      "param_value": "https://libraries.excalidraw.com/stats.json"
+    }
+  ]
+}
