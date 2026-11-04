@@ -3,6 +3,7 @@ import { authSessions, isSessionActive, isValidSessionId } from './db/auth-sessi
 import { dashboard } from './db/dashboard.js';
 import { developerTokens } from './db/developer-tokens.js';
 import { plugins } from './db/plugins.js';
+import { asPluginDownload, fetchGithubReleaseAsset } from './download-proxy.js';
 import { extractDeveloperToken, extractSessionId, readBody, roleAtLeast, canManagePlugin, type ReleaseReviewAction, type ReviewAction, type Role } from './db/query-utils.js';
 import { settings } from './db/settings.js';
 import { users } from './db/users.js';
@@ -227,6 +228,17 @@ export async function handle(request: Request): Promise<Response> {
       const rows = await plugins.publicReleases(path.split('/')[2]!);
       return ok({ items: rows.map(toReleaseSummary) });
     }
+    if (/^\/plugins\/[^/]+\/releases\/[^/]+\/download$/.test(path) && request.method === 'GET') {
+      const [, , pluginCode, , version] = path.split('/');
+      const release = await plugins.publicRelease(pluginCode, version);
+      if (!release) return fail('插件版本不存在或尚未发布', 404);
+      try {
+        return asPluginDownload(await fetchGithubReleaseAsset(String(release.download_url)), pluginCode, version);
+      } catch (error) {
+        console.warn('[download-proxy] GitHub 插件包下载失败', { pluginCode, version, message: error instanceof Error ? error.message : String(error) });
+        return fail('插件包暂时无法下载，请稍后重试', 502);
+      }
+    }
 
     if (path === '/admin/users' && request.method === 'POST') {
       const { user: actor } = await currentUser(request, 'admin', true);
@@ -346,7 +358,7 @@ export async function handle(request: Request): Promise<Response> {
     if (path === '/admin/plugins' && request.method === 'GET') {
       await currentUser(request, 'user');
       const rows = await plugins.adminList();
-      return ok({ items: rows.map((row) => ({ id: row.id, pluginCode: row.plugin_code, alias: row.alias, description: row.description, author: row.author, categories: row.categories ?? [], permissions: row.permissions ?? [], status: row.status, createdBy: row.created_by, updatedAt: row.updated_at, latestVersion: row.latest_version })) });
+      return ok({ items: rows.map((row) => ({ id: row.id, pluginCode: row.plugin_code, alias: row.alias, description: row.description, author: row.author, iconUrl: row.icon_url, categories: row.categories ?? [], permissions: row.permissions ?? [], status: row.status, createdBy: row.created_by, updatedAt: row.updated_at, latestVersion: row.latest_version })) });
     }
     if (path === '/admin/plugins/with-release' && request.method === 'POST') {
       const { user } = await currentUser(request, 'user', true);
@@ -400,6 +412,7 @@ export async function handle(request: Request): Promise<Response> {
         alias: body?.alias === undefined ? undefined : String(body.alias),
         description: body?.description === undefined ? undefined : String(body.description),
         author: body?.author === undefined ? undefined : String(body.author),
+        icon_url: body?.iconUrl === undefined ? undefined : (String(body.iconUrl ?? '').trim() || null),
         categories: body?.categories === undefined ? undefined : body.categories,
         permissions: body?.permissions === undefined ? undefined : body.permissions,
       });

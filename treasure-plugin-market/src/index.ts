@@ -1,4 +1,5 @@
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
+import { Readable } from 'node:stream';
 import { readFile } from 'node:fs/promises';
 import { extname, join, normalize } from 'node:path';
 import { createHash } from 'node:crypto';
@@ -45,7 +46,17 @@ async function toRequest(request: IncomingMessage, targetUrl: URL): Promise<Requ
 async function writeResponse(response: ServerResponse, result: Response): Promise<void> {
   response.statusCode = result.status;
   result.headers.forEach((value, key) => response.setHeader(key, value));
-  response.end(Buffer.from(await result.arrayBuffer()));
+  if (!result.body) {
+    response.end();
+    return;
+  }
+  await new Promise<void>((resolve, reject) => {
+    const stream = Readable.fromWeb(result.body as never);
+    stream.once('error', reject);
+    response.once('error', reject);
+    response.once('finish', resolve);
+    stream.pipe(response);
+  });
 }
 
 async function serveStatic(pathname: string, response: ServerResponse): Promise<void> {

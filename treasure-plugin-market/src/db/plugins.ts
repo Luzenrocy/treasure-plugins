@@ -41,6 +41,22 @@ export const plugins = {
     return data ?? [];
   },
 
+  // 下载代理仅能读取已发布插件的已发布版本，防止借市场服务访问草稿/已下线包。
+  async publicRelease(code: string, version: string) {
+    const { data, error } = await supabase
+      .from('plugin_releases')
+      .select('version, download_url, plugins!inner(plugin_code, status, deleted_at)')
+      .eq('plugins.plugin_code', code)
+      .eq('plugins.status', 'published')
+      .is('plugins.deleted_at', null)
+      .eq('version', version)
+      .eq('status', 'published')
+      .is('deleted_at', null)
+      .maybeSingle();
+    if (error) throw error;
+    return data;
+  },
+
   // 纯 REST：嵌入 plugin_releases，业务层（pickLatestVersion）按 created_at desc 取最新版本。
   // 注意：不在 REST 层对嵌入列排序（PostgREST 解析 point 嵌套排序会报 PGRST100）。
   async adminList() {
@@ -73,6 +89,7 @@ export const plugins = {
       alias: input.plugin.alias as string,
       description: input.plugin.description as string,
       author: input.plugin.author as string,
+      icon_url: (input.plugin.iconUrl as string | null | undefined) ?? null,
       categories: input.plugin.categories ?? [],
       permissions: input.plugin.permissions ?? [],
       created_by: actorId,
