@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "description": "Treasure 本地 Excalidraw 绘图插件",
-  "author": "Treasure Plugins",
+  "author": "treasure",
   "scripts": {
     "dev": "vite",
     "build": "node scripts/copy-excalidraw-assets.mjs && vite build",
@@ -18,7 +18,7 @@
     "jszip": "^3.10.2",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "treasure-sdk": "^2.1.1",
+    "treasure-sdk": "^2.2.0",
     "vue": "^3.5.13"
   },
   "devDependencies": {
