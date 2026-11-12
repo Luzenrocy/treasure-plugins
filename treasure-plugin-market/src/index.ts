@@ -1,5 +1,4 @@
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
-import { Readable } from 'node:stream';
 import { readFile } from 'node:fs/promises';
 import { extname, join, normalize } from 'node:path';
 import { createHash } from 'node:crypto';
@@ -46,19 +45,7 @@ async function toRequest(request: IncomingMessage, targetUrl: URL): Promise<Requ
 async function writeResponse(response: ServerResponse, result: Response): Promise<void> {
   response.statusCode = result.status;
   result.headers.forEach((value, key) => response.setHeader(key, value));
-  // 普通页面/API 保持原有的缓冲输出，避免托管平台对 Web Stream → Node Stream
-  // 转换的兼容性差异影响全站。只有代理下载包需要边读边传，标识为 attachment。
-  if (!result.headers.has('content-disposition')) {
-    response.end(Buffer.from(await result.arrayBuffer()));
-    return;
-  }
-  await new Promise<void>((resolve, reject) => {
-    const stream = Readable.fromWeb(result.body as never);
-    stream.once('error', reject);
-    response.once('error', reject);
-    response.once('finish', resolve);
-    stream.pipe(response);
-  });
+  response.end(Buffer.from(await result.arrayBuffer()));
 }
 
 async function serveStatic(pathname: string, response: ServerResponse): Promise<void> {

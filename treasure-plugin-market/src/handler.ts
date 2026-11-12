@@ -3,7 +3,6 @@ import { authSessions, isSessionActive, isValidSessionId } from './db/auth-sessi
 import { dashboard } from './db/dashboard.js';
 import { developerTokens } from './db/developer-tokens.js';
 import { plugins } from './db/plugins.js';
-import { asPluginDownload, fetchGithubReleaseAsset } from './download-proxy.js';
 import { extractDeveloperToken, extractSessionId, readBody, roleAtLeast, canManagePlugin, type ReleaseReviewAction, type ReviewAction, type Role } from './db/query-utils.js';
 import { settings } from './db/settings.js';
 import { users } from './db/users.js';
@@ -227,17 +226,6 @@ export async function handle(request: Request): Promise<Response> {
     if (/^\/plugins\/[^/]+\/releases$/.test(path) && request.method === 'GET') {
       const rows = await plugins.publicReleases(path.split('/')[2]!);
       return ok({ items: rows.map(toReleaseSummary) });
-    }
-    if (/^\/plugins\/[^/]+\/releases\/[^/]+\/download$/.test(path) && request.method === 'GET') {
-      const [, , pluginCode, , version] = path.split('/');
-      const release = await plugins.publicRelease(pluginCode, version);
-      if (!release) return fail('插件版本不存在或尚未发布', 404);
-      try {
-        return asPluginDownload(await fetchGithubReleaseAsset(String(release.download_url)), pluginCode, version);
-      } catch (error) {
-        console.warn('[download-proxy] GitHub 插件包下载失败', { pluginCode, version, message: error instanceof Error ? error.message : String(error) });
-        return fail('插件包暂时无法下载，请稍后重试', 502);
-      }
     }
 
     if (path === '/admin/users' && request.method === 'POST') {

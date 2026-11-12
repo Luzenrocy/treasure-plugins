@@ -93,30 +93,6 @@ GET /api/plugins/{pluginCode}/releases
 curl 'http://127.0.0.1:7860/api/plugins/text-diff/releases'
 ```
 
-### 1.4 插件包下载代理
-
-```
-GET /api/plugins/{pluginCode}/releases/{version}/download
-```
-
-供 Treasure 宿主下载安装包。服务端仅会代理市场中**已发布**版本登记的 GitHub Release `.zip` 资产，并在转发 GitHub 的签名下载跳转时保持流式传输；不会接受任意 URL，因此不能被用作开放代理。建议宿主优先使用此接口，而不是直接访问响应中的 `downloadUrl`。
-
-```bash
-curl -fL 'http://127.0.0.1:7860/api/plugins/text-diff/releases/1.0.0/download' -o text-diff.zip
-```
-
-| HTTP | 场景 |
-|---|---|
-| 200 | 返回 zip 二进制流，附带下载文件名 |
-| 404 | 插件或版本不存在、未发布或已下线 |
-| 502 | GitHub 资产暂时无法获取 |
-
-宿主根据市场地址拼接该路径即可，例如市场地址为 `https://market.example.com` 时，安装 `text-diff@1.0.0` 应请求：
-
-```
-https://market.example.com/api/plugins/text-diff/releases/1.0.0/download
-```
-
 ---
 
 ## 二、开发者登记接口（需开发者 Token）
