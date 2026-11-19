@@ -53,16 +53,49 @@ jobs:
             1548432076 1548432038 1548431991 1501572639 1501572606 1501572545 1501571707 1501571677 1501571628 1501089361 1501089324 1501089287 1501089151 1501089106 1501089071 1360472204 1360472181 1360472147 1360472142 1360472100 1360472062 1354693552 1354693506 1354693450 1354561522 1354561481 1354561452 1354561145 1354561103 1354561068 1331606039 1331606021 1331606003 1331500703 1331500674 1331500653 1331500305 1331500276 1331500252 1331341743 1331341730 1331341712 1331283234 1331283225 1331283203 1331283201 1331283183 1331283178 1331028361 1331028349 1331028341 1331028304 1331028291 1331028280 1330858071 1330858054 1330858037 1330858014 1330857994 1330857981 1330759454 1330759416 1330759363 1330759359 1330759320 1330759281 1330718767 1330718753 1330718729 1330718639 1330718628 1330718615 1330677873 1330677860 1330677845 1330677282 1330677263 1330677248 1330604799 1330604788 1330604778 1330604756 1330604746 1330604726 1330534948 1330534941 1330534928 1330534760 1330534742 1330534724 1330495491 1330495476 1330495463 1330495062 1330495049 1330495040 1330228632 1330228620 1330228603 1330228191 1330228174 1330228160 1327982193 1327982167 1327982142
           )
           icons_ids=(1493468409 1493468360 1493468304 1360714762 1360714731 1360714702 1360714015 1360713988 1360713967)
+          blocked=()
           delete_versions() {
             local package="$1"
             shift
             for version_id in "$@"; do
-              curl --fail-with-body --silent --show-error --request DELETE \
+              response_file=$(mktemp)
+              status=$(curl --silent --show-error --output "$response_file" --write-out '%{http_code}' --request DELETE \
                 --header "Accept: application/vnd.github+json" \
                 --header "Authorization: Bearer ${GHCR_CLEANUP_TOKEN}" \
                 --header "X-GitHub-Api-Version: 2022-11-28" \
-                "https://api.github.com/user/packages/container/${package}/versions/${version_id}"
+                "https://api.github.com/user/packages/container/${package}/versions/${version_id}")
+              case "$status" in
+                204)
+                  echo "Deleted GHCR version ${package}:${version_id}"
+                  ;;
+                404)
+                  echo "GHCR version already absent ${package}:${version_id}"
+                  ;;
+                400)
+                  message=$(jq -r '.message // "Unknown API error"' "$response_file")
+                  echo "GitHub blocked GHCR version ${package}:${version_id}: ${message}" >&2
+                  blocked+=("${package}:${version_id}: ${message}")
+                  ;;
+                *)
+                  cat "$response_file" >&2
+                  rm -f "$response_file"
+                  echo "Unexpected GHCR deletion response ${status} for ${package}:${version_id}" >&2
+                  exit 1
+                  ;;
+              esac
+              rm -f "$response_file"
             done
           }
           delete_versions 'treasure-plugins%2Ftreasure-plugin-market' "${market_ids[@]}"
           delete_versions 'treasure-plugins%2Ftreasure-plugin-icons' "${icons_ids[@]}"
+          if (( ${#blocked[@]} > 0 )); then
+            {
+              echo '## GHCR deletion needs GitHub Support'
+              echo
+              echo 'GitHub rejected these public package versions because their download count exceeds the deletion threshold:'
+              for item in "${blocked[@]}"; do
+                echo "- ${item}"
+              done
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
