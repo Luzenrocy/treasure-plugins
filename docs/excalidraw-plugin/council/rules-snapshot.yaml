@@ -1,0 +1,27 @@
+skill_snapshot:
+  loaded_at: "2026-10-15T15:15:15+08:00"
+  files:
+    - path: "/Users/luzenrocy/.codex/skills/writing-workshop/SKILL.md"
+      sha256: "e6cc3f1c48dbf2ea813494ba519200324f096a2bbc1f8716197fa6f4eac5a000"
+      modified: "2026-10-15T03:46:45.819616+00:00"
+    - path: "/Users/luzenrocy/.codex/skills/writing-workshop/agents/openai.yaml"
+      sha256: "04c5df00f8de6d13e5aa744067323f5c41b18d002c1c60dc16ffea4ccfe37b67"
+      modified: "2026-10-15T03:46:45.817052+00:00"
+    - path: "/Volumes/MacExtend/FrontProjects/treasure-plugins/.agents/skills/speckit-clarify/SKILL.md"
+      sha256: "d3aa120d6b5d7718c4c6d792dd41bee66254bd4bb82f88f3067f1d1c4e9d2dc2"
+      modified: "2026-09-03T15:06:11+08:00"
+contract_snapshot:
+  integration_mode: optional-overlay
+  skill_id: speckit-clarify
+  contract_source:
+    - "/Volumes/MacExtend/FrontProjects/treasure-plugins/.agents/skills/speckit-clarify/SKILL.md"
+  contract_version: "d3aa120d6b5d7718c4c6d792dd41bee66254bd4bb82f88f3067f1d1c4e9d2dc2"
+  required_files:
+    - "FEATURE_SPEC resolved by check-prerequisites.sh"
+  format: "Markdown feature spec with Clarifications section"
+  validation: "check-prerequisites.sh, checklist revalidation, clarify workflow"
+  handoff_inputs:
+    - "FEATURE_DIR"
+    - "FEATURE_SPEC"
+    - "clarification answers"
+  post_publish_action: "Proceed to speckit-plan only after user confirms the new feature target"

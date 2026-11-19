@@ -1,0 +1,54 @@
+ledger_version: 1
+entries:
+  - id: U-001
+    location: "概述与目标、范围与非目标"
+    status: satisfied
+    evidence: "候选稿形成独立 Excalidraw Treasure 插件规格，并固定目标路径"
+    verification: "后续 approver 检查用户目标、范围和验收覆盖"
+  - id: U-002
+    location: "范围与非目标、FR-001–FR-004、SC-001"
+    status: satisfied
+    evidence: "用户选择 A：本地核心编辑器 + 文件/素材库/导出，排除协作/账户/分享/云同步"
+    verification: "范围与非目标在候选规格中明确，并逐项验收本地核心能力"
+  - id: U-003
+    location: "FR-005–FR-009、DrawingDirectory/DrawingFile、SC-002"
+    status: satisfied
+    evidence: "用户选择 A：单一配置目录、显式保存、未保存/冲突确认"
+    verification: "验收单一目录、显式保存、未保存提示、外部修改/重名冲突确认"
+  - id: U-004
+    location: "FR-010–FR-012、LibraryItem/LibraryBundle、SC-003"
+    status: satisfied
+    evidence: "用户选择 A：安装素材持久保存到插件私有存储并支持离线使用"
+    verification: "验收安装、重启离线使用、删除/更新、网络失败和格式错误场景"
+  - id: U-005
+    location: "FR-013–FR-016、SC-004、OQ-004"
+    status: satisfied
+    evidence: "候选稿提供图片导出能力，PNG/SVG 为基线；高级选项标记为计划阶段决策"
+    verification: "导出基线格式并记录取消、失败和目标位置证据"
+  - id: U-006
+    location: "中文文档约束"
+    status: satisfied
+    evidence: ".specify/memory/constitution.md#VI. Chinese Project Documentation（中文项目文档）"
+    verification: "所有候选规格正文与说明使用简体中文"
+  - id: U-007
+    location: "出版路径与 feature spec 归属"
+    status: satisfied
+    evidence: "用户回答 A，确认创建独立 specs/004-excalidraw-plugin/spec.md"
+    verification: "候选规格发布路径固定为 specs/004-excalidraw-plugin/spec.md"
+
+  - id: U-008
+    location: "FR-001/FR-002 与外部依赖说明"
+    status: satisfied
+    evidence: "用户确认 A：仍直接集成官方 @excalidraw/excalidraw 编辑器代码"
+    verification: "候选规格明确官方包集成，排除远程 iframe 与自研画布"
+  - id: U-009
+    location: "FR-013–FR-016、SC-004"
+    status: satisfied
+    evidence: "用户确认 PNG/SVG、全画布/选区和透明背景；JPEG/WebP、剪贴板和倍率调整延后"
+    verification: "分别验收两种格式、两种范围和透明背景开关"
+
+  - id: U-010
+    location: "FR-006、FR-010、DrawingFile、LibraryItem/LibraryBundle"
+    status: satisfied
+    evidence: "用户确认 .excalidraw 为唯一绘图文件，.excalidrawlib 仅用于素材导入"
+    verification: "文件列表/保存只处理 .excalidraw，素材导入验证 .excalidrawlib"

@@ -1,4 +1,4 @@
-import { directories, files, permissions, settings, type DirectoryReference, type FileReference } from 'treasure-sdk';
+import { directories, files, permissions, settings, type DirectoryReference, type FileReference } from '@luzenrocy/treasure-sdk';
 
 /** Stable permission binding, chosen by this plugin rather than generated at runtime. */
 const DIRECTORY_PERMISSION_KEY = 'storage_dir';

@@ -1,0 +1,13 @@
+/* Vue 宿主接入和可访问性补充；主体视觉取自原型。 */
+.viewport svg.map-svg { width: 100%; height: 100%; display: block; user-select: none; overflow: visible; }
+.file-sidebar:focus { outline: 0; }
+.directory-choice { margin-top: 12px; }
+.menu-item:disabled { pointer-events: none; }
+.error-note { color: var(--mm-danger); }
+.shortcut-list { display: grid; grid-template-columns: auto 1fr; gap: 13px 22px; font-size: 13px; }
+.shortcut-list dt { color: var(--mm-muted); white-space: nowrap; }
+.shortcut-list dd { margin: 0; }
+.operation-status { position: absolute; left: 50%; top: 72px; transform: translateX(-50%); display: flex; align-items: center; gap: 8px; padding: 9px 13px; border: 1px solid var(--mm-line); border-radius: 8px; background: var(--mm-surface); z-index: 90; }
+.file-list, .outline-list, .inspector, .dialog-content { scrollbar-width: thin; }
+@media (max-width: 940px) { .file-sidebar:not(.force-visible) { display: block; } }
+@media (max-width: 899px) { .app { min-width: 900px; } body { overflow-x: auto; } }

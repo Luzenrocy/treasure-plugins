@@ -1,0 +1,28 @@
+ledger_version: 1
+revision: "iteration-01-revised"
+entries:
+  - id: U-001
+    location: "§1–§13"
+    status: satisfied
+    evidence: "完整技术方案覆盖架构、数据、流程、风险与验证。"
+    verification: "review.md 与 decision.md"
+  - id: U-002
+    location: "§7.2, §8, §11"
+    status: satisfied
+    evidence: "新增分支命令触发模型更新、全量布局、曲线箭头重建与单次画布更新。"
+    verification: "新增子主题验收项。"
+  - id: U-003
+    location: "封面状态、§2.2"
+    status: satisfied
+    evidence: "明确状态为提案，且声明本次不实现。"
+    verification: "checker 检查措辞。"
+  - id: U-004
+    location: "§2.1, §7.1, §11"
+    status: satisfied
+    evidence: "真实文本度量与统一 NodeLayoutBox 作为文字和图形几何来源。"
+    verification: "SDK 转换后边界中心断言。"
+  - id: U-005
+    location: "§3, §4"
+    status: satisfied
+    evidence: "明确现有一次性渲染边界，并选择模型驱动重排。"
+    verification: "S-001/S-002 源码审查。"

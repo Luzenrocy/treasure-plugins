@@ -1,0 +1,12 @@
+round: 1
+iteration: 1
+role_inputs:
+  shared_rules: "../../../../rules-snapshot.yaml#a0231c87"
+  user_brief: "../../../../user-brief.md#92c3144b"
+  ledger: "../../../../requirements-ledger.yaml#7a540797"
+  contract: "../../../../adaptive-contract.yaml#e460f101"
+  sources: "../../../../source-index.md#98eda8a1"
+role: writer
+freshness_checked_at: "2026-11-06T02:36:37Z"
+rule_change_detected: false
+notes: "The formal plan shall target SDK 2.1.1. The current 2.0.0 prototype adapter remains an evidence source, not the production baseline."

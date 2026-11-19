@@ -1,0 +1,70 @@
+document_id: "native-and-naming"
+title: "外部格式处理修订与仿古命名候选"
+document_type: "设计决策与命名候选"
+locale: "zh-CN"
+owner: "Codex"
+created: 2026-11-05
+updated: 2026-11-05
+version: "1.0-candidate"
+status: published
+round_limit: 10
+iterations_per_round: 10
+current_round: 1
+current_iteration: 1
+round_gate: none
+roles:
+  writer:
+    profile: "Chinese naming editor; source-grounded alternatives and lifecycle amendment"
+    context: "fresh subagent /root/naming_writer"
+    status: complete
+  reviewer:
+    profile: "Independent source/fidelity reviewer; user-intent coverage and scope"
+    context: "fresh subagent to be assigned by coordinator"
+    status: pending
+  approver:
+    profile: "Independent final checker; contract, hard requirements and publication gate"
+    context: "fresh subagent to be assigned by coordinator"
+    status: pending
+document_contract:
+  path: "adaptive-contract.yaml"
+  id: "native-and-naming-v1"
+  version: 1
+  mode: hybrid
+  family: "record"
+  label: "设计决策与命名候选"
+  purpose: "确认外部文件只读边界，比较仿古命名与原生后缀候选"
+  audience: ["产品负责人及研发"]
+  required_sections: ["修订结论", "文件边界", "命名方法", "六组候选", "推荐及待选", "落地核对"]
+  optional_sections: ["版本记录"]
+  forbidden_sections: ["未经用户选择的正式命名", "商标或唯一性保证", "伪造古义", "写作角色过程"]
+  quality_checks: ["U-001–U-006完整覆盖", "第一处修改前创建独立原生副本", "古文与现代取意分列", "单/多画布同一原生格式", "候选待选"]
+publication:
+  target_path: "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/revisions/2026-11-05-native-and-naming/proposal.md"
+  target_path_source: default
+  target_format: "markdown"
+  final_filename: "proposal.md"
+  overwrite_policy: refuse
+artifacts:
+  artifact_root: "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/revisions/2026-11-05-native-and-naming"
+  process_base_path: "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/revisions/2026-11-05-native-and-naming"
+  council_path: "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/revisions/2026-11-05-native-and-naming/council"
+  process_path: "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/revisions/2026-11-05-native-and-naming/council"
+  process_path_resolution: "derived-from-target/council"
+  process_path_source: default
+integration_mode: none
+target_skill: "none"
+contract_snapshot: null
+skill_snapshot:
+  path: "rules-snapshot.yaml"
+  id: "writing-workshop-20261105-r1i1"
+  sha256: "a379709deaa118519d06bff21d5e43d91efab7fe7868362ab0bad0e5dc22055b"
+  writer_rule_recheck: "12 recorded files re-read and hashed; no changes"
+requirements_ledger:
+  path: "requirements-ledger.yaml"
+  version: 1
+  sha256: "c3737588aa868524a56f4c71d4e851c1487575c11094c60171d5ee6652842d17"
+sources: ["S-001", "S-002", "S-003", "S-004", "S-005", "S-006", "S-007", "S-008", "S-009"]
+source_index: "source-index.md"
+current_draft: "rounds/round-01/iterations/iteration-01/draft.md"
+current_coverage: "rounds/round-01/iterations/iteration-01/coverage.yaml"
+publication_gate: "Only independent checker approve permits copying clean draft to target; approval does not select product name."

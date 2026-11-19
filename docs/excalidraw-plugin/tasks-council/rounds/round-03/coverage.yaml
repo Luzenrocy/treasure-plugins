@@ -1,0 +1,28 @@
+round: 3
+ledger_version: 3
+artifact_set:
+  - specs/004-excalidraw-plugin/spec.md
+  - specs/004-excalidraw-plugin/plan.md
+  - specs/004-excalidraw-plugin/quickstart.md
+  - specs/004-excalidraw-plugin/tasks.md
+  - specs/004-excalidraw-plugin/research.md
+  - specs/004-excalidraw-plugin/contracts/official-library-api.md
+coverage:
+  U-001: "spec clarification, plan decision 9, contract gate T042"
+  U-002: "quickstart preconfigured API wording and local fallback; tasks T042-T049"
+  U-003: "official-library-api.md, tasks T045/T048/T049"
+  U-004: "plan project structure and Phase 0/1 updates"
+  U-005: "research/plan/quickstart remove page and arbitrary URL flow"
+  U-006: "all revised docs remain Chinese; round-03 role records"
+  U-007: "tasks target remains specs/004-excalidraw-plugin/tasks.md"
+  U-009: "unchanged public menu SDK/host gate and T063 command details"
+  U-010: "all eight user feedback items mapped to revised documents"
+feedback_traceability:
+  U1: "spec.md:Session 2026-10-20; plan.md:Phase 0 decision 9; official-library-api.md; tasks.md:T042"
+  I1: "quickstart.md:preconditions and host step 5; research.md:Decision 5; plan.md:Decision 5"
+  U2: "tasks.md:T045, T048, T049; quickstart.md:automation item 8 and host step 5"
+  I2: "plan.md:Project Structure and Phase 1 contracts"
+  A1: "plan.md:tool-support-matrix.md; tasks.md:T064; quickstart.md:automation item 9 and host step 10"
+  A2: "plan.md:Performance Goals and Decision 10; tasks.md:T065; quickstart.md:automation item 9"
+  U3: "plan.md:Testing; tasks.md:T063; quickstart.md:automation commands"
+  I3: "plan.md date; quickstart.md historical evidence date/version note"

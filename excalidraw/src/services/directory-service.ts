@@ -1,4 +1,4 @@
-import { files, permissions, settings, directories, type DirectoryReference, type FileReference, type DirectoryEntry } from 'treasure-sdk';
+import { files, permissions, settings, directories, type DirectoryReference, type FileReference, type DirectoryEntry } from '@luzenrocy/treasure-sdk';
 import { WORKSPACE_KEY } from '../adapters/treasure-sdk';
 import { err, ok, sdkError, type Result } from '../domain/errors';
 import type { DrawingDirectorySetting, DrawingFile } from '../domain/drawing';

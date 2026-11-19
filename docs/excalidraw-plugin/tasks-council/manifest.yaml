@@ -1,0 +1,50 @@
+document_id: "excalidraw-plugin-tasks"
+title: "Treasure Excalidraw 实施任务清单"
+document_type: "implementation task list"
+locale: "zh-CN"
+owner: "Codex"
+created: 2026-10-16
+updated: 2026-10-20
+version: "0.3"
+status: published
+round_limit: 10
+current_round: 3
+roles:
+  writer:
+    profile: "技术任务拆分作者 + Treasure/Excalidraw 实施分析师"
+    rationale: "将已发布设计拆成依赖有序、可执行的任务"
+  reviewer:
+    profile: "独立实施计划评审者 + 需求追踪/安全评审者"
+    rationale: "检查任务覆盖、格式、依赖、范围和可验收性"
+  approver:
+    profile: "任务清单交付审核者"
+    rationale: "确认任务可直接交给 speckit-implement 且符合外部契约"
+document_contract:
+  mode: hybrid
+  family: "normative"
+  label: "Treasure Excalidraw 实施任务清单"
+  purpose: "把已确认的 Excalidraw 计划拆成可执行、依赖有序、可独立验收的实施任务"
+  reader_job: "开发者能够按任务顺序实现、测试和交付每个用户故事"
+  audience: ["插件开发者", "测试人员", "评审者", "产品负责人"]
+  medium: markdown
+  locale: zh-CN
+  tone: "直接、可执行、可追踪"
+  evidence_style: "spec/plan/design contracts/quickstart 引用与独立验收标准"
+  required_sections: ["Setup", "Foundational", "User Stories by priority", "Polish", "Dependencies & Execution Order", "Parallel Opportunities", "Implementation Strategy"]
+  optional_sections: ["Story-specific tests", "Traceability notes"]
+  forbidden_sections: ["未确认的技术承诺", "完整实现代码", "没有路径的模糊任务", "实现状态勾选"]
+  quality_checks: ["每个任务有顺序 ID、必要的 [P]/[USn] 标签和精确文件路径", "每个用户故事有独立验收标准", "依赖顺序不允许 foundation 之前开始故事", "任务覆盖规格与契约且不扩大范围", "中文说明和标准任务 token 可追踪"]
+publication:
+  target_path: "specs/004-excalidraw-plugin/tasks.md"
+  target_path_source: external_contract
+  target_format: "markdown"
+  final_filename: "tasks.md"
+  overwrite_policy: replace_after_hitl
+artifacts:
+  artifact_root: "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/excalidraw-plugin"
+  council_path: "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/excalidraw-plugin/tasks-council"
+integration_mode: optional-overlay
+target_skill: "speckit-tasks"
+contract_snapshot: rules-snapshot.yaml#contract_snapshot
+skill_snapshot: rules-snapshot.yaml#skill_snapshot
+sources: [S-001, S-002, S-003, S-004, S-005, S-006, S-007, S-008, S-009]

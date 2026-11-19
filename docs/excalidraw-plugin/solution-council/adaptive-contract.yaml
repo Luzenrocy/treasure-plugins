@@ -1,0 +1,39 @@
+document_contract:
+  mode: hybrid
+  family: custom
+  label: "Excalidraw Treasure 插件素材库与绘图目录适配技术方案"
+  purpose: "把已完成的官方 SDK/API 调研转化为可评审、可落地的架构决策与接口边界。"
+  reader_job: "研发人员能够判断 UIOptions/renderTopRightUI 的可行性，理解素材库与绘图目录的状态、数据和安全边界，并据此实施。"
+  audience:
+    - "Treasure 插件研发人员"
+    - "桌面应用/宿主集成评审人员"
+  medium: markdown
+  locale: zh-CN
+  tone: "技术、明确、克制；区分事实、决策、假设和开放问题。"
+  evidence_style: "官方 Excalidraw 0.18.1 本地类型/文档、Treasure SDK 2.0 API 文档、插件研发指南；外部事实附链接。"
+  required_sections:
+    - "执行摘要与 UIOptions 可行性结论"
+    - "范围、非范围和关键决策"
+    - "总体架构与交互流程"
+    - "素材库数据/安装/卸载设计"
+    - "绘图目录文件列表与原生菜单适配"
+    - "系统设置、SDK 接口和数据模型"
+    - "可靠性、安全、可访问性和版本风险"
+    - "验证标准与开放问题"
+    - "参考资料"
+  optional_sections:
+    - "状态机"
+    - "错误矩阵"
+  forbidden_sections:
+    - "研发任务拆分"
+    - "排期、人员分工或 sprint 计划"
+    - "未有来源支持的性能指标"
+  quality_checks:
+    - "每个 U-* 硬要求有覆盖位置和可观察验收条件。"
+    - "不把 UIOptions 描述为任意 DOM 扩展 API。"
+    - "所有 SDK 方案遵守 Result<T>、引用、权限和相对存储 key。"
+    - "明确 private storage 与用户可见目录的语义差异。"
+    - "明确隐藏原生素材库入口的版本/维护风险。"
+    - "保留 Excalidraw 原生画布能力，只做最小入口替换。"
+    - "最终文档不含角色讨论或未解决审稿批注。"
+  source: user

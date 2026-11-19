@@ -1,0 +1,16 @@
+document_contract:
+  mode: hybrid
+  family: normative
+  label: "Treasure Excalidraw 实施任务清单"
+  purpose: "把已确认的 Excalidraw 计划拆成可执行、依赖有序、可独立验收的实施任务"
+  reader_job: "开发者能够按任务顺序实现、测试和交付每个用户故事"
+  audience: ["插件开发者", "测试人员", "评审者", "产品负责人"]
+  medium: markdown
+  locale: zh-CN
+  tone: "直接、可执行、可追踪"
+  evidence_style: "spec/plan/design contracts/quickstart 引用与独立验收标准"
+  required_sections: ["Setup", "Foundational", "User Stories by priority", "Polish", "Dependencies & Execution Order", "Parallel Opportunities", "Implementation Strategy"]
+  optional_sections: ["Story-specific tests", "Traceability notes"]
+  forbidden_sections: ["未确认的技术承诺", "完整实现代码", "没有路径的模糊任务", "实现状态勾选"]
+  quality_checks: ["每个任务有顺序 ID、必要的 [P]/[USn] 标签和精确文件路径", "每个用户故事有独立验收标准", "依赖顺序不允许 foundation 之前开始故事", "任务覆盖规格与契约且不扩大范围", "中文说明和标准任务 token 可追踪"]
+  source: external-contract

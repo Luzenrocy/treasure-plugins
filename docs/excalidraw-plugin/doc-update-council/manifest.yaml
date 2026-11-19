@@ -1,0 +1,50 @@
+document_id: "excalidraw-doc-update"
+title: "Treasure Excalidraw 文档职责边界修订"
+document_type: "multi-document amendment"
+locale: "zh-CN"
+owner: "Codex"
+created: 2026-10-16
+updated: 2026-10-16
+version: "0.1"
+status: published
+round_limit: 10
+current_round: 1
+roles:
+  writer:
+    profile: "跨文档修订作者"
+    rationale: "将已确认的职责边界同步到任务、计划和验证指南"
+  reviewer:
+    profile: "独立任务归属与宪章评审者"
+    rationale: "检查宿主验证是否从代理任务中移除且没有丢失用户验收入口"
+  approver:
+    profile: "文档修订交付审核者"
+    rationale: "确认多文档候选一致、范围最小且可发布"
+document_contract:
+  mode: hybrid
+  family: "normative"
+  label: "Treasure Excalidraw 文档职责边界修订"
+  purpose: "根据 speckit-analyze 的确认结论，调整 tasks.md、plan.md 和 quickstart.md 的宿主验证职责边界"
+  reader_job: "开发者知道哪些工作由代理实施，哪些宿主验证由用户执行"
+  audience: ["插件开发者", "测试人员", "评审者", "产品负责人"]
+  medium: markdown
+  locale: zh-CN
+  tone: "直接、可追踪、职责清晰"
+  evidence_style: "分析结论、宪章条款、任务/计划/quickstart 交叉引用"
+  required_sections: ["修订范围", "任务清单变更", "计划变更", "用户手工验证说明"]
+  optional_sections: ["变更记录"]
+  forbidden_sections: ["自动执行 Treasure 宿主测试的任务", "修改已关闭分析项为新缺陷", "新增功能范围"]
+  quality_checks: ["宿主测试不出现在代理任务中", "quickstart 保留用户验收路径", "tasks/plan/quickstart 术语一致", "任务 ID 连续且格式有效"]
+publication:
+  target_path: "specs/004-excalidraw-plugin/tasks.md"
+  target_path_source: user
+  target_format: "markdown"
+  final_filename: "tasks.md"
+  overwrite_policy: replace_after_hitl
+artifacts:
+  artifact_root: "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/excalidraw-plugin"
+  council_path: "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/excalidraw-plugin/doc-update-council"
+integration_mode: none
+target_skill: "none"
+contract_snapshot: none
+skill_snapshot: rules-snapshot.yaml#skill_snapshot
+sources: [S-001, S-002, S-003, S-004, S-005]

@@ -1,0 +1,39 @@
+document_id: "excalidraw-plugin"
+title: "Treasure Excalidraw 绘图插件功能规格"
+document_type: "feature specification"
+locale: "zh-CN"
+owner: "pending"
+created: 2026-10-15
+updated: 2026-10-16
+version: "0.1"
+status: published
+round_limit: 10
+current_round: 2
+roles:
+  writer: "product requirements writer + Excalidraw domain analyst"
+  reviewer: "independent Treasure plugin reviewer + security/accessibility reviewer"
+  approver: "feature owner gate"
+document_contract:
+  mode: hybrid
+  family: "normative"
+  label: "feature specification"
+  purpose: "澄清并形成适配 Treasure 的 Excalidraw 绘图插件功能规格"
+  audience: ["产品负责人、设计师、插件开发者、测试人员"]
+  required_sections: []
+  optional_sections: []
+  forbidden_sections: []
+  quality_checks: []
+publication:
+  target_path: "specs/004-excalidraw-plugin/spec.md"
+  target_path_source: user
+  target_format: "markdown"
+  final_filename: "spec.md"
+  overwrite_policy: replace_after_hitl
+artifacts:
+  artifact_root: "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/excalidraw-plugin"
+  council_path: "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/excalidraw-plugin/council"
+integration_mode: optional-overlay
+target_skill: "speckit-clarify"
+contract_snapshot: rules-snapshot.yaml#contract_snapshot
+skill_snapshot: rules-snapshot.yaml#skill_snapshot
+sources: [S-001, S-002, S-003, S-004, S-005, S-006]

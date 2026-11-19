@@ -1,0 +1,56 @@
+version: 2
+source_message: "user correction 2026-10-16, active Codex task"
+entries:
+  - id: U-001
+    type: goal
+    verbatim: "插件的名称从excalidraw-plugin 改为excalidraw。"
+    normalized: "将插件项目目录和实现路径改为 excalidraw，保持 Spec Kit feature 标识 004-excalidraw-plugin 不变。"
+    hardness: hard
+    priority: P0
+    acceptance: "tasks.md 中所有插件实现路径、脚手架命令、构建工作目录和证据路径使用 excalidraw；specs/004-excalidraw-plugin/ 仍作为规格目录。"
+    verification: "全局引用扫描与 tasks 格式检查。"
+    owner: "用户/项目维护者"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+  - id: U-002
+    type: must
+    verbatim: "speckit-tasks"
+    normalized: "修订后的任务清单继续遵循原任务清单的 41 个任务、用户故事、依赖、并行机会和独立验收结构。"
+    hardness: hard
+    priority: P0
+    acceptance: "只修订名称/路径和必要的同步说明，不丢失任务 ID、故事标签、依赖和范围。"
+    verification: "与已发布 tasks.md 逐项比较任务 ID 和故事段落。"
+    owner: "Codex/项目维护者"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+  - id: U-003
+    type: must-not
+    verbatim: "feature 标识保持不变"
+    normalized: "不得把 specs/004-excalidraw-plugin、Feature Branch 或 feature 目录误改为 specs/004-excalidraw。"
+    hardness: hard
+    priority: P0
+    acceptance: "规格、计划、任务目标和 council 元数据继续使用 004-excalidraw-plugin。"
+    verification: "检查目标路径、Feature Branch 和输入文档路径。"
+    owner: "项目维护者"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+  - id: U-004
+    type: must
+    verbatim: "writing-workshop"
+    normalized: "保留本次修订的 writer/reviewer/approver 记录，候选发布前需要用户确认。"
+    hardness: hard
+    priority: P1
+    acceptance: "round-01 包含 draft/review/revision/decision/coverage/input-snapshot，candidate 只在 approve 后生成。"
+    verification: "validate_council.py。"
+    owner: "Codex/项目维护者"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+amendments:
+  - id: A-001
+    supersedes: U-001
+    user_text: "插件的名称从excalidraw-plugin 改为excalidraw。"
+    effective_round: 1

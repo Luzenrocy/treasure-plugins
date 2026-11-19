@@ -1,0 +1,25 @@
+{
+  "name": "guan-xiang-pu-ftl4rs",
+  "alias": "观象谱",
+  "version": "1.0.0",
+  "description": "在 Treasure 中创建、整理和导出思维导图工作簿",
+  "author": "Treasure Plugins",
+  "icon": "icon.svg",
+  "entry": "index.html",
+  "minPlatformVersion": "1.0.0",
+  "menu": {
+    "name": "观象谱",
+    "icon": "menu-icon.svg",
+    "order": 100
+  },
+  "settings": [
+    {
+      "key": "workspace_dir",
+      "param_key": "workspace_dir",
+      "param_type": "dir",
+      "param_name": "观象谱工作目录",
+      "param_value": ""
+    }
+  ],
+  "_frozen": true
+}

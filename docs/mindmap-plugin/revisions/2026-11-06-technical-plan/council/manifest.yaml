@@ -1,0 +1,52 @@
+document_id: "guan-xiang-pu-technical-plan"
+title: "观象谱技术与 UI 实施方案（校对版）"
+document_type: "技术方案与实施校对"
+locale: "zh-CN"
+owner: "Codex"
+created: 2026-11-06
+updated: 2026-11-06
+version: "0.1"
+status: published
+round_limit: 10
+iterations_per_round: 10
+current_round: 1
+current_iteration: 5
+round_gate: none
+roles:
+  writer:
+    profile: "插件架构师与技术方案主写者"
+    rationale: "需把原型行为、文件格式与 SDK 边界转成可执行架构。"
+  reviewer:
+    profile: "独立的 Treasure SDK/插件研发审查者"
+    rationale: "重点核对公开 API、版本、权限、错误路径和不实承诺。"
+  approver:
+    profile: "技术方案检查者"
+    rationale: "核验全部需求、审查结论、路径和清洁成品。"
+document_contract:
+  mode: hybrid
+  family: "normative"
+  label: "观象谱技术与 UI 实施方案（校对版）"
+  purpose: "把当前原型落实为符合插件研发指南和 SDK 约束的可执行方案。"
+  audience: ["产品负责人", "Vue/TypeScript 插件研发", "技术评审"]
+  required_sections: ["结论与校对范围", "SDK/插件研发约束矩阵", "目标架构", "文件与权限流程", "UI 实现契约", "分期与验收", "风险与来源"]
+  optional_sections: ["接口伪代码", "决策记录"]
+  forbidden_sections: ["原型模拟冒充完成实现", "未公开 SDK/Tauri/路径 API", "外部格式写回承诺"]
+  quality_checks: ["硬需求可追溯", "SDK 版本明确", "Result/CANCELLED 有处理", "生产实现与原型边界明确"]
+publication:
+  target_path: "docs/mindmap-plugin/revisions/2026-11-06-technical-plan/technical-ui-proposal.md"
+  target_path_source: default
+  target_format: "Markdown"
+  final_filename: "technical-ui-proposal.md"
+  overwrite_policy: refuse
+artifacts:
+  artifact_root: "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/revisions/2026-11-06-technical-plan"
+  process_base_path: "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/revisions/2026-11-06-technical-plan"
+  council_path: "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/revisions/2026-11-06-technical-plan/council"
+  process_path: "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/revisions/2026-11-06-technical-plan/council"
+  process_path_resolution: "inferred revision target with dedicated council child"
+  process_path_source: default
+integration_mode: none
+target_skill: "none"
+contract_snapshot: null
+skill_snapshot: "rules-snapshot.yaml#a0231c87"
+sources: ["S-01", "S-02", "S-03", "S-04", "S-05", "S-06", "S-07", "S-08", "S-09", "S-10", "S-11"]

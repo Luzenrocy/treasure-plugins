@@ -1,6 +1,6 @@
 # Excalidraw 工具支持矩阵
 
-**版本依据**：`@excalidraw/excalidraw@0.18.1`，插件 manifest `minPlatformVersion=2.3.0`。
+**版本依据**：`@excalidraw/excalidraw@0.18.1`，插件 manifest `minPlatformVersion=2.4.0`。
 
 | 工具/能力 | 状态 | 用户入口或降级 | 验收依据 |
 | --- | --- | --- | --- |

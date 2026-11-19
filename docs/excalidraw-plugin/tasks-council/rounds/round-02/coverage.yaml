@@ -1,0 +1,37 @@
+round: 2
+artifact: specs/004-excalidraw-plugin/tasks.md
+source_versions:
+  spec: "2026-10-20 current"
+  plan: "2026-10-20 published"
+  design: "research.md, data-model.md, contracts/, quickstart.md"
+  requirements_ledger: 2
+coverage:
+  U-001: "T001-T006; T055-T060"
+  U-002: "T007-T011; T024-T032; T048-T053"
+  U-003: "T007-T011; T024-T032; T048-T053"
+  U-004: "T007-T011; T040-T047"
+  U-005: "T049-T053"
+  U-006: "T033-T039; T054"
+  U-007: "T042-T047"
+  U-008: "T003; T055-T056; T062"
+  U-009: "T012-T020; T027; T057; T061"
+  U-010: "round-03 remediation supersedes this round"
+functional_requirements:
+  FR-001..FR-004: "T009-T011; T028; T030; T054"
+  FR-005..FR-009: "T008-T009; T024-T026; T031"
+  FR-010..FR-012: "T041-T047"
+  FR-013..FR-016: "T048-T053"
+  FR-017..FR-020: "T012-T020; T022-T032; T055-T057"
+  FR-021..FR-023: "T033-T039; T054"
+  FR-024..FR-027: "T040-T047; T056"
+  FR-028: "T059; T061-T062"
+success_criteria:
+  SC-001..SC-006: "T022-T032; T048-T053; T060"
+  SC-007: "T012-T020; T022-T032; T057; T061"
+  SC-008..SC-010: "T033-T047; T054; T059"
+  SC-011: "T055-T062"
+decision_traceability:
+  public_menu_api: "T012-T020; T027; T057"
+  host_manual_boundary: "T019; T059; T061"
+  official_preconfigured_library_source: "T040-T047; T056"
+  plugin_root_path: "T001; T003; T055"

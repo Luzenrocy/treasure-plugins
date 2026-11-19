@@ -1,0 +1,14 @@
+skill_snapshot:
+  loaded_at: "2026-10-18T13:42:20.975168+00:00"
+  skill_dir: "/Users/luzenrocy/.codex/skills/writing-workshop"
+  files:
+    - path: "/Users/luzenrocy/.codex/skills/writing-workshop/SKILL.md"
+      sha256: "a4e74e202f7bdf61aebfc9edc248e7686e4bc7bd6ad7b245f07b7622b52495ee"
+    - path: "/Users/luzenrocy/.codex/skills/writing-workshop/agents/openai.yaml"
+      sha256: "e4a46de92b5f4d78783e7a46583a7960948cb274fa80635c492d432ddc0a6bb2"
+    - path: "/Users/luzenrocy/.codex/skills/writing-workshop/references/requirements-ledger.md"
+      sha256: "eeb9d277e5ef35fd7d0dadbe9fc5843d8d68a381db1f816b405542f6c3cd8aba"
+    - path: "/Users/luzenrocy/.codex/skills/writing-workshop/references/document-contracts.md"
+      sha256: "79fc96f5ce48d54c58faa75c4e3a540fef6818b4ed1a31782fb11d3957af0323"
+    - path: "/Volumes/MacExtend/FrontProjects/treasure-plugins/.agents/skills/speckit-checklist/SKILL.md"
+      sha256: "ab64c93a2300da220acb06699a23b2e1e7fee4af272a99e3fea13fca642a0092"

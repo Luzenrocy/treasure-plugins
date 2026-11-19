@@ -16,7 +16,7 @@
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
     "element-plus": "^2.11.9",
-    "treasure-sdk": "^2.1.0",
+    "@luzenrocy/treasure-sdk": "^1.0.0",
     "vue": "^3.5.13"
   },
   "devDependencies": {

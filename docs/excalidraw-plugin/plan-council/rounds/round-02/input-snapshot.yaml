@@ -1,0 +1,17 @@
+round: 2
+rules_snapshot: docs/excalidraw-plugin/plan-council/rules-snapshot.yaml
+ledger_version: 2
+plan_contract: docs/excalidraw-plugin/plan-council/adaptive-contract.yaml
+feature_spec: specs/004-excalidraw-plugin/spec.md
+branch: 004-excalidraw-plugin
+amendment: "将窗口菜单点击能力从宿主内部 treasure-menu-event 改为 treasure-sdk 公共能力，并要求 SDK 与 Treasure 宿主同步调整。"
+source_plan: specs/004-excalidraw-plugin/plan.md
+artifacts:
+  - specs/004-excalidraw-plugin/research.md
+  - specs/004-excalidraw-plugin/data-model.md
+  - specs/004-excalidraw-plugin/quickstart.md
+  - specs/004-excalidraw-plugin/contracts/treasure-sdk-boundary.md
+  - specs/004-excalidraw-plugin/contracts/menu-actions.md
+  - specs/004-excalidraw-plugin/contracts/excalidraw-scene.md
+  - specs/004-excalidraw-plugin/contracts/export.md
+  - specs/004-excalidraw-plugin/contracts/ui-lifecycle.md

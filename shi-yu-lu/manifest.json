@@ -1,12 +1,12 @@
 {
   "name": "shi-yu-lu-2lglfy",
   "alias": "石玉录",
-  "version": "2.0.1",
+  "version": "1.0.0",
   "description": "Markdown 笔记编辑器",
   "author": "Treasure",
   "icon": "icon.svg",
   "entry": "index.html",
-  "minPlatformVersion": "2.1.0",
+  "minPlatformVersion": "1.0.0",
   "menu": {
     "name": "石玉录",
     "icon": "assets/shi-yu-lu-menu.svg",

@@ -1,4 +1,4 @@
-import type { DirectoryReference, FileReference } from 'treasure-sdk';
+import type { DirectoryReference, FileReference } from '@luzenrocy/treasure-sdk';
 
 export type DrawingStatus = 'new' | 'loading' | 'ready' | 'dirty' | 'saving' | 'saved' | 'conflict' | 'error';
 export interface DrawingDirectorySetting { permissionKey: string; directory: DirectoryReference | null; directoryName?: string | null; status: 'unconfigured' | 'ready' | 'needs-reselect' | 'error'; }

@@ -1,0 +1,15 @@
+round: 1
+iteration: 2
+role_inputs:
+  shared_rules: "../../../../rules-snapshot.yaml#a0231c87"
+  user_brief: "../../../../user-brief.md#92c3144b"
+  ledger: "../../../../requirements-ledger.yaml#7a540797"
+  contract: "../../../../adaptive-contract.yaml#e460f101"
+  sources: "../../../../source-index.md#98eda8a1"
+  prior_draft: "../iteration-01/draft.md"
+  prior_coverage: "../iteration-01/coverage.yaml"
+  review_findings: "../iteration-01/review.md"
+role: writer-revision
+freshness_checked_at: "2026-11-06T02:36:37Z"
+rule_change_detected: false
+notes: "All workshop rule hashes rechecked against rules-snapshot.yaml before the revision."

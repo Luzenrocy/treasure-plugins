@@ -1,0 +1,16 @@
+document_contract:
+  mode: hybrid
+  family: normative
+  label: "Treasure Excalidraw 插件重命名实施任务清单"
+  purpose: "只修订插件项目名称/路径，保持既有任务覆盖和 feature 标识稳定"
+  reader_job: "开发者能在新项目目录 excalidraw 中按原任务清单实施"
+  audience: ["插件开发者", "测试人员", "评审者", "产品负责人"]
+  medium: markdown
+  locale: zh-CN
+  tone: "直接、可追踪、最小变更"
+  evidence_style: "旧任务清单对照、全局路径扫描、任务格式检查"
+  required_sections: ["Setup", "Foundational", "User Stories", "Polish", "Dependencies & Execution Order", "Implementation Strategy"]
+  optional_sections: ["Rename impact note"]
+  forbidden_sections: ["修改 feature 标识", "新增功能范围", "删除原任务覆盖", "实现状态勾选"]
+  quality_checks: ["所有插件项目路径使用 excalidraw", "specs/004-excalidraw-plugin feature 路径保留", "任务 ID 和故事结构不变", "每项仍有准确路径和格式"]
+  source: user-amendment

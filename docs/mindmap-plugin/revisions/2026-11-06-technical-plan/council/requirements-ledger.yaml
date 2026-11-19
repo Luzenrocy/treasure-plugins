@@ -1,0 +1,125 @@
+version: 1
+source_message: "2026-11-06 user request, with dated decisions captured in user-brief.md"
+entries:
+  - id: U-001
+    type: goal
+    verbatim: "根据调整后的产品原型 重新校对更正技术方案"
+    normalized: "产出一份覆盖当前产品原型的、可供研发实施的技术与 UI 方案校对版。"
+    hardness: hard
+    priority: P0
+    acceptance: "方案逐项对齐当前原型的文件、画布、侧栏、控制与状态行为，并说明原型与真实实现边界。"
+    verification: "检查方案的需求追溯表、原型映射表和实现阶段。"
+    owner: "插件研发"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+    last_checked_iteration: 0
+  - id: U-002
+    type: must
+    verbatim: "同时技术方案要符合插件研发指南和sdk 的约束"
+    normalized: "以仓库的插件研发指南、宿主视觉参考及本地公开 treasure-sdk 类型为硬约束，明确版本和 API 边界。"
+    hardness: hard
+    priority: P0
+    acceptance: "每项文件/目录/设置/初始化/构建约束有来源和可执行落点；不使用未公开 SDK 或绝对路径。"
+    verification: "检查 SDK 约束矩阵与实施清单。"
+    owner: "插件研发"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+    last_checked_iteration: 0
+  - id: U-003
+    type: fact
+    verbatim: "用观象谱 吧 后缀名 确认为.gxp"
+    normalized: "产品名为观象谱，原生多画布工作簿后缀为 .gxp。"
+    hardness: hard
+    priority: P0
+    acceptance: "方案只将 .gxp 定义为原生可编辑与保存格式。"
+    verification: "全文检索格式约定与文件流程。"
+    owner: "产品负责人"
+    status: satisfied
+    document_refs: []
+    last_checked_round: 0
+    last_checked_iteration: 0
+  - id: U-004
+    type: scope
+    verbatim: "smm 、xmind 文件只要支持外部导入 或打开查看预览就可以 设计编辑、修改等操作都按当前 复制文件到新的文件处理"
+    normalized: ".smm/.xmind 仅输入与只读预览；首次编辑创建新的 .gxp，不回写、覆盖或导出为外部来源格式。"
+    hardness: hard
+    priority: P0
+    acceptance: "文件生命周期、权限与兼容表没有外部格式原位保存承诺。"
+    verification: "检查文件流程与非目标。"
+    owner: "插件研发"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+    last_checked_iteration: 0
+  - id: U-005
+    type: must
+    verbatim: "左侧 弹窗显示的时候层级应该在画布左上角的按钮之上；目录/大纲采用悬停显示；目录底部不设新建按钮。"
+    normalized: "左缘缩略大纲悬停展示同一侧栏中的文件/大纲；浮层不挤压画布且层级高于左上主菜单；没有侧栏新建入口。"
+    hardness: hard
+    priority: P1
+    acceptance: "UI 架构、可访问性和测试用例包含该层级与交互。"
+    verification: "检查原型映射、层级约定和浏览器验证。"
+    owner: "前端研发"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+    last_checked_iteration: 0
+  - id: U-006
+    type: must
+    verbatim: "打开文件按钮应该表现为调用相关sdk 打开电脑上的外部文件；导出也要支持选择电脑上的外部路径。"
+    normalized: "打开经 files.openDialog/readFile，导出经 files.saveDialog/writeFile；界面不得取得或伪造路径。"
+    hardness: hard
+    priority: P0
+    acceptance: "方案使用公开 FileReference 与 Result 处理，取消不改编辑会话。"
+    verification: "类型检查、宿主联调和失败路径测试。"
+    owner: "插件研发"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+    last_checked_iteration: 0
+  - id: U-007
+    type: must
+    verbatim: "重置视图 和清空当前画布有什么区别；清空画布内容改为重置画布。"
+    normalized: "重置视图仅恢复缩放和位置；重置画布保留根主题、移除其他分支、保持视图，并作为可撤销内容变更。"
+    hardness: hard
+    priority: P1
+    acceptance: "命令模型、脏状态和验收明确区分两个操作。"
+    verification: "单元与浏览器级场景验证。"
+    owner: "前端研发"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+    last_checked_iteration: 0
+  - id: U-008
+    type: must-not
+    verbatim: "不要顶部标题栏；保存、导出只保留右上角；左上菜单去除保存与导出。"
+    normalized: "不得重引入顶部标题栏或重复的保存/导出入口。"
+    hardness: hard
+    priority: P1
+    acceptance: "控制面布局图与验收项只包含约定入口。"
+    verification: "视觉回归与 DOM/可访问性检查。"
+    owner: "前端研发"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+    last_checked_iteration: 0
+  - id: U-009
+    type: format
+    verbatim: "技术方案"
+    normalized: "以中文 Markdown 交付，面向产品负责人、插件研发与技术评审；旧方案保持历史，不被静默覆盖。"
+    hardness: hard
+    priority: P1
+    acceptance: "新版本在独立 revision 路径发布，含来源、风险、阶段和验收。"
+    verification: "路径与文档结构检查。"
+    owner: "Codex"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+    last_checked_iteration: 0
+amendments:
+  - id: A-001
+    supersedes: "旧技术方案中 .treasuremind、外部格式就地编辑/写回、顶部标题栏等历史假设"
+    user_text: "2026-11-05 至 2026-11-06 的产品决定，详见 user-brief.md。"
+    effective_round: 1

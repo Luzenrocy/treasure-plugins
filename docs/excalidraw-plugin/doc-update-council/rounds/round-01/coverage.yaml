@@ -1,0 +1,23 @@
+round: 1
+ledger_version: 1
+entries:
+  - id: U-001
+    status: satisfied
+    draft_refs: ["本轮职责修订", "tasks.md", "plan.md", "quickstart.md"]
+    evidence: "三个候选文档统一表达代理自动化任务与用户宿主验证职责。"
+    verification: "交叉扫描三个候选文件。"
+  - id: U-002
+    status: satisfied
+    draft_refs: ["tasks.md T040", "quickstart.md Treasure 宿主手工验证（用户执行）", "plan.md Testing/Constitution Check"]
+    evidence: "宿主测试执行任务已移除；tasks.md 只维护自动化结果和用户证据链接。"
+    verification: "任务行不含宿主测试命令，quickstart 保留完整用户路径。"
+  - id: U-003
+    status: satisfied
+    draft_refs: ["tasks.md 本轮职责修订", "revision.md"]
+    evidence: "I1/U1/A1/I2/L1 被记录为关闭结论，不新增缺陷或范围。"
+    verification: "reviewer 检查变更范围。"
+  - id: U-004
+    status: satisfied
+    draft_refs: ["rounds/round-01/*"]
+    evidence: "已保存 draft、review、revision、decision、coverage 和 input-snapshot；最终目标等待用户确认。"
+    verification: "validate_council.py。"

@@ -1,0 +1,38 @@
+document_contract:
+  mode: hybrid
+  family: normative
+  label: "Treasure Excalidraw 绘图插件功能规格"
+  purpose: "在进入计划前，形成可追踪、可验收、中文书写的独立插件功能规格"
+  reader_job: "产品、设计、开发和测试人员能够据此判断范围、实现边界和验收证据"
+  audience:
+    - 产品负责人
+    - 设计师
+    - Treasure 插件开发者
+    - 测试人员
+  medium: markdown
+  locale: zh-CN
+  tone: "直接、可验证、面向协作"
+  evidence_style: "官方链接、仓库文档、可复现的宿主验收场景"
+  required_sections:
+    - 概述与目标
+    - 范围与非目标
+    - 用户场景与验收场景
+    - 功能需求
+    - 数据与文件模型
+    - 外部依赖与失败处理
+    - 非功能要求
+    - 验收标准
+    - 待确认事项
+  optional_sections:
+    - 术语表
+    - 版本与变更记录
+  forbidden_sections:
+    - 未经用户确认的实现承诺
+    - 未标注来源的性能数字或安全保证
+    - 与本插件无关的功能扩展
+  quality_checks:
+    - 每条硬性用户要求都有稳定 ID、验收条件和验证方法
+    - 所有官方能力声明可追溯到来源或标记为待验证
+    - 遵守 Treasure SDK、目录引用和中文文档原则
+    - 明确网络、权限、文件冲突和导出失败路径
+source: inferred

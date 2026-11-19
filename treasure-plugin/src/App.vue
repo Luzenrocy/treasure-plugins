@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { files, type FileReference } from 'treasure-sdk';
+import { files, type FileReference } from '@luzenrocy/treasure-sdk';
 
 export default defineComponent({
   name: 'App',

@@ -6,7 +6,7 @@
   "author": "Treasure",
   "icon": "icon.svg",
   "entry": "index.html",
-  "minPlatformVersion": "2.0.0",
+  "minPlatformVersion": "1.0.0",
   "menu": {
     "name": "文本对比",
     "icon": "assets/text-diff-menu.svg",

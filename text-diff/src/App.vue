@@ -41,7 +41,7 @@ import { buildInlineRows, renderInlineSide } from './editor/inlineDiff';
 import { defaultDiffSettings, type DiffSettings } from './domain/diffSettings';
 
 const left = ref<TextSide>(createTextSide('left')); const right = ref<TextSide>(createTextSide('right')); const settings = reactive<DiffSettings>({ ...defaultDiffSettings });
-const leftEditor = ref<HTMLTextAreaElement>(); const rightEditor = ref<HTMLTextAreaElement>(); const leftScrollTop = ref(0); const rightScrollTop = ref(0); const composingSide = ref<'left' | 'right'>();
+const leftEditor = ref<HTMLTextAreaElement>(); const rightEditor = ref<HTMLTextAreaElement>(); const leftScrollTop = ref(0); const rightScrollTop = ref(0); const leftScrollLeft = ref(0); const rightScrollLeft = ref(0); const composingSide = ref<'left' | 'right'>();
 const result = ref<ReturnType<DiffCoordinator['compare']>>(); const status = ref('待输入文本'); const currentIndex = ref(-1); const coordinator = new DiffCoordinator();
 const leftText = computed({ get: () => left.value.text, set: (value: string) => { left.value = markDirty(left.value, value); } }); const rightText = computed({ get: () => right.value.text, set: (value: string) => { right.value = markDirty(right.value, value); } });
 const leftFileName = computed(() => left.value.metadata?.fileName); const rightFileName = computed(() => right.value.metadata?.fileName);
@@ -54,8 +54,8 @@ watch(() => [left.value.text, right.value.text, settings.ignoreTrailingWhitespac
 function onInput(side: 'left' | 'right') { status.value = `${side === 'left' ? '左侧' : '右侧'}已编辑`; recompute(); }
 function navigate(step: number) { const next = currentIndex.value + step; if (next >= 0 && next < differences.value.length) currentIndex.value = next; }
 function swapSides() { const value = left.value; left.value = { ...right.value, side: 'left' }; right.value = { ...value, side: 'right' }; status.value = '已交换左右文本'; recompute(); }
-function overlayStyle(side: 'left' | 'right') { return { transform: `translateY(-${side === 'left' ? leftScrollTop.value : rightScrollTop.value}px)` }; }
-function syncScroll(side: 'left' | 'right') { const source = side === 'left' ? leftEditor.value : rightEditor.value; const target = side === 'left' ? rightEditor.value : leftEditor.value; if (!source) return; if (side === 'left') leftScrollTop.value = source.scrollTop; else rightScrollTop.value = source.scrollTop; if (target && Math.abs(target.scrollTop - source.scrollTop) > 1) { target.scrollTop = source.scrollTop; if (side === 'left') rightScrollTop.value = source.scrollTop; else leftScrollTop.value = source.scrollTop; } }
+function overlayStyle(side: 'left' | 'right') { const top = side === 'left' ? leftScrollTop.value : rightScrollTop.value; const left = side === 'left' ? leftScrollLeft.value : rightScrollLeft.value; return { transform: `translate(${-left}px, -${top}px)` }; }
+function syncScroll(side: 'left' | 'right') { const source = side === 'left' ? leftEditor.value : rightEditor.value; const target = side === 'left' ? rightEditor.value : leftEditor.value; if (!source) return; if (side === 'left') { leftScrollTop.value = source.scrollTop; leftScrollLeft.value = source.scrollLeft; } else { rightScrollTop.value = source.scrollTop; rightScrollLeft.value = source.scrollLeft; } if (target && (Math.abs(target.scrollTop - source.scrollTop) > 1 || Math.abs(target.scrollLeft - source.scrollLeft) > 1)) { target.scrollTop = source.scrollTop; target.scrollLeft = source.scrollLeft; if (side === 'left') { rightScrollTop.value = source.scrollTop; rightScrollLeft.value = source.scrollLeft; } else { leftScrollTop.value = source.scrollTop; leftScrollLeft.value = source.scrollLeft; } } }
 async function loadFile(side: 'left' | 'right') { status.value = `读取${side === 'left' ? '左侧' : '右侧'}文件`; const loaded = await chooseAndReadFile(); if (loaded.kind === 'cancelled') { status.value = '已取消'; return; } if (loaded.kind === 'error') { status.value = loaded.message; return; } if (side === 'left') left.value = updateTextSide(left.value, loaded.text, loaded.metadata); else right.value = updateTextSide(right.value, loaded.text, loaded.metadata); status.value = '文件已载入'; recompute(); }
 </script>
 
@@ -216,10 +216,14 @@ textarea {
 }
 
 .inline-diff-layer {
+  inset: 0 0 auto;
+  height: auto;
+  min-height: 100%;
+  box-sizing: border-box;
   padding: var(--diff-editor-padding);
   pointer-events: none;
   color: var(--diff-text);
-  overflow: hidden;
+  overflow: visible;
 }
 
 /* gutter 宽度与行号列宽度由 --diff-gutter-width 统一控制。 */

@@ -1,0 +1,19 @@
+document_contract:
+  mode: hybrid
+  family: "normative"
+  label: "checklist"
+  purpose: "为当前 Excalidraw 优化规格补充需求质量检查项，验证新增 SDK/宿主菜单边界与全功能验收表述的完整性、清晰度和可追踪性"
+  reader_job: "评审者能够发现规格中的遗漏、歧义、冲突、不可验收表述和未记录依赖。"
+  audience: ["需求评审者", "插件开发者", "SDK/宿主维护者"]
+  medium: markdown
+  locale: zh-CN
+  tone: "直接、问题导向、可追踪"
+  evidence_style: "spec.md、plan.md、contracts、data-model、quickstart 和 constitution"
+  required_sections: ["需求完整性", "需求清晰度", "需求一致性", "验收标准质量", "场景与边界覆盖", "非功能与依赖", "歧义与冲突"]
+  optional_sections: ["备注"]
+  forbidden_sections: ["实现步骤", "代码执行测试", "宿主手工测试步骤"]
+  quality_checks:
+    - "所有新增条目保持未勾选"
+    - "至少 80% 条目包含 Spec/Plan/Contract 引用或 [Gap]/[Ambiguity]/[Assumption] 标记"
+    - "条目检查需求文本质量，不验证实现行为"
+    - "中文正文完整，技术标识符保留原文并有中文上下文"

@@ -13,7 +13,7 @@ cd my-plugin
 npm run dev
 ```
 
-如果三个仓库位于同级目录，业务插件可在本地使用 `"treasure-sdk": "file:../../treasure-sdk"` 联调 SDK 工作区源码；该写法不适合独立分发或 CI 从单仓安装。发布插件前应改为经过验证的 npm 版本范围（例如与最低宿主匹配的 `^2.0.0`），重新安装并提交 lockfile，再完成宿主联调。
+如果三个仓库位于同级目录，业务插件可在本地使用 `"@luzenrocy/treasure-sdk": "file:../../treasure-sdk"` 联调 SDK 工作区源码；该写法不适合独立分发或 CI 从单仓安装。独立项目必须在 `.npmrc` 写入 `@luzenrocy:registry=https://npm.pkg.github.com`，并依赖经过验证的版本范围（例如 `^1.0.0`）；重新安装并提交 lockfile 后，再完成宿主联调。
 
 如使用 `--no-install` 跳过自动安装，或自动安装失败，请在生成的插件目录中手动执行 `npm install`；该步骤会安装 `package.json` 中声明的 `treasure-sdk` 及其他依赖。CLI 会生成 Vue + Vite 项目、SDK 初始化、`manifest.json`、生命周期脚本和插件打包脚本。插件编码必须是小写 kebab-case，例如 `my-plugin`。
 
@@ -48,7 +48,7 @@ npm run dev
 
 ```ts
 import { createApp } from 'vue';
-import { initTreasure, database, files } from 'treasure-sdk';
+import { initTreasure, database, files } from '@luzenrocy/treasure-sdk';
 import App from './App.vue';
 
 initTreasure();
@@ -94,7 +94,7 @@ const selected = await files.openDialog({ kind: 'file', multiple: false });
 这个流程适用于笔记库、项目文件夹、图片目录等需要在多次启动后继续使用同一目录的功能。`WORKSPACE_KEY` 是插件源码中固定的目录授权键，应与 manifest 中 `dir` 设置的 `param_key` 一致。目录设置不返回路径，只返回授权验证需要的 `accessGrantId` 和 `pathHash`。
 
 ```ts
-import { directories, files, permissions, settings } from 'treasure-sdk';
+import { directories, files, permissions, settings } from '@luzenrocy/treasure-sdk';
 
 const WORKSPACE_KEY = 'workspace_dir';
 
@@ -153,7 +153,7 @@ if (!saved.ok) showError(saved.error.message);
   "alias": "我的插件",
   "version": "1.0.0",
   "entry": "index.html",
-  "minPlatformVersion": "2.0.0",
+  "minPlatformVersion": "2.4.0",
   "menu": { "name": "我的插件", "order": 100 }
 }
 ```
@@ -290,13 +290,13 @@ npm run build:plugin:zip
 | --- | --- |
 | 插件研发流程、manifest、打包与联调 | 本文档。 |
 | SDK 方法、类型与返回值 | [SDK API 参考](https://github.com/Luzenrocy/treasure-sdk/blob/main/docs/API-REFERENCE.md)。 |
-| 请求/响应信封、operation、版本兼容 | [桥接协议](https://github.com/Luzenrocy/treasure-sdk/blob/main/docs/BRIDGE-PROTOCOL.md)。 |
+| 请求/响应信封（按能力域拆分）、operation、版本兼容 | [桥接协议](https://github.com/Luzenrocy/treasure-sdk/blob/main/docs/BRIDGE-PROTOCOL.md)。 |
 | 宿主产品与内部实现 | [Treasure](https://github.com/Luzenrocy/treasure) README。 |
 | 某一插件的功能与设计 | 对应插件目录的 README。 |
 
 ## 9. 当前公开契约限制
 
-- `menus.register/unregister` 可以向宿主登记菜单，但 SDK 2.0 当前没有公开类型化的点击事件订阅或勾选状态更新接口。内置插件中出现的 `treasure-menu-event` 是宿主内部协议，不作为第三方稳定 API；需要交互菜单的新插件应等待 SDK 补齐事件接口，或在项目风险记录中明确版本绑定。
+- `menus.register/updateChecked/subscribe/unsubscribe` 已经作为公开 SDK 能力提供：重复 `register` 同一 `menuId` 即覆盖菜单声明；`menus.update` 已移除。**仅同步勾选状态时优先使用 `menus.updateChecked(menuId, itemId, checked)`**（不触发整窗菜单重建）；若还需更新 enabled、label 或菜单结构，则重新调用 `register`。插件通过 `menus.subscribe` 接收原生窗口菜单点击；不要监听 `window` 消息或内部 `treasure-menu-event`。注册请求的 `rootLabel` 必须是宿主已知系统菜单名（View/File/Edit/Window/Help 或本地化别名）且 items 条目 id/label/type 合法。发布 SDK 3.0.0 时，依赖版本与 `manifest.minPlatformVersion` 必须同步到包含该协议的宿主发行版本。
 - `files.openDialog` 的成功类型暂未根据 `kind` 自动收窄，按本文示例使用 `Array.isArray` 判断。
 - `dir` 设置不返回绝对路径；应使用其 `accessGrantId` 与 `pathHash` 调用 `permissions.verifyDirectoryGrant`。验证失败时记录诊断并允许用户重新选择；不要匹配错误消息文本。
 - 文件/私有存储单次 32 MiB、数据库载荷 256 KiB、事务 50 条和查询结果 1,000 行是宿主硬限制；目前 SDK 不提供流式文件或自动分页接口，业务需自行拆分数据与分页查询。

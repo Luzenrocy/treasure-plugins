@@ -1,0 +1,26 @@
+round: 1
+iteration: 1
+role: writer
+fresh_context: true
+rules_snapshot: rules-snapshot.yaml
+rules_snapshot_id: writing-workshop-20261105-r1i1
+ledger_version: 1
+contract_snapshot: native-and-naming-v1
+rules_rechecked: true
+rule_changes: []
+inputs:
+  - path: user-brief.md
+    sha256: 7e1c64fc4ab9713efeafa580b307e46053bd4cb926bdc02ad524284bf33a1a1f
+  - path: requirements-ledger.yaml
+    sha256: c3737588aa868524a56f4c71d4e851c1487575c11094c60171d5ee6652842d17
+  - path: adaptive-contract.yaml
+    sha256: f2be2591eea810d2ee6d68ddee6b6b546a8879d5c1b546a75c9239a608e73362
+  - path: source-index.md
+    sha256: 47134caadedd1c3952634c2665f7d1b19d806ba330fc5561fca1eb37c3cc3c17
+  - path: rules-snapshot.yaml
+    sha256: a379709deaa118519d06bff21d5e43d91efab7fe7868362ab0bad0e5dc22055b
+previous_draft: null
+prior_findings: []
+selected_quality_lenses: ["record/decision", "normative lifecycle boundary", "reference candidate mapping"]
+publication_permitted: false
+note: "Reviewer and checker must recheck current rules and read the same ledger/contract; final publication only after checker approve."

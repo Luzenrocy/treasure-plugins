@@ -17,10 +17,15 @@ on:
 
 permissions:
   contents: write
+  packages: read
 
 jobs:
   release:
     runs-on: ubuntu-latest
+    env:
+      GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
+      GITEE_OWNER: ${{ vars.GITEE_OWNER || github.repository_owner }}
+      GITEE_REPO: ${{ vars.GITEE_REPO || github.event.repository.name }}
 
     steps:
       - uses: actions/checkout@v4
@@ -69,6 +74,7 @@ jobs:
           const fs = require('fs');
           const path = process.env.PLUGIN;
           const manifest = JSON.parse(fs.readFileSync(`${path}/manifest.json`, 'utf8'));
+          const packageJson = JSON.parse(fs.readFileSync(`${path}/package.json`, 'utf8'));
 
           if (manifest.publish === false) {
             throw new Error(`${path} is marked publish: false`);
@@ -78,11 +84,17 @@ jobs:
               `Version mismatch: manifest=${manifest.version}, tag=${process.env.RELEASE_VERSION}`,
             );
           }
+          if (packageJson.version !== process.env.RELEASE_VERSION) {
+            throw new Error(
+              `Version mismatch: package.json=${packageJson.version}, tag=${process.env.RELEASE_VERSION}`,
+            );
+          }
           NODE
 
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+          registry-url: https://npm.pkg.github.com
           cache: npm
           cache-dependency-path: ${{ steps.meta.outputs.plugin }}/package-lock.json
 
@@ -91,6 +103,8 @@ jobs:
         # Plugin packaging invokes Vite and TypeScript from devDependencies.
         # Include them explicitly even when the runner sets NODE_ENV=production.
         run: npm ci --include=dev
+        env:
+          NODE_AUTH_TOKEN: ${{ github.token }}
 
       - name: Build release package
         working-directory: ${{ steps.meta.outputs.plugin }}
@@ -109,6 +123,14 @@ jobs:
             "$GITHUB_SHA" \
             "$PLUGIN"
 
+      - name: Generate asset checksums
+        env:
+          PLUGIN: ${{ steps.meta.outputs.plugin }}
+          VERSION: ${{ steps.meta.outputs.version }}
+        run: |
+          cd "${PLUGIN}/build-output"
+          sha256sum "${PLUGIN}.zip" "${PLUGIN}-source-v${VERSION}.zip" > SHA256SUMS.txt
+
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -119,6 +141,49 @@ jobs:
           gh release create "$tag" \
             "${PLUGIN}/build-output/${PLUGIN}.zip" \
             "${PLUGIN}/build-output/${PLUGIN}-source-v${VERSION}.zip" \
+            "${PLUGIN}/build-output/SHA256SUMS.txt" \
             --title "${PLUGIN} v${VERSION}" \
             --generate-notes \
             --target "$GITHUB_SHA"
+
+      - name: Mirror release assets to Gitee
+        shell: bash
+        env:
+          PLUGIN: ${{ steps.meta.outputs.plugin }}
+          VERSION: ${{ steps.meta.outputs.version }}
+        run: |
+          set -euo pipefail
+          : "${GITEE_TOKEN:?Set the GITEE_TOKEN repository secret before releasing.}"
+          tag="plugin/${PLUGIN}/v${VERSION}"
+          api="https://gitee.com/api/v5/repos/${GITEE_OWNER}/${GITEE_REPO}"
+          # Wait for Gitee's one-way GitHub pull mirror.  Release creation is
+          # deliberately blocked rather than referencing a non-existent commit.
+          for attempt in $(seq 1 90); do
+            status=$(curl --silent --output /dev/null --write-out '%{http_code}' \
+              "${api}/commits/${GITHUB_SHA}?access_token=${GITEE_TOKEN}")
+            if [ "$status" = "200" ]; then
+              break
+            fi
+            if [ "$attempt" = "90" ]; then
+              echo "Gitee has not mirrored ${GITHUB_SHA} after 15 minutes (last HTTP status: ${status})."
+              exit 1
+            fi
+            sleep 10
+          done
+          payload=$(curl --silent --show-error --request POST \
+            --data-urlencode "tag_name=${tag}" \
+            --data-urlencode "name=${PLUGIN} v${VERSION}" \
+            --data-urlencode "body=Mirrored from https://github.com/${GITHUB_REPOSITORY}/releases/tag/${tag}" \
+            --data-urlencode "target_commitish=${GITHUB_SHA}" \
+            "${api}/releases?access_token=${GITEE_TOKEN}")
+          release_id=$(jq -er '.id // empty' <<<"$payload" || true)
+          if [ -z "$release_id" ]; then
+            payload=$(curl --fail-with-body --silent --show-error \
+              "${api}/releases/tags/${tag}?access_token=${GITEE_TOKEN}")
+            release_id=$(jq -er '.id' <<<"$payload")
+          fi
+          for asset in "${PLUGIN}/build-output/${PLUGIN}.zip" "${PLUGIN}/build-output/${PLUGIN}-source-v${VERSION}.zip" "${PLUGIN}/build-output/SHA256SUMS.txt"; do
+            curl --fail-with-body --silent --show-error --request POST \
+              --form "file=@${asset}" \
+              "${api}/releases/${release_id}/attach_files?access_token=${GITEE_TOKEN}"
+          done

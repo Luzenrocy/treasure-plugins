@@ -7,7 +7,7 @@
   "author": "作者名",
   "icon": "icon.svg",
   "entry": "index.html",
-  "minPlatformVersion": "2.0.0",
+  "minPlatformVersion": "1.0.0",
   "menu": {
     "name": "我的插件",
     "icon": "plugin",

@@ -1,0 +1,11 @@
+round: 1
+rules_snapshot: docs/excalidraw-plugin/doc-update-council/rules-snapshot.yaml
+ledger_version: 1
+source_analysis: speckit-analyze report plus user-confirmed dispositions
+source_tasks: specs/004-excalidraw-plugin/tasks.md
+source_plan: specs/004-excalidraw-plugin/plan.md
+source_quickstart: specs/004-excalidraw-plugin/quickstart.md
+candidate_targets:
+  - specs/004-excalidraw-plugin/tasks.md
+  - specs/004-excalidraw-plugin/plan.md
+  - specs/004-excalidraw-plugin/quickstart.md

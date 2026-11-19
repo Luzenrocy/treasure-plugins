@@ -1,0 +1,11 @@
+round: 1
+rules_snapshot: docs/excalidraw-plugin/tasks-council-rename/rules-snapshot.yaml
+ledger_version: 2
+contract_snapshot: docs/excalidraw-plugin/tasks-council-rename/rules-snapshot.yaml#contract_snapshot
+source_tasks: specs/004-excalidraw-plugin/tasks.md
+source_plan: specs/004-excalidraw-plugin/plan.md
+source_quickstart: specs/004-excalidraw-plugin/quickstart.md
+rename_scope: "project directory excalidraw-plugin/ -> excalidraw/; feature identifier 004-excalidraw-plugin unchanged"
+supporting_candidates:
+  - docs/excalidraw-plugin/tasks-council-rename/supporting/plan.md
+  - docs/excalidraw-plugin/tasks-council-rename/supporting/quickstart.md

@@ -1,0 +1,394 @@
+{
+  "round": 1,
+  "iteration": 1,
+  "role": "writer",
+  "checked_at": "2026-11-04T14:48:45.981886+00:00",
+  "ledger_version": 1,
+  "role_verification": {
+    "fresh_context": true,
+    "shared_file_inputs_only": true,
+    "all_rules_sha_and_mtime_match": true,
+    "ledger_and_contract_read": true,
+    "all_listed_sources_read": true,
+    "no_business_implementation_files_modified": true,
+    "no_poc_or_product_test_performed": true,
+    "reviewer_and_checker": "not performed by writer"
+  },
+  "rules": [
+    {
+      "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/SKILL.md",
+      "sha256": "a0231c87b27fab4341ce02fb3413d1aaf0f0b8ef4e53902f7f561f9d8bd6c63d",
+      "modified": "2026-10-27T08:51:32.821800+00:00",
+      "matches_snapshot": true,
+      "read_by_role": true
+    },
+    {
+      "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/agents/openai.yaml",
+      "sha256": "4249082cc69c459fd664df91e75bf51b1761b9cc782c7da9ca7cfa7cb8f2d69b",
+      "modified": "2026-10-27T08:51:32.821971+00:00",
+      "matches_snapshot": true,
+      "read_by_role": true
+    },
+    {
+      "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/references/requirements-ledger.md",
+      "sha256": "132433d10f99baabc264d8c340aea98983efc3f5522a82c2f6d64f8c7eac8595",
+      "modified": "2026-10-27T08:51:32.822749+00:00",
+      "matches_snapshot": true,
+      "read_by_role": true
+    },
+    {
+      "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/references/type-adaptation.md",
+      "sha256": "b81e7735f0412da77def3cae259bb0c6fe9be0f630b6b6f53e2b68a0ac466f1e",
+      "modified": "2026-10-27T08:51:32.823170+00:00",
+      "matches_snapshot": true,
+      "read_by_role": true
+    },
+    {
+      "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/references/skill-reload.md",
+      "sha256": "08e3000b3a14b92c6974cafe3714f62982ae72540cbce1a37e61dd4b507746af",
+      "modified": "2026-10-27T08:51:32.823064+00:00",
+      "matches_snapshot": true,
+      "read_by_role": true
+    },
+    {
+      "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/references/process-artifacts.md",
+      "sha256": "790f14dd6f38f6ace9f37348124d95bce7d9850e2b2b1d53f0330aa5cc23b02a",
+      "modified": "2026-10-27T08:51:32.822535+00:00",
+      "matches_snapshot": true,
+      "read_by_role": true
+    },
+    {
+      "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/references/integration.md",
+      "sha256": "ccf6c1d0c120c7551cfd9b9ba020533c69dbdc004e8dfe8fb9d452d76746cb8c",
+      "modified": "2026-10-27T08:51:32.822410+00:00",
+      "matches_snapshot": true,
+      "read_by_role": true
+    },
+    {
+      "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/references/document-contracts.md",
+      "sha256": "82b6f2306b55c66558b00041ba0ef682493e004480a65860a27aceae120d7fa8",
+      "modified": "2026-10-27T08:51:32.822307+00:00",
+      "matches_snapshot": true,
+      "read_by_role": true
+    },
+    {
+      "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/scripts/init_council.py",
+      "sha256": "7a6c6a98faaef2667b12448a67add84498c23e9ef08c686244b07bd87f485eaf",
+      "modified": "2026-10-27T08:51:32.823556+00:00",
+      "matches_snapshot": true,
+      "read_by_role": true
+    },
+    {
+      "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/scripts/validate_council.py",
+      "sha256": "cc663556f2bd2a2756eb1cf97a9783cc5f55bf629b50f39e1464386c214c2800",
+      "modified": "2026-10-27T08:51:32.823681+00:00",
+      "matches_snapshot": true,
+      "read_by_role": true
+    },
+    {
+      "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/scripts/fingerprint_skill.py",
+      "sha256": "fa6b91c1c4b3ea96cb330ec8db186bcebb64251867a9bacc19b0e2ee3c5b23c9",
+      "modified": "2026-10-27T08:51:32.823434+00:00",
+      "matches_snapshot": true,
+      "read_by_role": true
+    },
+    {
+      "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/scripts/council_schema.py",
+      "sha256": "5adef36735841ca32dcb1459594fa74b71f5e4a4ae586b90bee9cbe11d0604f1",
+      "modified": "2026-10-27T08:51:32.823334+00:00",
+      "matches_snapshot": true,
+      "read_by_role": true
+    }
+  ],
+  "inputs": [
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rules-snapshot.yaml",
+      "sha256": "075f51d99b7a9278b9cd5903482c4e62d162f624e42d155db6fc59decca1df22",
+      "modified": "2026-11-04T14:25:07.564563+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/user-brief.md",
+      "sha256": "f5aa0785af03c87876a9daeee6dac726a918b07480491af79cfaac1f01fa7850",
+      "modified": "2026-11-04T14:25:07.555670+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/requirements-ledger.yaml",
+      "sha256": "42a83700e834b86b92e8cd005e6a2376fcb043dcbb57408735b760ed3668af15",
+      "modified": "2026-11-04T14:48:45.974057+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/adaptive-contract.yaml",
+      "sha256": "5046ea33cfb2b3d95a4fa0e4825ed45b287bb0648d8656e9419490b4069bc96c",
+      "modified": "2026-11-04T14:25:07.560574+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/source-index.md",
+      "sha256": "579986f02291276be7a294b36982536c35ca5d17d60227316e52dc0ba19dee33",
+      "modified": "2026-11-04T14:46:27.370230+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/source-local.md",
+      "sha256": "a9f9e72ee5f63955eaf627a9c5d1365abe6e1c41b1228168cbc18d5928c0caf7",
+      "modified": "2026-11-04T14:25:58.629135+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/source-engines.md",
+      "sha256": "8828c324ebea739a68e7565499fa47220adf1cff1d29e443f00a16a34240300c",
+      "modified": "2026-11-04T14:28:28.782182+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/source-xmind.md",
+      "sha256": "3c8381d233acc0b34f94e216ab9f650c13a1b87718195d2411ca64f63fb9d1a1",
+      "modified": "2026-11-04T14:28:28.785369+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/source-rendering.md",
+      "sha256": "aa890d0ed52bb508d4dcee4e42c9289a441bcc40cb4350e0ed1721a03b1bdab1",
+      "modified": "2026-11-04T14:33:54.158781+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/design-validation.md",
+      "sha256": "e9df5774e799160e10e383a402c5d431228d14fcaa2a339f46c429758bd482e0",
+      "modified": "2026-11-04T14:46:20.881597+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-01/ui-concept.svg",
+      "sha256": "10b00faef75b22c2a3cb8d50e505fa1037851f8e54c57507cee0a4f926ae453b",
+      "modified": "2026-11-04T14:30:37.206799+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-01/ui-concept.png",
+      "sha256": "93c727eab733b0e95671033c6efb7d4ea7f0014d12249137421337b78ab46459",
+      "modified": "2026-11-04T14:30:38.111817+00:00"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-01/draft.md",
+      "sha256": "8d4d21c3aed0e9c6253235a411f3b122bb6b44219b643131b3684c08880c0037",
+      "modified": "2026-11-04T14:48:45.971819+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-01/coverage.yaml",
+      "sha256": "d4e006d231230ecb5e70481bd39b7f3da2423b04f4972d0c1c6604a0dab3f5e1",
+      "modified": "2026-11-04T14:48:45.975514+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-01/revision.md",
+      "sha256": "9a46a778ce6831063542214757b1dab8103ab37d3c39e7c435bda59d61212c34",
+      "modified": "2026-11-04T14:48:45.976387+00:00"
+    }
+  ],
+  "checker_verification": {
+    "role": "fresh-context independent checker",
+    "checked_at": "2026-11-04T15:03:48.679646+00:00",
+    "round": 1,
+    "iteration": 1,
+    "ledger_version": 1,
+    "rules_read_and_verified": [
+      {
+        "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/SKILL.md",
+        "sha256": "a0231c87b27fab4341ce02fb3413d1aaf0f0b8ef4e53902f7f561f9d8bd6c63d",
+        "modified": "2026-10-27T08:51:32.821800+00:00",
+        "sha256_matches_snapshot": true,
+        "mtime_matches_snapshot": true,
+        "read_by_checker": true
+      },
+      {
+        "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/agents/openai.yaml",
+        "sha256": "4249082cc69c459fd664df91e75bf51b1761b9cc782c7da9ca7cfa7cb8f2d69b",
+        "modified": "2026-10-27T08:51:32.821971+00:00",
+        "sha256_matches_snapshot": true,
+        "mtime_matches_snapshot": true,
+        "read_by_checker": true
+      },
+      {
+        "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/references/requirements-ledger.md",
+        "sha256": "132433d10f99baabc264d8c340aea98983efc3f5522a82c2f6d64f8c7eac8595",
+        "modified": "2026-10-27T08:51:32.822749+00:00",
+        "sha256_matches_snapshot": true,
+        "mtime_matches_snapshot": true,
+        "read_by_checker": true
+      },
+      {
+        "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/references/type-adaptation.md",
+        "sha256": "b81e7735f0412da77def3cae259bb0c6fe9be0f630b6b6f53e2b68a0ac466f1e",
+        "modified": "2026-10-27T08:51:32.823170+00:00",
+        "sha256_matches_snapshot": true,
+        "mtime_matches_snapshot": true,
+        "read_by_checker": true
+      },
+      {
+        "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/references/skill-reload.md",
+        "sha256": "08e3000b3a14b92c6974cafe3714f62982ae72540cbce1a37e61dd4b507746af",
+        "modified": "2026-10-27T08:51:32.823064+00:00",
+        "sha256_matches_snapshot": true,
+        "mtime_matches_snapshot": true,
+        "read_by_checker": true
+      },
+      {
+        "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/references/process-artifacts.md",
+        "sha256": "790f14dd6f38f6ace9f37348124d95bce7d9850e2b2b1d53f0330aa5cc23b02a",
+        "modified": "2026-10-27T08:51:32.822535+00:00",
+        "sha256_matches_snapshot": true,
+        "mtime_matches_snapshot": true,
+        "read_by_checker": true
+      },
+      {
+        "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/references/integration.md",
+        "sha256": "ccf6c1d0c120c7551cfd9b9ba020533c69dbdc004e8dfe8fb9d452d76746cb8c",
+        "modified": "2026-10-27T08:51:32.822410+00:00",
+        "sha256_matches_snapshot": true,
+        "mtime_matches_snapshot": true,
+        "read_by_checker": true
+      },
+      {
+        "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/references/document-contracts.md",
+        "sha256": "82b6f2306b55c66558b00041ba0ef682493e004480a65860a27aceae120d7fa8",
+        "modified": "2026-10-27T08:51:32.822307+00:00",
+        "sha256_matches_snapshot": true,
+        "mtime_matches_snapshot": true,
+        "read_by_checker": true
+      },
+      {
+        "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/scripts/init_council.py",
+        "sha256": "7a6c6a98faaef2667b12448a67add84498c23e9ef08c686244b07bd87f485eaf",
+        "modified": "2026-10-27T08:51:32.823556+00:00",
+        "sha256_matches_snapshot": true,
+        "mtime_matches_snapshot": true,
+        "read_by_checker": true
+      },
+      {
+        "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/scripts/validate_council.py",
+        "sha256": "cc663556f2bd2a2756eb1cf97a9783cc5f55bf629b50f39e1464386c214c2800",
+        "modified": "2026-10-27T08:51:32.823681+00:00",
+        "sha256_matches_snapshot": true,
+        "mtime_matches_snapshot": true,
+        "read_by_checker": true
+      },
+      {
+        "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/scripts/fingerprint_skill.py",
+        "sha256": "fa6b91c1c4b3ea96cb330ec8db186bcebb64251867a9bacc19b0e2ee3c5b23c9",
+        "modified": "2026-10-27T08:51:32.823434+00:00",
+        "sha256_matches_snapshot": true,
+        "mtime_matches_snapshot": true,
+        "read_by_checker": true
+      },
+      {
+        "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/scripts/council_schema.py",
+        "sha256": "5adef36735841ca32dcb1459594fa74b71f5e4a4ae586b90bee9cbe11d0604f1",
+        "modified": "2026-10-27T08:51:32.823334+00:00",
+        "sha256_matches_snapshot": true,
+        "mtime_matches_snapshot": true,
+        "read_by_checker": true
+      }
+    ],
+    "all_12_rules_sha_and_mtime_match": true,
+    "user_brief_ledger_contract_sources_read": true,
+    "formal_adjudication_after_root_ready_signal": true,
+    "draft_sha_matches_frozen_version": true,
+    "svg_read_and_png_visually_inspected": true,
+    "local_source_12_sha_all_match": true,
+    "sdk_signatures_and_guide_constraints_spot_checked": true,
+    "no_new_network_research": true,
+    "no_poc_or_product_test_performed": true,
+    "no_draft_or_business_code_modified": true,
+    "inputs": [
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rules-snapshot.yaml",
+        "sha256": "075f51d99b7a9278b9cd5903482c4e62d162f624e42d155db6fc59decca1df22",
+        "modified": "2026-11-04T14:25:07.564563+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/user-brief.md",
+        "sha256": "f5aa0785af03c87876a9daeee6dac726a918b07480491af79cfaac1f01fa7850",
+        "modified": "2026-11-04T14:25:07.555670+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/requirements-ledger.yaml",
+        "sha256": "42a83700e834b86b92e8cd005e6a2376fcb043dcbb57408735b760ed3668af15",
+        "modified": "2026-11-04T14:48:45.974057+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/adaptive-contract.yaml",
+        "sha256": "5046ea33cfb2b3d95a4fa0e4825ed45b287bb0648d8656e9419490b4069bc96c",
+        "modified": "2026-11-04T14:25:07.560574+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/source-index.md",
+        "sha256": "579986f02291276be7a294b36982536c35ca5d17d60227316e52dc0ba19dee33",
+        "modified": "2026-11-04T14:46:27.370230+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/source-engines.md",
+        "sha256": "8828c324ebea739a68e7565499fa47220adf1cff1d29e443f00a16a34240300c",
+        "modified": "2026-11-04T14:28:28.782182+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/source-xmind.md",
+        "sha256": "3c8381d233acc0b34f94e216ab9f650c13a1b87718195d2411ca64f63fb9d1a1",
+        "modified": "2026-11-04T14:28:28.785369+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/source-local.md",
+        "sha256": "a9f9e72ee5f63955eaf627a9c5d1365abe6e1c41b1228168cbc18d5928c0caf7",
+        "modified": "2026-11-04T14:25:58.629135+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/source-rendering.md",
+        "sha256": "aa890d0ed52bb508d4dcee4e42c9289a441bcc40cb4350e0ed1721a03b1bdab1",
+        "modified": "2026-11-04T14:33:54.158781+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/design-validation.md",
+        "sha256": "e9df5774e799160e10e383a402c5d431228d14fcaa2a339f46c429758bd482e0",
+        "modified": "2026-11-04T14:46:20.881597+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-01/draft.md",
+        "sha256": "8d4d21c3aed0e9c6253235a411f3b122bb6b44219b643131b3684c08880c0037",
+        "modified": "2026-11-04T14:48:45.971819+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-01/coverage.yaml",
+        "sha256": "d4e006d231230ecb5e70481bd39b7f3da2423b04f4972d0c1c6604a0dab3f5e1",
+        "modified": "2026-11-04T14:48:45.975514+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-01/review.md",
+        "sha256": "5282631db08c9779cd5ba377ccacd42067989b45b0c1450b30ea5330f9014757",
+        "modified": "2026-11-04T15:01:52.395335+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-01/revision.md",
+        "sha256": "9a46a778ce6831063542214757b1dab8103ab37d3c39e7c435bda59d61212c34",
+        "modified": "2026-11-04T14:48:45.976387+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-01/ui-concept.svg",
+        "sha256": "10b00faef75b22c2a3cb8d50e505fa1037851f8e54c57507cee0a4f926ae453b",
+        "modified": "2026-11-04T14:30:37.206799+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-01/ui-concept.png",
+        "sha256": "93c727eab733b0e95671033c6efb7d4ea7f0014d12249137421337b78ab46459",
+        "modified": "2026-11-04T14:30:38.111817+00:00"
+      }
+    ],
+    "verdict": "revise",
+    "accepted_findings": [
+      "R1-001"
+    ],
+    "hard_requirements_requiring_revision": [
+      "U-006",
+      "U-007",
+      "U-009",
+      "U-011"
+    ],
+    "decision_output": {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-01/decision.md",
+      "sha256": "cec50fe9e89bd48366828148eeb9c6738e670b1a84bebce1184849ce55b9a0fa",
+      "modified": "2026-11-04T15:03:48.688766+00:00"
+    }
+  }
+}

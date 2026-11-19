@@ -13,7 +13,7 @@
  * @packageDocumentation
  */
 
-import { database, notifications, settings } from 'treasure-sdk';
+import { database, notifications, settings } from '@luzenrocy/treasure-sdk';
 
 /** 提醒配置 */
 interface ReminderSettings {

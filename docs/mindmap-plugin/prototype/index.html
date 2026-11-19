@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>观象谱 · 交互原型</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="floating-controls.css">
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <div id="mindmap-app" class="app" tabindex="0" aria-label="观象谱工作台">
+    <div class="workspace">
+      <aside id="file-sidebar" class="file-sidebar" aria-label="左侧目录与大纲，鼠标移入展开"></aside>
+      <main id="main-region" class="main-region">
+        <div id="viewport" class="viewport" tabindex="0" aria-label="思维导图画布">
+          <svg id="map-svg" xmlns="http://www.w3.org/2000/svg" aria-label="当前思维导图"></svg>
+          <nav id="app-header" class="app-header" aria-label="工作台操作"></nav>
+          <div id="canvas-commands" class="canvas-commands"></div>
+          <div id="contextbar" class="contextbar" hidden></div>
+          <div id="view-controls" class="view-controls"></div>
+          <div id="canvas-status" class="canvas-status" aria-live="polite"></div>
+          <textarea id="inline-editor" class="inline-editor" aria-label="编辑主题文字" hidden></textarea>
+        </div>
+        <footer id="sheetbar" class="sheetbar" aria-label="画布列表"></footer>
+      </main>
+      <aside id="inspector" class="inspector" aria-label="属性面板" hidden></aside>
+    </div>
+    <div id="popover-host"></div>
+    <div id="overlay-host"></div>
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  </div>
+</body>
+</html>

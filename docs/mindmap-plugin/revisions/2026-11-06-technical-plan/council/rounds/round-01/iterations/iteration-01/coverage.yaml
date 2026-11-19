@@ -1,0 +1,99 @@
+version: 1
+document: draft.md
+iteration: round-01/iteration-01
+sdk_implementation_baseline: "treasure-sdk 2.1.1"
+coverage:
+  - id: U-001
+    status: covered
+    locations:
+      - "§1 结论与校对范围"
+      - "§2 已确认产品契约与旧方案更正"
+      - "§7 画布 / 大纲 / UI 实现契约"
+    evidence:
+      - "S-01 当前交互原型 README"
+      - "S-10 原型文件通路回归"
+    verification: "按§9第6、7项进行视觉、键盘和命令语义回归。"
+  - id: U-002
+    status: covered
+    locations:
+      - "§1 SDK 2.1.1 正式基线声明"
+      - "§3 SDK / 插件研发约束矩阵"
+      - "§9 分期、验收与发布门槛"
+    evidence:
+      - "S-04 Treasure 插件研发指南"
+      - "S-05 Treasure 宿主视觉参考"
+      - "S-06 treasure-sdk 2.1.1 类型声明"
+    verification: "锁定 SDK 2.1.1，执行类型检查、宿主注册调试、打包和发布清单。"
+  - id: U-003
+    status: covered
+    locations:
+      - "§1 第2项"
+      - "§2 原生文件"
+      - "§6 原生 .gxp、外部解析与兼容边界"
+    evidence:
+      - "S-03 观象谱命名决定"
+      - "S-01 当前交互原型 README"
+    verification: "检索格式流程，仅 .gxp 为可编辑与保存格式。"
+  - id: U-004
+    status: covered
+    locations:
+      - "§1 第3项"
+      - "§5.2 打开、预览、副本与保存"
+      - "§6 外部格式边界表"
+    evidence:
+      - "S-01 当前交互原型 README"
+      - "S-03 观象谱命名决定"
+    verification: "真实外部样本验证只读预览；编辑前创建 .gxp；检查没有外部回写调用。"
+  - id: U-005
+    status: covered
+    locations:
+      - "§2 左缘导航"
+      - "§7.1 布局、层级与状态"
+      - "§9 第6项"
+    evidence:
+      - "S-01 当前交互原型 README"
+      - "S-10 原型文件通路回归"
+    verification: "浏览器与宿主视觉回归：浮层覆盖画布、层级高于主菜单、无侧栏新建按钮。"
+  - id: U-006
+    status: covered
+    locations:
+      - "§3 文件打开、另存为/导出、SDK Result"
+      - "§5.2 打开、预览、副本与保存"
+    evidence:
+      - "S-02 文件适配器草案（仅调用形态）"
+      - "S-04 Treasure 插件研发指南"
+      - "S-06 treasure-sdk 2.1.1 类型声明"
+    verification: "宿主联调 openDialog/readFile 与 saveDialog/writeFile；取消不改变编辑会话。"
+  - id: U-007
+    status: covered
+    locations:
+      - "§2 视图与内容"
+      - "§7.2 命令语义"
+      - "§9 第7项"
+    evidence:
+      - "S-01 当前交互原型 README"
+      - "S-10 原型文件通路回归"
+    verification: "单元和浏览器场景分别验证修订、撤销栈、根主题、视图与脏状态。"
+  - id: U-008
+    status: covered
+    locations:
+      - "§2 顶层控制"
+      - "§7.1 布局、层级与状态"
+      - "§9 第6项"
+    evidence:
+      - "S-01 当前交互原型 README"
+    verification: "DOM/可访问性和视觉回归确认无顶部栏、主菜单无保存/导出、右上唯一入口。"
+  - id: U-009
+    status: covered
+    locations:
+      - "文档元数据"
+      - "§9 分期、验收与发布门槛"
+      - "§10 风险、待验证项与来源"
+    evidence:
+      - "requirements-ledger.yaml"
+      - "adaptive-contract.yaml"
+    verification: "检查独立 revision 路径、中文 Markdown、来源、风险、阶段与验收结构。"
+global_checks:
+  - "草稿将 SDK 2.1.1 明确为正式实现基线。"
+  - "草稿未将浏览器原型或适配器描述为真实格式解析或磁盘持久化。"
+  - "每个文件 SDK 操作均要求 Result 分支和 CANCELLED 不变式。"

@@ -1,0 +1,50 @@
+skill_snapshot:
+  loaded_at: "2026-10-16T07:50:55.616310+00:00"
+  files:
+    - path: "/Users/luzenrocy/.codex/skills/writing-workshop/SKILL.md"
+      sha256: "e6cc3f1c48dbf2ea813494ba519200324f096a2bbc1f8716197fa6f4eac5a000"
+      modified: "2026-10-15T03:46:45.819616+00:00"
+    - path: "/Users/luzenrocy/.codex/skills/writing-workshop/agents/openai.yaml"
+      sha256: "04c5df00f8de6d13e5aa744067323f5c41b18d002c1c60dc16ffea4ccfe37b67"
+      modified: "2026-10-15T03:46:45.817052+00:00"
+    - path: "/Users/luzenrocy/.codex/skills/writing-workshop/references/approval-protocol.md"
+      sha256: "9c250d9fc67185285d633cdfdfe5b7ccf922a5515d35128e990821f879091b33"
+      modified: "2026-10-15T03:46:45.813846+00:00"
+    - path: "/Users/luzenrocy/.codex/skills/writing-workshop/references/document-contracts.md"
+      sha256: "b94af9256e56a573ad88bd168485d676e3cd87e45119e00a74bb2e4f23eef942"
+      modified: "2026-10-15T03:46:45.815725+00:00"
+    - path: "/Users/luzenrocy/.codex/skills/writing-workshop/references/integration.md"
+      sha256: "0a800d8d718282aba5639ce71c9c3c082ac05687c3df06c194f93eb53629d8c5"
+      modified: "2026-10-15T03:46:45.812943+00:00"
+    - path: "/Users/luzenrocy/.codex/skills/writing-workshop/references/public-foundations.md"
+      sha256: "919bc7d382870a961fc3968a24f8dd96856ca553464c0adc1572c966a123e539"
+      modified: "2026-10-15T03:46:45.814830+00:00"
+    - path: "/Users/luzenrocy/.codex/skills/writing-workshop/references/requirements-ledger.md"
+      sha256: "676c676e0be2642986f21d8d1204db6a49092b032a22bd10a97d2861f5c07ca9"
+      modified: "2026-10-15T03:46:45.812454+00:00"
+    - path: "/Users/luzenrocy/.codex/skills/writing-workshop/references/review-rubric.md"
+      sha256: "216ca083b29c4214c4cee292968177b5ac89fc8c8a651245c6a90999ea8de75a"
+      modified: "2026-10-15T03:46:45.815221+00:00"
+    - path: "/Users/luzenrocy/.codex/skills/writing-workshop/references/role-profiles.md"
+      sha256: "e0c0dbfe43d9cd45d03b8badf0e41774354ce595499378469423e5ff96a8fd0f"
+      modified: "2026-10-15T03:46:45.813442+00:00"
+    - path: "/Users/luzenrocy/.codex/skills/writing-workshop/references/skill-reload.md"
+      sha256: "66641849bc20ae823cd64d790b1735aebc36c6ffded6cbd992b011c525f40b52"
+      modified: "2026-10-15T03:46:45.816251+00:00"
+    - path: "/Users/luzenrocy/.codex/skills/writing-workshop/references/type-adaptation.md"
+      sha256: "ccd7af8330640f51833b9876496a2188a6461493b7bc255fc2a4aed64e2fd13b"
+      modified: "2026-10-15T03:46:45.814327+00:00"
+
+contract_snapshot:
+  integration_mode: optional-overlay
+  skill_id: speckit-tasks
+  contract_source:
+    - "/Volumes/MacExtend/FrontProjects/treasure-plugins/.agents/skills/speckit-tasks/SKILL.md"
+    - "/Volumes/MacExtend/FrontProjects/treasure-plugins/.specify/templates/tasks-template.md"
+    - "/Volumes/MacExtend/FrontProjects/treasure-plugins/.specify/scripts/bash/setup-tasks.sh"
+  contract_version: "1ae03ee3aac56f19cac4cba8d51c672e4f50692f5a179f8fb65a035752e71592"
+  required_files: ["plan.md", "spec.md", "research.md", "data-model.md", "contracts/", "quickstart.md"]
+  format: "Markdown tasks list with checkbox, sequential IDs, story labels, exact file paths"
+  validation: "setup-tasks.sh --json; task format and rename scans; writing-workshop validate_council.py"
+  handoff_inputs: ["FEATURE_DIR", "TASKS_TEMPLATE_CONTENT", "existing tasks.md", "rename amendment"]
+  post_publish_action: "Run speckit-implement after human confirmation"

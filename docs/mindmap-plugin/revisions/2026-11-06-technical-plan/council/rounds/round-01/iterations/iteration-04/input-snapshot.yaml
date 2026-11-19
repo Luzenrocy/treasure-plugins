@@ -1,0 +1,14 @@
+round: 1
+iteration: 4
+role_inputs:
+  shared_rules: "../../../../rules-snapshot.yaml#a0231c87"
+  user_brief: "../../../../user-brief.md#92c3144b"
+  ledger: "../../../../requirements-ledger.yaml#7a540797"
+  contract: "../../../../adaptive-contract.yaml#e460f101"
+  sources: "../../../../source-index.md (S-01 through S-11)"
+  prior_draft: "../iteration-03/draft.md"
+  checker_decision: "../iteration-03/decision.md"
+role: writer-publication-revision
+freshness_checked_at: "2026-11-06T02:36:37Z"
+rule_change_detected: false
+notes: "GATE-001 through GATE-003 only; source index and manifest have been synchronised by the process owner."

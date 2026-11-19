@@ -98,7 +98,7 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
       '@drawing-panel': fileURLToPath(new URL('./src/components/DrawingDirectoryPanel.vue', import.meta.url)),
-      ...(existsSync(localSdkEntry) ? { 'treasure-sdk': localSdkEntry } : {}),
+      ...(existsSync(localSdkEntry) ? { '@luzenrocy/treasure-sdk': localSdkEntry } : {}),
     },
   },
   // Treasure 桌面端使用 tauri://localhost，需要跨域拉取调试插件的静态图标资源。

@@ -1,4 +1,4 @@
-import { files, directories, type DirectoryReference, type FileReference } from 'treasure-sdk';
+import { files, directories, type DirectoryReference, type FileReference } from '@luzenrocy/treasure-sdk';
 import { loadFromBlob, serializeAsJSON } from '@excalidraw/excalidraw';
 import type { AppState, BinaryFiles } from '@excalidraw/excalidraw/types';
 type CanvasElement = { id: string; [key: string]: unknown };

@@ -1,4 +1,4 @@
-import type { Result } from 'treasure-sdk';
+import type { Result } from '@luzenrocy/treasure-sdk';
 
 type Remove = (key: string) => Promise<Result<void>>;
 type Enqueue = (key: string, reason: string) => Promise<boolean>;

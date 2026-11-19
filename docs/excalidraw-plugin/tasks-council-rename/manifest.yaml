@@ -1,0 +1,50 @@
+document_id: "excalidraw-plugin-tasks-rename"
+title: "Treasure Excalidraw 插件重命名实施任务清单"
+document_type: "implementation task list amendment"
+locale: "zh-CN"
+owner: "Codex"
+created: 2026-10-16
+updated: 2026-10-16
+version: "0.1"
+status: published
+round_limit: 10
+current_round: 1
+roles:
+  writer:
+    profile: "任务清单修订作者"
+    rationale: "执行用户指定的最小名称/路径变更"
+  reviewer:
+    profile: "独立路径一致性与任务覆盖评审者"
+    rationale: "确认 feature 标识未变且任务结构完整"
+  approver:
+    profile: "修订交付审核者"
+    rationale: "确认候选可发布到原 tasks.md 目标"
+document_contract:
+  mode: hybrid
+  family: "normative"
+  label: "Treasure Excalidraw 插件重命名实施任务清单"
+  purpose: "将已发布任务清单中的插件项目目录从 excalidraw-plugin 统一修订为 excalidraw，并保持 feature 标识不变"
+  reader_job: "开发者能在新项目目录 excalidraw 中按原任务清单实施"
+  audience: ["插件开发者", "测试人员", "评审者", "产品负责人"]
+  medium: markdown
+  locale: zh-CN
+  tone: "直接、可追踪、最小变更"
+  evidence_style: "旧任务清单对照、全局路径扫描、任务格式检查"
+  required_sections: ["Setup", "Foundational", "User Stories", "Polish", "Dependencies & Execution Order", "Implementation Strategy"]
+  optional_sections: ["Rename impact note"]
+  forbidden_sections: ["修改 feature 标识", "新增功能范围", "删除原任务覆盖", "实现状态勾选"]
+  quality_checks: ["所有插件项目路径使用 excalidraw", "specs/004-excalidraw-plugin feature 路径保留", "任务 ID 和故事结构不变", "每项仍有准确路径和格式"]
+publication:
+  target_path: "specs/004-excalidraw-plugin/tasks.md"
+  target_path_source: external_contract
+  target_format: "markdown"
+  final_filename: "tasks.md"
+  overwrite_policy: replace_after_hitl
+artifacts:
+  artifact_root: "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/excalidraw-plugin"
+  council_path: "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/excalidraw-plugin/tasks-council-rename"
+integration_mode: optional-overlay
+target_skill: "speckit-tasks"
+contract_snapshot: rules-snapshot.yaml#contract_snapshot
+skill_snapshot: rules-snapshot.yaml#skill_snapshot
+sources: [S-001, S-002, S-003, S-004, S-005]

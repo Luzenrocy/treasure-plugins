@@ -79,9 +79,9 @@ npm run build:plugin:zip
 
 `npm run dev` 只启动可注册的插件开发服务。石玉录应在 Treasure 中通过“注册调试插件”完成所有调试；打包后可导入目录包或 ZIP 包。完整流程见 [插件研发指南](../docs/PLUGIN-DEVELOPMENT-GUIDE.md)。
 
-本插件要求 Treasure 2.0.0+。本地可验证工作区树、私有资产索引和错误处理；请人工验证原生文件/目录选择、重启后的授权、撤销授权、导出覆盖与回收站行为。
+本插件要求 Treasure 2.4.0+。本地可验证工作区树、私有资产索引和错误处理；请人工验证原生文件/目录选择、重启后的授权、撤销授权、导出覆盖与回收站行为。
 
-石玉录当前通过宿主内部 `treasure-menu-event` 接收原生菜单点击，因为 SDK 2.0 尚未公开类型化菜单事件订阅。该实现与 Treasure 2.0.0 宿主协议绑定；SDK 提供正式事件 API 后应优先迁移，不应复制到新的第三方插件。
+石玉录通过 SDK `menus.register` 注册原生菜单，并通过 SDK `menus.subscribe` 类型化订阅接收菜单点击，不再直接监听宿主内部消息（如 `treasure-menu-event`）。
 
 ## 关联文档
 

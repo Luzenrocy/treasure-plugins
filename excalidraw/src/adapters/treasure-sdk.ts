@@ -1,4 +1,4 @@
-import { directories, files, permissions, settings, storage, menus, type DirectoryReference, type FileReference, type Result as SdkResult, type DirectoryEntry, type MenuRegistration } from 'treasure-sdk';
+import { directories, files, permissions, settings, storage, menus, type DirectoryReference, type FileReference, type Result as SdkResult, type DirectoryEntry, type MenuRegistration } from '@luzenrocy/treasure-sdk';
 import { err, ok, sdkError, type Result } from '../domain/errors';
 
 export const WORKSPACE_KEY = 'workspace_dir';

@@ -7,7 +7,7 @@
  * 声明的表名列表：['tasks', 'tags', 'task_tags']
  */
 
-import { storage } from 'treasure-sdk';
+import { storage } from '@luzenrocy/treasure-sdk';
 import { compensateFailedAttachmentInsert, queueFailedAttachmentRemoval } from './attachmentCompensation';
 import { sdkBridge as bridge } from './sdkBridge';
 import type {

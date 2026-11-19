@@ -1,0 +1,23 @@
+round: 1
+ledger_version: 2
+entries:
+  - id: U-001
+    status: satisfied
+    draft_refs: ["重命名边界", "阶段 1", "阶段 2", "阶段 3-6", "任务路径"]
+    evidence: "所有实现、测试、README、构建和宿主证据路径使用 excalidraw；脚手架命令改为 npx treasure-sdk create excalidraw。"
+    verification: "全局扫描排除 specs/004-excalidraw-plugin 后的旧项目路径。"
+  - id: U-002
+    status: satisfied
+    draft_refs: ["全部阶段", "Dependencies & Execution Order", "Implementation Strategy"]
+    evidence: "保留原 41 个任务、US1-US3、依赖、并行机会、独立验收和 MVP 策略，只做路径替换和重命名说明。"
+    verification: "对照已发布 tasks.md 的 T001-T041 ID 和故事章节。"
+  - id: U-003
+    status: satisfied
+    draft_refs: ["重命名边界", "输入/目标路径"]
+    evidence: "feature 规格目录和目标路径继续是 specs/004-excalidraw-plugin，未变更为 specs/004-excalidraw。"
+    verification: "检查 feature refs、manifest publication 和任务输入路径。"
+  - id: U-004
+    status: satisfied
+    draft_refs: ["tasks-council-rename/rounds/round-01/*"]
+    evidence: "本轮保留 draft、review、revision、decision、coverage 和 input-snapshot，候选仅在 approve 后生成。"
+    verification: "运行 validate_council.py。"

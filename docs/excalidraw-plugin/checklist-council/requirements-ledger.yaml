@@ -1,0 +1,64 @@
+version: 1
+source_message: "user invocation 2026-10-18, active Codex task"
+entries:
+  - id: U-001
+    type: goal
+    verbatim: "[$speckit-checklist]"
+    normalized: "为当前 Excalidraw 功能生成需求质量清单，检查需求文本而不是实现行为。"
+    hardness: hard
+    priority: P0
+    acceptance: "清单包含完整性、清晰度、一致性、验收质量、场景/边界、非功能和依赖检查。"
+    verification: "审阅清单项目类型，确认没有实现测试措辞。"
+    owner: "Codex/需求评审者"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+  - id: U-002
+    type: scope
+    verbatim: "当前 Excalidraw 功能规格及最新菜单 API 方案"
+    normalized: "覆盖 FR-001..FR-028、SC-001..SC-011，并重点覆盖 SDK/宿主公共菜单能力、素材库、侧边导航和保留的首版绘图/导出边界。"
+    hardness: hard
+    priority: P0
+    acceptance: "关键功能和新增跨仓库边界均有需求质量检查项。"
+    verification: "对照 spec.md、plan.md、data-model.md、contracts/ 和 quickstart.md。"
+    owner: "需求评审者"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+  - id: U-003
+    type: must-not
+    verbatim: "checklist purpose: Unit Tests for English"
+    normalized: "不能把清单写成代码执行、UI 点击、API 返回或宿主运行测试；每项必须询问需求是否完整、清晰、一致、可度量或覆盖场景。"
+    hardness: hard
+    priority: P0
+    acceptance: "所有新增条目使用需求质量问句，并保持未勾选。"
+    verification: "检查条目措辞、勾选状态和引用。"
+    owner: "需求评审者"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+  - id: U-004
+    type: path
+    verbatim: "FEATURE_DIR/checklists/requirements-quality.md"
+    normalized: "不替换既有 reviewer-owned 清单，在 CHK048 后追加新条目。"
+    hardness: hard
+    priority: P0
+    acceptance: "既有内容保持不变，新增 ID 从 CHK049 连续递增。"
+    verification: "比较发布前后旧内容和 ID 序列。"
+    owner: "Codex/需求评审者"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+  - id: U-005
+    type: governance
+    verbatim: "constitution.md Principle VII"
+    normalized: "本 checklist 文档写作由 writing-workshop 的 writer、reviewer、approver 独立审查后发布；正文使用简体中文。"
+    hardness: hard
+    priority: P0
+    acceptance: "round-01 保存三角色工件，最终清单不含角色讨论。"
+    verification: "运行 validate_council.py 并检查决策文件。"
+    owner: "Codex/项目维护者"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+amendments: []

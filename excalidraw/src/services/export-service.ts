@@ -1,4 +1,4 @@
-import { files, type FileReference } from 'treasure-sdk';
+import { files, type FileReference } from '@luzenrocy/treasure-sdk';
 import { exportToBlob, exportToSvg } from '@excalidraw/excalidraw';
 import type { AppState, BinaryFiles } from '@excalidraw/excalidraw/types';
 type CanvasElement = { id: string; [key: string]: unknown };

@@ -1,4 +1,4 @@
-import { files } from 'treasure-sdk';
+import { files } from '@luzenrocy/treasure-sdk';
 
 export interface FileMetadata {
   fileName: string;

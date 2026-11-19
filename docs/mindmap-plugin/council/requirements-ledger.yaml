@@ -1,0 +1,238 @@
+version: 1
+source_message: "本次用户请求；原文见 user-brief.md"
+entries:
+  - id: U-001
+    type: goal
+    verbatim: "类似xmind 的思维导图的插件"
+    normalized: "形成类似 Xmind 的 Treasure 思维导图插件技术与 UI 决策方案"
+    hardness: hard
+    priority: P0
+    acceptance: "交付可供产品、设计和研发直接讨论的完整中文方案"
+    verification: "文档检查、来源核对、独立评审和审核"
+    owner: "Writing Workshop"
+    status: satisfied
+    document_refs: ["docs/mindmap-plugin/technical-ui-proposal.md §1 推荐路线与适用条件", "docs/mindmap-plugin/technical-ui-proposal.md §3 Xmind 功能参照与交付边界", "docs/mindmap-plugin/technical-ui-proposal.md §9 分阶段验证与验收", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/draft.md §1 推荐路线与适用条件；§3 Xmind 功能参照与交付边界；§9 分阶段验证与验收", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/draft.md §1 推荐路线与适用条件；§3 Xmind 功能参照与交付边界；§9 分阶段验证与验收"]
+    last_checked_round: 1
+    last_checked_iteration: 3
+  - id: U-002
+    type: must
+    verbatim: "支持xmind"
+    normalized: "明确 .xmind 的导入、可编辑范围、导出和往返保真边界"
+    hardness: hard
+    priority: P0
+    acceptance: "新旧格式、多 sheet、附件、降级报告与验证策略齐全"
+    verification: "文档检查、来源核对、独立评审和审核"
+    owner: "Writing Workshop"
+    status: satisfied
+    document_refs: ["docs/mindmap-plugin/technical-ui-proposal.md §5.1 识别与兼容等级", "docs/mindmap-plugin/technical-ui-proposal.md §5.2 新原生包的明确提案", "docs/mindmap-plugin/technical-ui-proposal.md §5.3 Xmind 语义映射与降级", "docs/mindmap-plugin/technical-ui-proposal.md §9.2 G2", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/draft.md §5.1 识别与兼容等级；§5.2 新原生包的明确提案；§5.3 Xmind 语义映射与降级；§9.2 G2", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/draft.md §5.1 识别与兼容等级；§5.2 新原生包的明确提案；§5.3 Xmind 语义映射与降级；§9.2 G2"]
+    last_checked_round: 1
+    last_checked_iteration: 3
+  - id: U-003
+    type: must
+    verbatim: ".smm等格式"
+    normalized: "明确 .smm 格式语义、原生保存和互通边界；给出其他格式优先级"
+    hardness: hard
+    priority: P0
+    acceptance: "说明格式识别、原生格式选择和其他格式支持矩阵"
+    verification: "文档检查、来源核对、独立评审和审核"
+    owner: "Writing Workshop"
+    status: satisfied
+    document_refs: ["docs/mindmap-plugin/technical-ui-proposal.md §5.1 识别与兼容等级", "docs/mindmap-plugin/technical-ui-proposal.md §5.2 新原生包的明确提案", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/draft.md §5.1 识别与兼容等级；§5.2 新原生包的明确提案", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/draft.md §5.1 识别与兼容等级；§5.2 新原生包的明确提案"]
+    last_checked_round: 1
+    last_checked_iteration: 3
+  - id: U-004
+    type: must
+    verbatim: "当前主流、流行的美观的图形方案"
+    normalized: "给出现代节点、连线、布局、主题和美观依据"
+    hardness: hard
+    priority: P0
+    acceptance: "有官方产品依据和可实现视觉规格，区分审美建议和市场事实"
+    verification: "文档检查、来源核对、独立评审和审核"
+    owner: "Writing Workshop"
+    status: satisfied
+    document_refs: ["docs/mindmap-plugin/technical-ui-proposal.md §3 产品参照", "docs/mindmap-plugin/technical-ui-proposal.md §8.2 节点、连线与布局", "docs/mindmap-plugin/technical-ui-proposal.md §8.3 设计 tokens 与可访问性", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/draft.md §3 产品参照；§8.2 节点、连线与布局；§8.3 设计 tokens 与可访问性", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/draft.md §3 产品参照；§8.2 节点、连线与布局；§8.3 设计 tokens 与可访问性"]
+    last_checked_round: 1
+    last_checked_iteration: 3
+  - id: U-005
+    type: must
+    verbatim: "各项功能 参考xmind 的实际功能实现"
+    normalized: "用 Xmind 官方资料映射实际功能、阶段与差距"
+    hardness: hard
+    priority: P0
+    acceptance: "不把查看器当编辑器，不暗示全功能同等实现"
+    verification: "文档检查、来源核对、独立评审和审核"
+    owner: "Writing Workshop"
+    status: satisfied
+    document_refs: ["docs/mindmap-plugin/technical-ui-proposal.md §3 Xmind 功能参照与交付边界", "docs/mindmap-plugin/technical-ui-proposal.md §4.1 代表性候选比较", "docs/mindmap-plugin/technical-ui-proposal.md §5.3 Xmind 语义映射与降级", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/draft.md §3 Xmind 功能参照与交付边界；§4.1 代表性候选比较；§5.3 Xmind 语义映射与降级", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/draft.md §3 Xmind 功能参照与交付边界；§4.1 代表性候选比较；§5.3 Xmind 语义映射与降级"]
+    last_checked_round: 1
+    last_checked_iteration: 3
+  - id: U-006
+    type: must
+    verbatim: "打开文件"
+    normalized: "定义打开、验证、失败与切换保护"
+    hardness: hard
+    priority: P0
+    acceptance: "打开失败不丢当前会话，异步乱序有处理"
+    verification: "文档检查、来源核对、独立评审和审核"
+    owner: "Writing Workshop"
+    status: satisfied
+    document_refs: ["docs/mindmap-plugin/technical-ui-proposal.md §7.2 操作合同", "docs/mindmap-plugin/technical-ui-proposal.md §9.3 必验场景", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/draft.md §7.2 操作合同；§9.3 必验场景", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/draft.md §7.2 操作合同；§9.3 必验场景"]
+    last_checked_round: 1
+    last_checked_iteration: 3
+  - id: U-007
+    type: must
+    verbatim: "关闭文件"
+    normalized: "定义关闭及未保存变更处理"
+    hardness: hard
+    priority: P0
+    acceptance: "保存/放弃/取消、失败保持会话"
+    verification: "文档检查、来源核对、独立评审和审核"
+    owner: "Writing Workshop"
+    status: satisfied
+    document_refs: ["docs/mindmap-plugin/technical-ui-proposal.md §7.2 操作合同", "docs/mindmap-plugin/technical-ui-proposal.md §9.3 必验场景", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/draft.md §7.2 操作合同；§9.3 必验场景", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/draft.md §7.2 操作合同；§9.3 必验场景"]
+    last_checked_round: 1
+    last_checked_iteration: 3
+  - id: U-008
+    type: must
+    verbatim: "重置画布"
+    normalized: "区分重置视图、重新布局和清空内容"
+    hardness: hard
+    priority: P0
+    acceptance: "入口文案与破坏性语义明确，可验证"
+    verification: "文档检查、来源核对、独立评审和审核"
+    owner: "Writing Workshop"
+    status: satisfied
+    document_refs: ["docs/mindmap-plugin/technical-ui-proposal.md §7.2 操作合同", "docs/mindmap-plugin/technical-ui-proposal.md §8.1 工作台布局", "docs/mindmap-plugin/technical-ui-proposal.md §9.3 必验场景", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/draft.md §7.2 操作合同；§8.1 工作台布局；§9.3 必验场景", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/draft.md §7.2 操作合同；§8.1 工作台布局；§9.3 必验场景"]
+    last_checked_round: 1
+    last_checked_iteration: 3
+  - id: U-009
+    type: must
+    verbatim: "删除文件"
+    normalized: "定义目录文件删除、当前文件和失败反馈"
+    hardness: hard
+    priority: P0
+    acceptance: "SDK 回收站能力与未保存保护、取消、列表更新明确"
+    verification: "文档检查、来源核对、独立评审和审核"
+    owner: "Writing Workshop"
+    status: satisfied
+    document_refs: ["docs/mindmap-plugin/technical-ui-proposal.md §6.2 宿主能力核对", "docs/mindmap-plugin/technical-ui-proposal.md §7.2 操作合同", "docs/mindmap-plugin/technical-ui-proposal.md §9.3 必验场景", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/draft.md §6.2 宿主能力核对；§7.2 操作合同；§9.3 必验场景", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/draft.md §6.2 宿主能力核对；§7.2 操作合同；§9.3 必验场景"]
+    last_checked_round: 1
+    last_checked_iteration: 3
+  - id: U-010
+    type: must
+    verbatim: "导出"
+    normalized: "给出可编辑文件及图片/文档导出范围和交互"
+    hardness: hard
+    priority: P0
+    acceptance: "格式矩阵、范围、降级、保存目标、失败路径明确"
+    verification: "文档检查、来源核对、独立评审和审核"
+    owner: "Writing Workshop"
+    status: satisfied
+    document_refs: ["docs/mindmap-plugin/technical-ui-proposal.md §5.1 兼容矩阵", "docs/mindmap-plugin/technical-ui-proposal.md §5.4 导出对话框", "docs/mindmap-plugin/technical-ui-proposal.md §7.2 操作合同", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/draft.md §5.1 兼容矩阵；§5.4 导出对话框；§7.2 操作合同", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/draft.md §5.1 兼容矩阵；§5.4 导出对话框；§7.2 操作合同"]
+    last_checked_round: 1
+    last_checked_iteration: 3
+  - id: U-011
+    type: must
+    verbatim: "增加文件目录（类似excalidraw 的绘图目录及其下的文件列表 点击文件列表中的文件可在画布打开文件）"
+    normalized: "左侧授权工作目录及文件列表，单击加载到画布"
+    hardness: hard
+    priority: P0
+    acceptance: "目录授权/恢复/刷新/点击切换/未保存保护/不可用状态完整"
+    verification: "文档检查、来源核对、独立评审和审核"
+    owner: "Writing Workshop"
+    status: satisfied
+    document_refs: ["docs/mindmap-plugin/technical-ui-proposal.md §7.1 左侧目录", "docs/mindmap-plugin/technical-ui-proposal.md §7.2 操作合同", "docs/mindmap-plugin/technical-ui-proposal.md §8.1 工作台布局", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/draft.md §7.1 左侧目录；§7.2 操作合同；§8.1 工作台布局；§9.3 必验场景", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/draft.md §7.1 左侧目录；§7.2 操作合同；§8.1 工作台布局；§9.3 必验场景"]
+    last_checked_round: 1
+    last_checked_iteration: 3
+  - id: U-012
+    type: must
+    verbatim: "充分调研当前主流思维导图使用的技术以及相关框架"
+    normalized: "比较专用思维导图库、图编辑框架、布局与渲染方案"
+    hardness: hard
+    priority: P0
+    acceptance: "官方一手来源、查阅日、许可证与维护状态，推荐和替代路径明确"
+    verification: "文档检查、来源核对、独立评审和审核"
+    owner: "Writing Workshop"
+    status: satisfied
+    document_refs: ["docs/mindmap-plugin/technical-ui-proposal.md §2 研究边界与本地基线", "docs/mindmap-plugin/technical-ui-proposal.md §4 候选技术、渲染和布局", "docs/mindmap-plugin/technical-ui-proposal.md §10 待确认问题与来源", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/draft.md §2 研究边界与本地基线；§4 候选技术、渲染和布局；§10 待确认问题与来源", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/draft.md §2 研究边界与本地基线；§4 候选技术、渲染和布局；§10 待确认问题与来源"]
+    last_checked_round: 1
+    last_checked_iteration: 3
+  - id: U-013
+    type: format
+    verbatim: "技术方案、ui设计方案"
+    normalized: "中文 Markdown 决策书，包含技术架构、UI线框/规格及可执行验证门槛"
+    hardness: hard
+    priority: P0
+    acceptance: "最终文档与独立评审流程齐全"
+    verification: "文档检查、来源核对、独立评审和审核"
+    owner: "Writing Workshop"
+    status: satisfied
+    document_refs: ["docs/mindmap-plugin/technical-ui-proposal.md 全文中文 Markdown、元数据", "docs/mindmap-plugin/technical-ui-proposal.md §6 应用架构与宿主接入", "docs/mindmap-plugin/technical-ui-proposal.md §8 UI 设计与图形规格", "docs/mindmap-plugin/technical-ui-proposal.md §9 分阶段验证与验收", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/draft.md 全文中文 Markdown、元数据；§6 应用架构与宿主接入；§8 UI 设计与图形规格；§9 分阶段验证与验收", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/draft.md 全文中文 Markdown、元数据；§6 应用架构与宿主接入；§8 UI 设计与图形规格；§9 分阶段验证与验收"]
+    last_checked_round: 1
+    last_checked_iteration: 3
+  - id: U-014
+    type: scope
+    verbatim: "我需要你充分调研…整理出…方案"
+    normalized: "本次交付调研与方案，不开展插件业务实现"
+    hardness: hard
+    priority: P0
+    acceptance: "不修改既有业务文件，不虚构已做 PoC 或跑分"
+    verification: "文档检查、来源核对、独立评审和审核"
+    owner: "Writing Workshop"
+    status: satisfied
+    document_refs: ["docs/mindmap-plugin/technical-ui-proposal.md 开篇研究范围", "docs/mindmap-plugin/technical-ui-proposal.md §2 研究边界与本地基线", "docs/mindmap-plugin/technical-ui-proposal.md §9.2 验证门槛", "docs/mindmap-plugin/technical-ui-proposal.md 结尾未实测声明", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/draft.md 开篇研究范围；§2 研究边界与本地基线；§9.2 验证门槛；结尾未实测声明", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/draft.md 开篇研究范围；§2 研究边界与本地基线；§9.2 验证门槛；结尾未实测声明"]
+    last_checked_round: 1
+    last_checked_iteration: 3
+  - id: U-015
+    type: fact
+    verbatim: "当前仓库 treasure-plugins"
+    normalized: "[Assumption A-01] 按当前仓库为 Treasure 插件设计，遵循 Vue/Vite/SDK 约束"
+    hardness: soft
+    priority: P1
+    acceptance: "引用本地 README 与源码，若宿主不同可替换适配层"
+    verification: "文档检查、来源核对、独立评审和审核"
+    owner: "Writing Workshop"
+    status: open
+    document_refs: ["docs/mindmap-plugin/technical-ui-proposal.md 开篇宿主假设", "docs/mindmap-plugin/technical-ui-proposal.md §2 研究边界与本地基线", "docs/mindmap-plugin/technical-ui-proposal.md §6.2 宿主能力核对", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/draft.md 开篇宿主假设；§2 研究边界与本地基线；§6.2 宿主能力核对", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/draft.md 开篇宿主假设；§2 研究边界与本地基线；§6.2 宿主能力核对"]
+    last_checked_round: 1
+    last_checked_iteration: 3
+  - id: U-016
+    type: open
+    verbatim: ".smm"
+    normalized: "[Assumption A-02] 默认指 SimpleMindMap 的 JSON .smm，其他 .smm 方言待真实样本确认"
+    hardness: soft
+    priority: P1
+    acceptance: "文档列明方言识别和用户后续样本验证，不阻塞调研"
+    verification: "文档检查、来源核对、独立评审和审核"
+    owner: "Writing Workshop"
+    status: open
+    document_refs: ["docs/mindmap-plugin/technical-ui-proposal.md §5.1 识别与兼容等级", "docs/mindmap-plugin/technical-ui-proposal.md §10 待确认问题与来源", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/draft.md §5.1 识别与兼容等级；§10 待确认问题与来源", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/draft.md §5.1 识别与兼容等级；§10 待确认问题与来源"]
+    last_checked_round: 1
+    last_checked_iteration: 3
+  - id: U-017
+    type: path
+    verbatim: "未指定交付路径"
+    normalized: "[Decision D-01] 默认发布到 docs/mindmap-plugin/technical-ui-proposal.md；过程单独放 council/"
+    hardness: soft
+    priority: P2
+    acceptance: "manifest 路径来源 default 并精确发布"
+    verification: "文档检查、来源核对、独立评审和审核"
+    owner: "Writing Workshop"
+    status: satisfied
+    document_refs: ["docs/mindmap-plugin/technical-ui-proposal.md 元数据 publication_path", "docs/mindmap-plugin/technical-ui-proposal.md §10 需求台账链接", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/draft.md 元数据 publication_path；§10 需求台账链接", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/draft.md 元数据 publication_path；§10 需求台账链接"]
+    last_checked_round: 1
+    last_checked_iteration: 3
+  - id: U-018
+    type: scope
+    verbatim: "类似xmind"
+    normalized: "[Decision D-02] AI、多人实时协作、云同步作为未来扩展，不自动列入首版必做"
+    hardness: soft
+    priority: P2
+    acceptance: "明确属于本方案建议阶段划分，并非用户已同意删减需求"
+    verification: "文档检查、来源核对、独立评审和审核"
+    owner: "Writing Workshop"
+    status: satisfied
+    document_refs: ["docs/mindmap-plugin/technical-ui-proposal.md §1 阶段划分声明", "docs/mindmap-plugin/technical-ui-proposal.md §9.1 建议阶段，不承诺工期", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/draft.md §1 阶段划分声明；§9.1 建议阶段，不承诺工期", "docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/draft.md §1 阶段划分声明；§9.1 建议阶段，不承诺工期"]
+    last_checked_round: 1
+    last_checked_iteration: 3
+amendments: []

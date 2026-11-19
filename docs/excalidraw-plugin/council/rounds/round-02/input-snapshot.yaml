@@ -1,0 +1,6 @@
+rules_snapshot: docs/excalidraw-plugin/council/rules-snapshot.yaml
+ledger_version: 1
+contract_snapshot: docs/excalidraw-plugin/council/rules-snapshot.yaml#contract_snapshot
+source_spec: specs/004-excalidraw-plugin/spec.md
+reuse_previous_published_spec: true
+feature_context_update: .specify/feature.json -> specs/004-excalidraw-plugin

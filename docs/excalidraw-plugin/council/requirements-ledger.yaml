@@ -1,0 +1,157 @@
+version: 1
+source_message: "user turn 2026-10-15, active Codex task"
+entries:
+  - id: U-001
+    type: goal
+    verbatim: "使用 https://github.com/excalidraw/excalidraw 开发一款适配treasure的绘图插件"
+    normalized: "为 Treasure 提供一个基于 Excalidraw 的独立绘图插件"
+    hardness: hard
+    priority: P0
+    acceptance: "形成可进入计划阶段的独立 Excalidraw 插件规格"
+    verification: "规格包含架构、功能、约束和可验收成功标准"
+    owner: "用户/项目维护者"
+    status: satisfied
+    document_refs: ["docs/excalidraw-plugin/council/rounds/round-01/draft.md"]
+    last_checked_round: 1
+  - id: U-002
+    type: must
+    verbatim: "支持如 https://excalidraw.com/ 页面的主体的绘图功能"
+    normalized: "首版覆盖本地核心编辑器、文件管理、官方素材库和图片导出；不包含实时协作、账户、分享链接和云端同步"
+    hardness: hard
+    priority: P0
+    acceptance: "规格明确核心工具、画布操作、编辑状态和不纳入范围"
+    verification: "功能需求与验收场景可逐项演示"
+    owner: "用户/产品负责人"
+    status: satisfied
+    document_refs: ["docs/excalidraw-plugin/council/rounds/round-01/draft.md"]
+    last_checked_round: 1
+  - id: U-003
+    type: must
+    verbatim: "增加系统参数文件路径 支持从该路径查看、编辑绘图文件，还有在该路径新建、删除绘图文件的功能"
+    normalized: "使用单一系统设置绘图目录，显式保存，并在未保存、外部修改或同名文件时要求确认"
+    hardness: hard
+    priority: P0
+    acceptance: "目录配置、授权、文件列表、打开/保存、新建和删除都有成功、取消、失败场景"
+    verification: "在 Treasure 宿主中使用 SDK 目录引用完成端到端演示"
+    owner: "用户/产品负责人"
+    status: satisfied
+    document_refs: ["docs/excalidraw-plugin/council/rounds/round-01/draft.md"]
+    last_checked_round: 1
+  - id: U-004
+    type: must
+    verbatim: "支持从官方素材库安装、导入并使用素材的功能"
+    normalized: "接入官方素材库并将已安装素材持久保存到插件私有存储，重启后可离线使用"
+    hardness: hard
+    priority: P1
+    acceptance: "用户能从素材库选择素材，完成安装/导入并将其插入画布"
+    verification: "网络成功、取消、不可达和素材格式错误均有可验收结果"
+    owner: "用户/产品负责人"
+    status: satisfied
+    document_refs: ["docs/excalidraw-plugin/council/rounds/round-01/draft.md"]
+    last_checked_round: 1
+  - id: U-005
+    type: must
+    verbatim: "支持导出图片的功能(最好能和 https://excalidraw.com/ 的导出图片的功能一致)"
+    normalized: "首版支持 PNG/SVG、全画布/选区和透明背景；JPEG/WebP、剪贴板及倍率调整延后"
+    hardness: hard
+    priority: P1
+    acceptance: "规格明确导出格式、范围、背景/透明度、失败和保存位置"
+    verification: "可在宿主中导出并打开目标图片"
+    owner: "用户/产品负责人"
+    status: satisfied
+    document_refs: ["docs/excalidraw-plugin/council/rounds/round-01/draft.md"]
+    last_checked_round: 1
+  - id: U-006
+    type: constraint
+    verbatim: "相关文档使用中文，如frs 等"
+    normalized: "本功能的需求、规格、计划、任务和验收文档使用简体中文，技术标识可保留原文"
+    hardness: hard
+    priority: P1
+    acceptance: "交付文档正文、标题和说明以简体中文呈现，并保留术语可追溯性"
+    verification: "中文文档审查"
+    owner: "项目维护者"
+    status: satisfied
+    document_refs: [".specify/memory/constitution.md#VI. Chinese Project Documentation（中文项目文档）"]
+    last_checked_round: 1
+  - id: U-007
+    type: open
+    verbatim: "当前 active feature spec 仍是 003-prototype-source-parity"
+    normalized: "为 Excalidraw 创建新的独立 feature spec，而不是修改现有 JSON/Text Diff 规格"
+    hardness: hard
+    priority: P0
+    acceptance: "规格发布路径固定为 specs/004-excalidraw-plugin/spec.md"
+    verification: "用户确认新规格路径"
+    owner: "用户/项目维护者"
+    status: satisfied
+    document_refs: ["specs/004-excalidraw-plugin/spec.md"]
+    last_checked_round: 1
+  - id: U-008
+    type: constraint
+    verbatim: "A：仍直接集成官方 Excalidraw 编辑器代码"
+    normalized: "插件直接集成官方 @excalidraw/excalidraw 编辑器；Vue 页面通过适配层连接 Treasure SDK"
+    hardness: hard
+    priority: P0
+    acceptance: "候选规格明确官方编辑器为画布实现，排除远程 iframe 和自研替代实现"
+    verification: "审查依赖、构建产物和运行时边界"
+    owner: "用户/项目维护者"
+    status: satisfied
+    document_refs: ["docs/excalidraw-plugin/council/rounds/round-01/draft.md"]
+    last_checked_round: 1
+  - id: U-009
+    type: constraint
+    verbatim: "A：PNG/SVG + 全画布/选区 + 透明背景（推荐）"
+    normalized: "首版导出支持 PNG、SVG、全画布或选区及透明背景；JPEG/WebP、剪贴板和倍率调整延后"
+    hardness: hard
+    priority: P1
+    acceptance: "规格和验收场景覆盖两种格式、两种范围和透明背景开关"
+    verification: "FR-013–FR-016 与 SC-004"
+    owner: "用户/项目维护者"
+    status: satisfied
+    document_refs: ["specs/004-excalidraw-plugin/spec.md"]
+    last_checked_round: 1
+  - id: U-010
+    type: constraint
+    verbatim: "A：`.excalidraw` 是唯一绘图文件；`.excalidrawlib` 仅用于素材导入（推荐）"
+    normalized: "绘图目录只管理 .excalidraw 场景文件，.excalidrawlib 进入插件私有素材库后用于插入画布"
+    hardness: hard
+    priority: P1
+    acceptance: "文件列表、打开/保存和格式校验只针对 .excalidraw；素材导入单独验证 .excalidrawlib"
+    verification: "FR-006、FR-010、DrawingFile、LibraryItem/LibraryBundle"
+    owner: "用户/项目维护者"
+    status: satisfied
+    document_refs: ["specs/004-excalidraw-plugin/spec.md"]
+    last_checked_round: 1
+amendments:
+  - id: A-008
+    supersedes: U-010
+    user_text: "A：`.excalidraw` 是唯一绘图文件；`.excalidrawlib` 仅用于素材导入（推荐）"
+    effective_round: 1
+  - id: A-007
+    supersedes: U-005
+    user_text: "A：PNG/SVG + 全画布/选区 + 透明背景（推荐）"
+    effective_round: 1
+  - id: A-006
+    supersedes: U-004
+    user_text: "A：持久保存到插件私有存储并支持离线使用（推荐）"
+    effective_round: 1
+  - id: A-005
+    supersedes: U-003
+    user_text: "A：单一配置目录 + 显式保存 + 未保存/冲突确认（推荐）"
+    effective_round: 1
+  - id: A-004
+    supersedes: A-003
+    user_text: "A：仍直接集成官方 @excalidraw/excalidraw 编辑器代码"
+    effective_round: 1
+  - id: A-003
+    supersedes: U-008
+    user_text: "C：在 Vue 中重新实现 Excalidraw 画布功能（后经确认改为 A）"
+    effective_round: 1
+    status: superseded
+  - id: A-002
+    supersedes: U-002
+    user_text: "A：本地核心编辑器 + 文件/素材库/导出（推荐）"
+    effective_round: 1
+  - id: A-001
+    supersedes: U-007
+    user_text: "A：新建 specs/004-excalidraw-plugin/spec.md（推荐）"
+    effective_round: 1

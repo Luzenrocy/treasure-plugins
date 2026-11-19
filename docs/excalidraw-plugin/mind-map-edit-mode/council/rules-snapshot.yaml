@@ -1,0 +1,12 @@
+skill_snapshot:
+  loaded_at: "2026-11-02T13:32:12+08:00"
+  files:
+    - path: "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/SKILL.md"
+      sha256: "a0231c87b27fab4341ce02fb3413d1aaf0f0b8ef4e53902f7f561f9d8bd6c63d"
+      modified_epoch: 1793091092
+    - path: "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/agents/openai.yaml"
+      sha256: "4249082cc69c459fd664df91e75bf51b1761b9cc782c7da9ca7cfa7cb8f2d69b"
+      modified_epoch: 1793091092
+    - path: "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/references/{requirements-ledger,type-adaptation,process-artifacts,role-profiles,review-rubric,approval-protocol,skill-reload,document-contracts}.md"
+      sha256: "参见本轮加载日志；全部 modified_epoch=1793091092"
+      modified_epoch: 1793091092

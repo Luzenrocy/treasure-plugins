@@ -1,0 +1,10 @@
+round: 3
+rules_snapshot: docs/excalidraw-plugin/tasks-council/rules-snapshot.yaml
+ledger_version: 3
+contract_snapshot: docs/excalidraw-plugin/tasks-council/rules-snapshot.yaml#contract_snapshot
+feature_spec: specs/004-excalidraw-plugin/spec.md
+plan: specs/004-excalidraw-plugin/plan.md
+quickstart: specs/004-excalidraw-plugin/quickstart.md
+tasks: specs/004-excalidraw-plugin/tasks.md
+branch: 004-excalidraw-plugin
+amendment: "根据分析反馈修订官方 API 门、素材本地回退、计划结构、工具矩阵、性能说明、测试命令和历史证据。"

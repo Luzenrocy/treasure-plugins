@@ -1,0 +1,54 @@
+contract_id: native-and-naming-v1
+version: 1
+effective_date: 2026-11-05
+document_contract:
+  mode: hybrid
+  family: record
+  label: "设计决策与命名候选"
+  purpose: "以清晰的修订记录确认外部文件只读边界，供用户比较仿古命名与相应原生后缀。"
+  reader_job: "确认SMM/Xmind与原生工作文件的分工，并从六组候选中选择名称与后缀。"
+  audience: ["产品负责人", "插件研发"]
+  medium: markdown
+  locale: zh-CN
+  tone: "简洁、具体，尊重用户命名逻辑，避免生造典故与公文式铺陈。"
+  evidence_style: "古籍原文短引并就近链接；现代产品寓意单独标明；用户命名自述为权威意图；实现状态以原型README为界。"
+  risk_level: low
+  required_sections:
+    - "修订结论与适用范围：对旧文冲突给出优先级"
+    - "外部来源与原生工作文件：只读、创建副本、保存及失败边界"
+    - "命名方法：古义/古制到产品寓意再到载体字"
+    - "六组名称与后缀候选：出处、解释、优缺点、repo slug与文件例"
+    - "推荐次序与待选项：推荐不等于最终选择"
+    - "落地核对：可观察场景、模拟边界与待选择项"
+  optional_sections: ["简短版本记录"]
+  forbidden_sections:
+    - "通用PRD章节、与本次修订无关的技术栈重选"
+    - "未经用户选择即宣布正式名称或正式后缀"
+    - "商标、唯一性或其他软件兼容性的保证"
+    - "将现代思维导图含义伪装为古籍原义"
+    - "写作过程、角色辩论、未解决的council审稿意见"
+  terminology:
+    external_source: "外部来源文件（.smm / .xmind），只读"
+    native_work_file: "原生工作文件，承载本插件编辑结果，单/多画布共用"
+    editable_copy: "创建可编辑副本：转换已支持内容到独立原生工作文件"
+    sheet: "画布（sheet）"
+    placeholder: ".treasuremind，仅历史原型占位"
+  quality_checks:
+    - "逐条覆盖U-001至U-006；候选选择不阻塞当前只读边界确认"
+    - "第一处修改前创建副本；没有SMM原地写回或第二张画布转换门槛"
+    - "六候选含优缺点、载体字解释、可核验来源及现代取意边界"
+    - "后缀匹配 ^\\.[a-z]+$；repo slug为全名拼音小写分词"
+    - "单图与多图使用同一原生格式；后缀不代替schema验证"
+    - "明确新修订优先级；历史批准文档保留；原型模拟能力不升级为落地承诺"
+    - "元数据完整，链接在正式publication位置成立，正文可独立阅读"
+  selected_lenses:
+    - "record/decision：比较选项、推荐理由、后果与待选项，符合用户决策任务。"
+    - "normative：只对文件生命周期列明确边界与可观察核对。"
+    - "reference：统一展示候选名、后缀、repo slug与文件实例。"
+  output_format: "UTF-8 Markdown with YAML frontmatter"
+  source: inferred
+publication:
+  target_path: "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/revisions/2026-11-05-native-and-naming/proposal.md"
+  status_in_artifact: "候选待选"
+  approval_meaning: "AI批准代表文档满足请求，可发布供选择；不代表用户已选定产品名。"
+integration_mode: none

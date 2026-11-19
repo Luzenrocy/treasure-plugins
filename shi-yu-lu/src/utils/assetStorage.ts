@@ -1,4 +1,4 @@
-import { directories, files, logs, type DirectoryReference } from 'treasure-sdk';
+import { directories, files, logs, type DirectoryReference } from '@luzenrocy/treasure-sdk';
 import { workspace } from './workspace';
 
 const ASSET_ALIAS = '@assets';
@@ -98,7 +98,7 @@ export async function readAssetAsObjectUrl(_root: string, _markdown: string, url
     previewTrace('error', 'asset-directory-unavailable', { name, error: error instanceof Error ? error.message : String(error) });
     return null;
   }
-  let file: import('treasure-sdk').FileReference | undefined;
+  let file: import('@luzenrocy/treasure-sdk').FileReference | undefined;
   try { file = await assetFile(directory, name); } catch (error) {
     previewTrace('error', 'asset-directory-list-failed', { name, directoryId: directory.id, error: error instanceof Error ? error.message : String(error) });
     return null;
@@ -126,7 +126,18 @@ export async function writeAssetMetadata(name: string, data: Uint8Array): Promis
   if (!result.ok) throw new Error(result.error.message);
 }
 export async function removeAssetFile(name: string): Promise<void> {
-  const directory = await assetDirectory(); const result = await directories.remove({ directory, name }); if (!result.ok) throw new Error(result.error.message);
+  const directory = await assetDirectory();
+  // 删除附件的语义是“确保不存在”。保存队列已经避免了常规并发；这里再
+  // 处理跨进程或旧队列遗留的竞态，让一次已完成的删除不再显示为失败。
+  if (!await assetFile(directory, name)) return;
+  const result = await directories.remove({ directory, name });
+  if (!result.ok && !isMissingAssetError(result.error.message)) throw new Error(result.error.message);
+}
+
+function isMissingAssetError(message: string): boolean {
+  // macOS NSFileNoSuchFileError 为 NSCocoaErrorDomain code 4；其他平台或
+  // 宿主实现使用常见的“not found”措辞。这里只在清理附件的幂等路径中使用。
+  return /NSCocoaErrorDomain[\s\S]*\bcode:\s*4\b|no such file|not found|文件不存在/i.test(message);
 }
 /** Data URLs have no browser resource to revoke; document changes only clear the cache. */
 export function clearAssetPreviewCache() { previewUrlCache.clear(); }

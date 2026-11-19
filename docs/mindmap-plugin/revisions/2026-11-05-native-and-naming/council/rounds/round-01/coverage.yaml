@@ -1,0 +1,36 @@
+round: 1
+iteration: 1
+ledger_version: 1
+contract_id: native-and-naming-v1
+draft: rounds/round-01/iterations/iteration-01/draft.md
+entries:
+  - id: U-001
+    status: satisfied
+    document_refs: ["1 修订结论与适用范围", "2 外部来源与原生工作文件", "6 落地核对"]
+    evidence: "两外部格式统一只读；第一处修改前创建原生副本；新建/单图/多图/保存/取消/失败均说明；不要求外部写出。"
+    verification: "Writer inspected lifecycle table and failure paths; implementation verification remains separate."
+  - id: U-002
+    status: satisfied
+    document_refs: ["3 命名方法", "4 六组名称与后缀候选"]
+    evidence: "保留用户说明的石玉、录、考成、策思路；明确古义或古制→现代用途→载体字。"
+    verification: "Compared with immutable brief; plugin purpose corroborated by S-008/S-009."
+  - id: U-003
+    status: satisfied
+    document_refs: ["4 A–F", "5 推荐次序与待选项"]
+    evidence: "六个不同候选均解释古义、现代寓意、优势与取舍；会通图首推，其他五项有排序。"
+    verification: "Counted six distinct names and six paired benefit/tradeoff records."
+  - id: U-004
+    status: satisfied
+    document_refs: ["4 名称、项目目录与文件实例", "5 推荐次序与待选项"]
+    evidence: "六组后缀为小写ASCII；项目目录均全名拼音；每组单/多画布实例相同后缀，尚未选择。"
+    verification: "Inspect all six table rows; naming choice distinguished from physical schema."
+  - id: U-005
+    status: satisfied
+    document_refs: ["4 A–F"]
+    evidence: "每项古文短引就近链接；纲目图注明取意重组；经纬/观象明确历史语境与现代引申。"
+    verification: "Exact text checked against S-004/S-005/S-006/S-007 on 2026-11-05."
+  - id: U-006
+    status: satisfied
+    document_refs: ["metadata", "1 修订结论与适用范围", "4 comparison table", "5 推荐次序与待选项", "6 落地核对"]
+    evidence: "状态候选待选；推荐不等于选定；无唯一/商标保证；.treasuremind仅历史占位；明确修订优先级，旧文保留。"
+    verification: "No publication performed; prior approved proposal/council not edited by writer."

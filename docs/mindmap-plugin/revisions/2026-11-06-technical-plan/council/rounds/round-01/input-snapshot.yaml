@@ -1,0 +1,6 @@
+round: 1
+iteration: 5
+role: writer-clean-final
+freshness_checked_at: "2026-11-06T02:36:37Z"
+rule_change_detected: false
+inputs: ["user-brief.md", "requirements-ledger.yaml", "adaptive-contract.yaml", "source-index.md", "manifest.yaml", "iteration-04/draft.md", "iteration-04/decision.md"]

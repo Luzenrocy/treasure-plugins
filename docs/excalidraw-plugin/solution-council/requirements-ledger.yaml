@@ -1,0 +1,160 @@
+version: 1
+source_message: "2026-10-29 用户请求 + 同一会话中的 Excalidraw 调研上下文"
+entries:
+  - id: U-001
+    type: goal
+    verbatim: "出一份技术方案"
+    normalized: "交付一份面向研发评审的技术设计方案，不实施代码修改。"
+    hardness: hard
+    priority: P0
+    acceptance: "存在可阅读的 Markdown 技术方案文件，覆盖所有 U-002 至 U-010。"
+    verification: "检查最终文件和覆盖矩阵。"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+    last_checked_iteration: 0
+  - id: U-002
+    type: must
+    verbatim: "将画布右上角素材库按钮(sidebar-trigger__label-element ) 这一前端元素删除或隐藏"
+    normalized: "隐藏官方内置素材库入口，并说明采用的稳定性策略。"
+    hardness: hard
+    priority: P0
+    acceptance: "方案明确当前版本没有稳定 library UIOptions 开关，并给出隐藏、替换和升级风险。"
+    verification: "检查‘可行性与决策’及‘风险’章节。"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+    last_checked_iteration: 0
+  - id: U-003
+    type: must
+    verbatim: "在素材库按钮所在元素（layer-ui__wrapper__top-right zen-mode-transition）新增一个类似素材库的按钮，该按钮命名为素材库"
+    normalized: "通过官方公开扩展点或宿主 UI 添加顶部右侧‘素材库’按钮，不再依赖左侧常驻菜单。"
+    hardness: hard
+    priority: P0
+    acceptance: "方案给出按钮挂载点、交互状态、可访问性和与原生布局的关系。"
+    verification: "检查架构和 UI 集成章节。"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+    last_checked_iteration: 0
+  - id: U-004
+    type: must
+    verbatim: "点击按钮打开右侧抽屉，抽屉标题为素材库"
+    normalized: "点击自定义按钮在不离开画布的情况下打开右侧抽屉，标题为素材库。"
+    hardness: hard
+    priority: P0
+    acceptance: "方案定义抽屉状态、关闭/返回、空态和错误态。"
+    verification: "检查交互流程图与状态模型。"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+    last_checked_iteration: 0
+  - id: U-005
+    type: must
+    verbatim: "素材库数据从素材库url获取"
+    normalized: "素材库 URL 来自系统设置，默认为指定官方 URL，并定义请求、校验、缓存和失败策略。"
+    hardness: hard
+    priority: P0
+    acceptance: "方案包含配置键、默认值、响应契约、超时/缓存/错误处理。"
+    verification: "检查配置与可靠性章节。"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+    last_checked_iteration: 0
+  - id: U-006
+    type: must
+    verbatim: "支持安装（未安装的）卸载（已安装的）功能"
+    normalized: "每个素材条目根据本地安装索引显示安装或卸载，并保证幂等及状态一致。"
+    hardness: hard
+    priority: P0
+    acceptance: "方案定义安装/卸载状态机、重复操作、失败补偿和版本冲突策略。"
+    verification: "检查素材库领域模型与错误矩阵。"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+    last_checked_iteration: 0
+  - id: U-007
+    type: must
+    verbatim: "安装则安装到本地素材库目录 卸载则从本地素材库删除 本地素材库目录默认为 treasure app 插件默认的app目录下创建"
+    normalized: "默认把素材包保存在插件私有数据区的 libraries/ 命名空间；如需用户可见目录，必须另设目录设置与授权，不能伪造绝对路径。卸载使用 SDK remove 语义。"
+    hardness: hard
+    priority: P0
+    acceptance: "方案区分 private storage 与用户授权目录，给出默认策略和切换条件。"
+    verification: "检查存储边界、安全章节和开放问题。"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+    last_checked_iteration: 0
+  - id: U-008
+    type: must
+    verbatim: "新增系统参数 素材库 默认https://libraries.excalidraw.com/libraries.json"
+    normalized: "在 Treasure 系统设置注册字符串参数 `library_url`（显示名素材库）并提供该默认值。"
+    hardness: hard
+    priority: P0
+    acceptance: "方案给出 manifest/设置注册、读取、变更生效和安全校验。"
+    verification: "检查设置契约章节。"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+    last_checked_iteration: 0
+  - id: U-009
+    type: must
+    verbatim: "画布左上角的按钮 点击后的菜单中 隐藏或去掉 打开、保存到 这两个按钮; excalidraw links 或隐藏，改为限制绘图目录下的 文件列表"
+    normalized: "使用 UIOptions 隐藏 Open/Save to/Excalidraw links 等不适配入口；以 Treasure 绘图目录文件列表替代，且不引入左侧常驻菜单。"
+    hardness: hard
+    priority: P0
+    acceptance: "方案说明每个 native action 的隐藏方式、绘图目录来源、文件列表与打开/保存流程。"
+    verification: "检查 UIOptions 映射、文件列表设计和原生能力保留章节。"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+    last_checked_iteration: 0
+  - id: U-010
+    type: must
+    verbatim: "要求定高 支持滚动 滚动条按插件研发指南的样式操作"
+    normalized: "文件列表使用固定高度容器、内部滚动和插件研发指南定义的滚动条视觉规范。"
+    hardness: hard
+    priority: P1
+    acceptance: "方案给出尺寸策略、键盘/触屏可用性和滚动条样式来源。"
+    verification: "检查 UI 规范与可访问性章节。"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+    last_checked_iteration: 0
+  - id: U-011
+    type: must-not
+    verbatim: "仅需给出调研结果 无需考虑研发任务" 
+    normalized: "文档不得变成任务拆分、排期或代码提交计划；可包含实现边界、接口和验收性质的设计约束。"
+    hardness: hard
+    priority: P0
+    acceptance: "无 sprint/task checklist；内容聚焦方案、决策、接口和风险。"
+    verification: "检查最终文档结构。"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+    last_checked_iteration: 0
+  - id: U-012
+    type: source-fact
+    verbatim: "先确定在UIOptions增加自定义元素的可行性"
+    normalized: "必须先给出 UIOptions 可行性结论：其负责动作可见性，顶部自定义按钮应使用 renderTopRightUI 等公开扩展点；不能宣称 UIOptions 支持任意元素。"
+    hardness: hard
+    priority: P0
+    acceptance: "方案先呈现可行性结论，再呈现备选实现。"
+    verification: "检查第一决策章节和官方 API 引用。"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+    last_checked_iteration: 0
+  - id: U-013
+    type: fact
+    verbatim: "Treasure SDK 的公开 API 受控且不暴露绝对路径"
+    normalized: "文件、目录、私有存储和系统设置设计必须遵守 Result<T>、引用、授权和相对 key 约束。"
+    hardness: hard
+    priority: P0
+    acceptance: "方案中的接口不出现绝对路径、内部 action 或未公开 API。"
+    verification: "检查 SDK 边界和安全章节。"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+    last_checked_iteration: 0
+amendments: []

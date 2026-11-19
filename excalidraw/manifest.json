@@ -1,12 +1,12 @@
 {
-  "name": "excalidraw",
+  "name": "excalidraw-k67ixt",
   "alias": "Excalidraw",
   "version": "1.0.0",
   "description": "Treasure 本地 Excalidraw 绘图插件",
   "author": "Treasure Plugins",
   "icon": "icon.png",
   "entry": "index.html",
-  "minPlatformVersion": "2.3.0",
+  "minPlatformVersion": "1.0.0",
   "menu": {
     "name": "Excalidraw",
     "icon": "public/assets/excalidraw-menu.svg",

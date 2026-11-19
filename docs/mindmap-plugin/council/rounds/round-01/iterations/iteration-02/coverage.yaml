@@ -1,0 +1,242 @@
+{
+  "ledger_version": 1,
+  "round": 1,
+  "iteration": 2,
+  "role": "writer",
+  "checked_at": "2026-11-04T15:09:37.234166+00:00",
+  "status_semantics": "satisfied means proposal-document coverage only; it does not mean plugin implementation or PoC passed.",
+  "entries": [
+    {
+      "id": "U-001",
+      "status": "satisfied",
+      "document_refs": [
+        "§1 推荐路线与适用条件",
+        "§3 Xmind 功能参照与交付边界",
+        "§9 分阶段验证与验收"
+      ],
+      "evidence": "给出优先候选、采用门槛、替代路线与完整工作台方案；目标是可实施的决策书。 iteration-02复核：本项内容与首稿一致。",
+      "verification": "writer iteration-02 document/source inspection; independent reviewer/checker pending",
+      "last_checked_round": 1,
+      "last_checked_iteration": 2
+    },
+    {
+      "id": "U-002",
+      "status": "satisfied",
+      "document_refs": [
+        "§5.1 识别与兼容等级",
+        "§5.2 新原生包的明确提案",
+        "§5.3 Xmind 语义映射与降级",
+        "§9.2 G2"
+      ],
+      "evidence": "区分JSON/XML族、R/E/W/RT；全sheet原生包重开；图片附件和高级语义保留/降级；禁止静默覆盖。 iteration-02复核：本项内容与首稿一致。",
+      "verification": "writer iteration-02 document/source inspection; independent reviewer/checker pending",
+      "last_checked_round": 1,
+      "last_checked_iteration": 2
+    },
+    {
+      "id": "U-003",
+      "status": "satisfied",
+      "document_refs": [
+        "§5.1 识别与兼容等级",
+        "§5.2 新原生包的明确提案"
+      ],
+      "evidence": "说明思绪JSON与SimpleMind差异、完整配置和纯树、新原生格式提案成本、其他格式优先级。 iteration-02复核：本项内容与首稿一致。",
+      "verification": "writer iteration-02 document/source inspection; independent reviewer/checker pending",
+      "last_checked_round": 1,
+      "last_checked_iteration": 2
+    },
+    {
+      "id": "U-004",
+      "status": "satisfied",
+      "document_refs": [
+        "§3 产品参照",
+        "§8.2 节点、连线与布局",
+        "§8.3 设计 tokens 与可访问性"
+      ],
+      "evidence": "引用Xmind/MindNode/EdrawMind官方依据；提供节点、连线、布局与tokens；审美建议不当市场统计。 iteration-02复核：本项内容与首稿一致。",
+      "verification": "writer iteration-02 document/source inspection; independent reviewer/checker pending",
+      "last_checked_round": 1,
+      "last_checked_iteration": 2
+    },
+    {
+      "id": "U-005",
+      "status": "satisfied",
+      "document_refs": [
+        "§3 Xmind 功能参照与交付边界",
+        "§4.1 代表性候选比较",
+        "§5.3 Xmind 语义映射与降级"
+      ],
+      "evidence": "逐项映射Xmind官方功能，区分基础编辑与复杂语义，明确SDK/viewer不是通用编辑器。 iteration-02复核：本项内容与首稿一致。",
+      "verification": "writer iteration-02 document/source inspection; independent reviewer/checker pending",
+      "last_checked_round": 1,
+      "last_checked_iteration": 2
+    },
+    {
+      "id": "U-006",
+      "status": "satisfied",
+      "document_refs": [
+        "§7.2 操作合同",
+        "§9.3 必验场景"
+      ],
+      "evidence": "统一离开保护先提交文本/IME并锁内容；同会话/离开token及最终修订检查通过才替换A；§9.3暂停N、已有N+1后打开B不能凭N成功离开。",
+      "verification": "writer iteration-02 document/source inspection; independent reviewer/checker pending",
+      "last_checked_round": 1,
+      "last_checked_iteration": 2
+    },
+    {
+      "id": "U-007",
+      "status": "satisfied",
+      "document_refs": [
+        "§7.2 操作合同",
+        "§9.3 必验场景"
+      ],
+      "evidence": "关闭须统一保护最终确认currentRevision==savedRevision或明确放弃最新修订；N保存期间新增N+1不能被销毁；失败/取消保留会话并解锁。",
+      "verification": "writer iteration-02 document/source inspection; independent reviewer/checker pending",
+      "last_checked_round": 1,
+      "last_checked_iteration": 2
+    },
+    {
+      "id": "U-008",
+      "status": "satisfied",
+      "document_refs": [
+        "§7.2 操作合同",
+        "§8.1 工作台布局",
+        "§9.3 必验场景"
+      ],
+      "evidence": "重置视图不改修订；重新布局/清空分入口、可撤销；危险语义明确。 iteration-02复核：本项内容与首稿一致。",
+      "verification": "writer iteration-02 document/source inspection; independent reviewer/checker pending",
+      "last_checked_round": 1,
+      "last_checked_iteration": 2
+    },
+    {
+      "id": "U-009",
+      "status": "satisfied",
+      "document_refs": [
+        "§6.2 宿主能力核对",
+        "§7.2 操作合同",
+        "§9.3 必验场景"
+      ],
+      "evidence": "当前文件另存副本后删除执行同一guard，完整可恢复副本的copySavedRevision须等于当前修订或明确放弃最新修订；锁保持至删除结果，旧N成功不允许回收原文件。",
+      "verification": "writer iteration-02 document/source inspection; independent reviewer/checker pending",
+      "last_checked_round": 1,
+      "last_checked_iteration": 2
+    },
+    {
+      "id": "U-010",
+      "status": "satisfied",
+      "document_refs": [
+        "§5.1 兼容矩阵",
+        "§5.4 导出对话框",
+        "§7.2 操作合同"
+      ],
+      "evidence": "可编辑与静态格式矩阵、当前/全sheet范围、预检报告、保存目标、取消/失败/部分成功处理。 iteration-02复核：本项内容与首稿一致。",
+      "verification": "writer iteration-02 document/source inspection; independent reviewer/checker pending",
+      "last_checked_round": 1,
+      "last_checked_iteration": 2
+    },
+    {
+      "id": "U-011",
+      "status": "satisfied",
+      "document_refs": [
+        "§7.1 左侧目录",
+        "§7.2 操作合同",
+        "§8.1 工作台布局",
+        "§9.3 必验场景"
+      ],
+      "evidence": "目录授权/恢复/刷新及点选维持原方案；新增换目录操作合同，目录可用且统一保护通过才切换，N/N+1窗口四路径验收覆盖。",
+      "verification": "writer iteration-02 document/source inspection; independent reviewer/checker pending",
+      "last_checked_round": 1,
+      "last_checked_iteration": 2
+    },
+    {
+      "id": "U-012",
+      "status": "satisfied",
+      "document_refs": [
+        "§2 研究边界与本地基线",
+        "§4 候选技术、渲染和布局",
+        "§10 待确认问题与来源"
+      ],
+      "evidence": "专用核心/通用图编辑/布局组件/渲染对比，官方来源和日期，MIT/EPL及SMM低维护边界。 iteration-02复核：本项内容与首稿一致。",
+      "verification": "writer iteration-02 document/source inspection; independent reviewer/checker pending",
+      "last_checked_round": 1,
+      "last_checked_iteration": 2
+    },
+    {
+      "id": "U-013",
+      "status": "satisfied",
+      "document_refs": [
+        "全文中文 Markdown、元数据",
+        "§6 应用架构与宿主接入",
+        "§8 UI 设计与图形规格",
+        "§9 分阶段验证与验收"
+      ],
+      "evidence": "完整中文决策书含元数据、Mermaid架构、具体UI线框及PNG概念图、PoC门槛和验收表。 iteration-02复核：本项内容与首稿一致。",
+      "verification": "writer iteration-02 document/source inspection; independent reviewer/checker pending",
+      "last_checked_round": 1,
+      "last_checked_iteration": 2
+    },
+    {
+      "id": "U-014",
+      "status": "satisfied",
+      "document_refs": [
+        "开篇研究范围",
+        "§2 研究边界与本地基线",
+        "§9.2 验证门槛",
+        "结尾未实测声明"
+      ],
+      "evidence": "全部工程效果写为目标/提案，不宣称运行PoC；本角色仅改文档过程文件及授权台账定位。 iteration-02复核：本项内容与首稿一致。",
+      "verification": "writer iteration-02 document/source inspection; independent reviewer/checker pending",
+      "last_checked_round": 1,
+      "last_checked_iteration": 2
+    },
+    {
+      "id": "U-015",
+      "status": "open",
+      "document_refs": [
+        "开篇宿主假设",
+        "§2 研究边界与本地基线",
+        "§6.2 宿主能力核对"
+      ],
+      "evidence": "宿主假设明确标为暂按当前仓库；引用实际指南和SDK，目标宿主尚待用户确认。 iteration-02复核：本项内容与首稿一致。",
+      "verification": "writer iteration-02 document/source inspection; independent reviewer/checker pending",
+      "last_checked_round": 1,
+      "last_checked_iteration": 2
+    },
+    {
+      "id": "U-016",
+      "status": "open",
+      "document_refs": [
+        "§5.1 识别与兼容等级",
+        "§10 待确认问题与来源"
+      ],
+      "evidence": "默认方言显式声明；其他.smm需要样本，列为后续问题。 iteration-02复核：本项内容与首稿一致。",
+      "verification": "writer iteration-02 document/source inspection; independent reviewer/checker pending",
+      "last_checked_round": 1,
+      "last_checked_iteration": 2
+    },
+    {
+      "id": "U-017",
+      "status": "satisfied",
+      "document_refs": [
+        "元数据 publication_path",
+        "§10 需求台账链接"
+      ],
+      "evidence": "主文元数据准确记录最终路径；实际发布由checker批准后的根代理完成。 iteration-02复核：本项内容与首稿一致。",
+      "verification": "writer iteration-02 document/source inspection; independent reviewer/checker pending",
+      "last_checked_round": 1,
+      "last_checked_iteration": 2
+    },
+    {
+      "id": "U-018",
+      "status": "satisfied",
+      "document_refs": [
+        "§1 阶段划分声明",
+        "§9.1 建议阶段，不承诺工期"
+      ],
+      "evidence": "AI/协作/云同步均为建议后续阶段；明确不是用户已同意的删减。 iteration-02复核：本项内容与首稿一致。",
+      "verification": "writer iteration-02 document/source inspection; independent reviewer/checker pending",
+      "last_checked_round": 1,
+      "last_checked_iteration": 2
+    }
+  ]
+}

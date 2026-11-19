@@ -1,0 +1,819 @@
+{
+  "round": 1,
+  "iteration": 3,
+  "role": "writer",
+  "checked_at": "2026-11-04T15:16:14.037936+00:00",
+  "ledger_version": 1,
+  "role_verification": {
+    "fresh_context": false,
+    "role_isolation": true,
+    "same_isolated_writer_role_continuation": true,
+    "shared_file_inputs_only_between_roles": true,
+    "all_rules_sha_and_mtime_match": true,
+    "current_rules_reread": true,
+    "current_ledger_contract_prior_review_decision_read": true,
+    "source_evidence_read_in_same_writer_role": true,
+    "no_new_network_research": true,
+    "no_business_implementation_files_modified": true,
+    "no_poc_or_product_test_performed": true,
+    "reviewer_and_checker": "not performed by writer"
+  },
+  "rules": [
+    {
+      "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/SKILL.md",
+      "sha256": "a0231c87b27fab4341ce02fb3413d1aaf0f0b8ef4e53902f7f561f9d8bd6c63d",
+      "modified": "2026-10-27T08:51:32.821800+00:00",
+      "matches_snapshot": true,
+      "read_by_role": true
+    },
+    {
+      "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/agents/openai.yaml",
+      "sha256": "4249082cc69c459fd664df91e75bf51b1761b9cc782c7da9ca7cfa7cb8f2d69b",
+      "modified": "2026-10-27T08:51:32.821971+00:00",
+      "matches_snapshot": true,
+      "read_by_role": true
+    },
+    {
+      "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/references/requirements-ledger.md",
+      "sha256": "132433d10f99baabc264d8c340aea98983efc3f5522a82c2f6d64f8c7eac8595",
+      "modified": "2026-10-27T08:51:32.822749+00:00",
+      "matches_snapshot": true,
+      "read_by_role": true
+    },
+    {
+      "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/references/type-adaptation.md",
+      "sha256": "b81e7735f0412da77def3cae259bb0c6fe9be0f630b6b6f53e2b68a0ac466f1e",
+      "modified": "2026-10-27T08:51:32.823170+00:00",
+      "matches_snapshot": true,
+      "read_by_role": true
+    },
+    {
+      "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/references/skill-reload.md",
+      "sha256": "08e3000b3a14b92c6974cafe3714f62982ae72540cbce1a37e61dd4b507746af",
+      "modified": "2026-10-27T08:51:32.823064+00:00",
+      "matches_snapshot": true,
+      "read_by_role": true
+    },
+    {
+      "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/references/process-artifacts.md",
+      "sha256": "790f14dd6f38f6ace9f37348124d95bce7d9850e2b2b1d53f0330aa5cc23b02a",
+      "modified": "2026-10-27T08:51:32.822535+00:00",
+      "matches_snapshot": true,
+      "read_by_role": true
+    },
+    {
+      "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/references/integration.md",
+      "sha256": "ccf6c1d0c120c7551cfd9b9ba020533c69dbdc004e8dfe8fb9d452d76746cb8c",
+      "modified": "2026-10-27T08:51:32.822410+00:00",
+      "matches_snapshot": true,
+      "read_by_role": true
+    },
+    {
+      "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/references/document-contracts.md",
+      "sha256": "82b6f2306b55c66558b00041ba0ef682493e004480a65860a27aceae120d7fa8",
+      "modified": "2026-10-27T08:51:32.822307+00:00",
+      "matches_snapshot": true,
+      "read_by_role": true
+    },
+    {
+      "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/scripts/init_council.py",
+      "sha256": "7a6c6a98faaef2667b12448a67add84498c23e9ef08c686244b07bd87f485eaf",
+      "modified": "2026-10-27T08:51:32.823556+00:00",
+      "matches_snapshot": true,
+      "read_by_role": true
+    },
+    {
+      "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/scripts/validate_council.py",
+      "sha256": "cc663556f2bd2a2756eb1cf97a9783cc5f55bf629b50f39e1464386c214c2800",
+      "modified": "2026-10-27T08:51:32.823681+00:00",
+      "matches_snapshot": true,
+      "read_by_role": true
+    },
+    {
+      "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/scripts/fingerprint_skill.py",
+      "sha256": "fa6b91c1c4b3ea96cb330ec8db186bcebb64251867a9bacc19b0e2ee3c5b23c9",
+      "modified": "2026-10-27T08:51:32.823434+00:00",
+      "matches_snapshot": true,
+      "read_by_role": true
+    },
+    {
+      "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/scripts/council_schema.py",
+      "sha256": "5adef36735841ca32dcb1459594fa74b71f5e4a4ae586b90bee9cbe11d0604f1",
+      "modified": "2026-10-27T08:51:32.823334+00:00",
+      "matches_snapshot": true,
+      "read_by_role": true
+    }
+  ],
+  "ledger_before_writer_location_update": {
+    "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/requirements-ledger.yaml",
+    "sha256": "a8ebdd8f5f275c6c33f40b12ab157e13bf5b120f0bbee3e8120983e464a71363",
+    "modified": "2026-11-04T15:09:37.248023+00:00"
+  },
+  "inputs": [
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rules-snapshot.yaml",
+      "sha256": "075f51d99b7a9278b9cd5903482c4e62d162f624e42d155db6fc59decca1df22",
+      "modified": "2026-11-04T14:25:07.564563+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/user-brief.md",
+      "sha256": "f5aa0785af03c87876a9daeee6dac726a918b07480491af79cfaac1f01fa7850",
+      "modified": "2026-11-04T14:25:07.555670+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/requirements-ledger.yaml",
+      "sha256": "52848f7057b103775f930b74e608e4fd826bad1174398c2cf559dc6b8e9a3f31",
+      "modified": "2026-11-04T15:16:14.055676+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/adaptive-contract.yaml",
+      "sha256": "5046ea33cfb2b3d95a4fa0e4825ed45b287bb0648d8656e9419490b4069bc96c",
+      "modified": "2026-11-04T14:25:07.560574+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/source-index.md",
+      "sha256": "579986f02291276be7a294b36982536c35ca5d17d60227316e52dc0ba19dee33",
+      "modified": "2026-11-04T14:46:27.370230+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/source-local.md",
+      "sha256": "a9f9e72ee5f63955eaf627a9c5d1365abe6e1c41b1228168cbc18d5928c0caf7",
+      "modified": "2026-11-04T14:25:58.629135+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/source-engines.md",
+      "sha256": "8828c324ebea739a68e7565499fa47220adf1cff1d29e443f00a16a34240300c",
+      "modified": "2026-11-04T14:28:28.782182+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/source-xmind.md",
+      "sha256": "3c8381d233acc0b34f94e216ab9f650c13a1b87718195d2411ca64f63fb9d1a1",
+      "modified": "2026-11-04T14:28:28.785369+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/source-rendering.md",
+      "sha256": "aa890d0ed52bb508d4dcee4e42c9289a441bcc40cb4350e0ed1721a03b1bdab1",
+      "modified": "2026-11-04T14:33:54.158781+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/design-validation.md",
+      "sha256": "e9df5774e799160e10e383a402c5d431228d14fcaa2a339f46c429758bd482e0",
+      "modified": "2026-11-04T14:46:20.881597+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/draft.md",
+      "sha256": "433cc9028fb225bc9c2132b3003212785bfad62be4921a413afedba92d987848",
+      "modified": "2026-11-04T15:09:37.243351+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/review.md",
+      "sha256": "42b973e760fb95f880a85bae6edaecb650898ab5b16eaf89fa6aa0b3b47eead9",
+      "modified": "2026-11-04T15:11:50.893893+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/decision.md",
+      "sha256": "a1d529ce30486a83ffac39a3d473cfdf0a7616f8a487360021977876636963a5",
+      "modified": "2026-11-04T15:13:18.922049+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/revision.md",
+      "sha256": "5f6a06dc0b0355cd9b39635ccf371f358e716ea9997826e52a03540b3a9caf6e",
+      "modified": "2026-11-04T15:09:37.249198+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/coverage.yaml",
+      "sha256": "b9243fef4a0aee705491f67e29b678fe547badb22146c0a5bf6520bcc3cc34c4",
+      "modified": "2026-11-04T15:09:37.246855+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/input-snapshot.yaml",
+      "sha256": "387ece3eda9156d0847ba849e85721ca9590512d9a5f6fb8385f5f697661a8c1",
+      "modified": "2026-11-04T15:14:35.828096+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/ui-concept.svg",
+      "sha256": "10b00faef75b22c2a3cb8d50e505fa1037851f8e54c57507cee0a4f926ae453b",
+      "modified": "2026-11-04T14:30:37.206799+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/ui-concept.png",
+      "sha256": "93c727eab733b0e95671033c6efb7d4ea7f0014d12249137421337b78ab46459",
+      "modified": "2026-11-04T14:30:38.111817+00:00"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/draft.md",
+      "sha256": "ad36cd91945a211eb111e208259447284f610f321459dfef61e104b796413b38",
+      "modified": "2026-11-04T15:15:27.269981+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/coverage.yaml",
+      "sha256": "994077ca0d33fa0dde3d7fdbed6d8c6a69bcd5cd39431c1d34a8c5ac4d9b98ba",
+      "modified": "2026-11-04T15:16:14.054690+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/revision.md",
+      "sha256": "a508d41256ba3048d8b99bb1676c66ccbc013ad80a9479b5d6a88925b223c2e8",
+      "modified": "2026-11-04T15:16:14.056447+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/ui-concept.svg",
+      "sha256": "10b00faef75b22c2a3cb8d50e505fa1037851f8e54c57507cee0a4f926ae453b",
+      "modified": "2026-11-04T14:30:37.206799+00:00"
+    },
+    {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/ui-concept.png",
+      "sha256": "93c727eab733b0e95671033c6efb7d4ea7f0014d12249137421337b78ab46459",
+      "modified": "2026-11-04T14:30:38.111817+00:00"
+    }
+  ],
+  "checker_verification": {
+    "role": "independent checker continuation",
+    "checked_at": "2026-11-04T15:19:23.232631+00:00",
+    "round": 1,
+    "iteration": 3,
+    "ledger_version": 1,
+    "fresh_context": false,
+    "role_isolation": true,
+    "same_isolated_checker_role_continuation": true,
+    "shared_file_inputs_only_between_roles": true,
+    "formal_adjudication_after_draft_and_review_ready": true,
+    "all_12_rules_sha_and_mtime_match": true,
+    "rules_read_and_verified": [
+      {
+        "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/SKILL.md",
+        "sha256": "a0231c87b27fab4341ce02fb3413d1aaf0f0b8ef4e53902f7f561f9d8bd6c63d",
+        "modified": "2026-10-27T08:51:32.821800+00:00",
+        "sha256_matches_snapshot": true,
+        "mtime_matches_snapshot": true,
+        "read_by_checker": true
+      },
+      {
+        "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/agents/openai.yaml",
+        "sha256": "4249082cc69c459fd664df91e75bf51b1761b9cc782c7da9ca7cfa7cb8f2d69b",
+        "modified": "2026-10-27T08:51:32.821971+00:00",
+        "sha256_matches_snapshot": true,
+        "mtime_matches_snapshot": true,
+        "read_by_checker": true
+      },
+      {
+        "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/references/requirements-ledger.md",
+        "sha256": "132433d10f99baabc264d8c340aea98983efc3f5522a82c2f6d64f8c7eac8595",
+        "modified": "2026-10-27T08:51:32.822749+00:00",
+        "sha256_matches_snapshot": true,
+        "mtime_matches_snapshot": true,
+        "read_by_checker": true
+      },
+      {
+        "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/references/type-adaptation.md",
+        "sha256": "b81e7735f0412da77def3cae259bb0c6fe9be0f630b6b6f53e2b68a0ac466f1e",
+        "modified": "2026-10-27T08:51:32.823170+00:00",
+        "sha256_matches_snapshot": true,
+        "mtime_matches_snapshot": true,
+        "read_by_checker": true
+      },
+      {
+        "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/references/skill-reload.md",
+        "sha256": "08e3000b3a14b92c6974cafe3714f62982ae72540cbce1a37e61dd4b507746af",
+        "modified": "2026-10-27T08:51:32.823064+00:00",
+        "sha256_matches_snapshot": true,
+        "mtime_matches_snapshot": true,
+        "read_by_checker": true
+      },
+      {
+        "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/references/process-artifacts.md",
+        "sha256": "790f14dd6f38f6ace9f37348124d95bce7d9850e2b2b1d53f0330aa5cc23b02a",
+        "modified": "2026-10-27T08:51:32.822535+00:00",
+        "sha256_matches_snapshot": true,
+        "mtime_matches_snapshot": true,
+        "read_by_checker": true
+      },
+      {
+        "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/references/integration.md",
+        "sha256": "ccf6c1d0c120c7551cfd9b9ba020533c69dbdc004e8dfe8fb9d452d76746cb8c",
+        "modified": "2026-10-27T08:51:32.822410+00:00",
+        "sha256_matches_snapshot": true,
+        "mtime_matches_snapshot": true,
+        "read_by_checker": true
+      },
+      {
+        "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/references/document-contracts.md",
+        "sha256": "82b6f2306b55c66558b00041ba0ef682493e004480a65860a27aceae120d7fa8",
+        "modified": "2026-10-27T08:51:32.822307+00:00",
+        "sha256_matches_snapshot": true,
+        "mtime_matches_snapshot": true,
+        "read_by_checker": true
+      },
+      {
+        "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/scripts/init_council.py",
+        "sha256": "7a6c6a98faaef2667b12448a67add84498c23e9ef08c686244b07bd87f485eaf",
+        "modified": "2026-10-27T08:51:32.823556+00:00",
+        "sha256_matches_snapshot": true,
+        "mtime_matches_snapshot": true,
+        "read_by_checker": true
+      },
+      {
+        "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/scripts/validate_council.py",
+        "sha256": "cc663556f2bd2a2756eb1cf97a9783cc5f55bf629b50f39e1464386c214c2800",
+        "modified": "2026-10-27T08:51:32.823681+00:00",
+        "sha256_matches_snapshot": true,
+        "mtime_matches_snapshot": true,
+        "read_by_checker": true
+      },
+      {
+        "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/scripts/fingerprint_skill.py",
+        "sha256": "fa6b91c1c4b3ea96cb330ec8db186bcebb64251867a9bacc19b0e2ee3c5b23c9",
+        "modified": "2026-10-27T08:51:32.823434+00:00",
+        "sha256_matches_snapshot": true,
+        "mtime_matches_snapshot": true,
+        "read_by_checker": true
+      },
+      {
+        "path": "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/scripts/council_schema.py",
+        "sha256": "5adef36735841ca32dcb1459594fa74b71f5e4a4ae586b90bee9cbe11d0604f1",
+        "modified": "2026-10-27T08:51:32.823334+00:00",
+        "sha256_matches_snapshot": true,
+        "mtime_matches_snapshot": true,
+        "read_by_checker": true
+      }
+    ],
+    "current_ledger_contract_and_prior_review_decision_reread": true,
+    "source_evidence_read_in_same_checker_role": true,
+    "writer_input_snapshot_before_checker": {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/input-snapshot.yaml",
+      "sha256": "a6afefc53e728f229976def214396aca3b9cf8a7fe7aa6f99059ca6227c73b2d",
+      "modified": "2026-11-04T15:16:14.064817+00:00"
+    },
+    "writer_listed_23_inputs_outputs_verified": [
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rules-snapshot.yaml",
+        "sha256": "075f51d99b7a9278b9cd5903482c4e62d162f624e42d155db6fc59decca1df22",
+        "modified": "2026-11-04T14:25:07.564563+00:00",
+        "sha256_matches_writer_snapshot": true,
+        "mtime_matches_writer_snapshot": true
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/user-brief.md",
+        "sha256": "f5aa0785af03c87876a9daeee6dac726a918b07480491af79cfaac1f01fa7850",
+        "modified": "2026-11-04T14:25:07.555670+00:00",
+        "sha256_matches_writer_snapshot": true,
+        "mtime_matches_writer_snapshot": true
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/requirements-ledger.yaml",
+        "sha256": "52848f7057b103775f930b74e608e4fd826bad1174398c2cf559dc6b8e9a3f31",
+        "modified": "2026-11-04T15:16:14.055676+00:00",
+        "sha256_matches_writer_snapshot": true,
+        "mtime_matches_writer_snapshot": true
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/adaptive-contract.yaml",
+        "sha256": "5046ea33cfb2b3d95a4fa0e4825ed45b287bb0648d8656e9419490b4069bc96c",
+        "modified": "2026-11-04T14:25:07.560574+00:00",
+        "sha256_matches_writer_snapshot": true,
+        "mtime_matches_writer_snapshot": true
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/source-index.md",
+        "sha256": "579986f02291276be7a294b36982536c35ca5d17d60227316e52dc0ba19dee33",
+        "modified": "2026-11-04T14:46:27.370230+00:00",
+        "sha256_matches_writer_snapshot": true,
+        "mtime_matches_writer_snapshot": true
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/source-local.md",
+        "sha256": "a9f9e72ee5f63955eaf627a9c5d1365abe6e1c41b1228168cbc18d5928c0caf7",
+        "modified": "2026-11-04T14:25:58.629135+00:00",
+        "sha256_matches_writer_snapshot": true,
+        "mtime_matches_writer_snapshot": true
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/source-engines.md",
+        "sha256": "8828c324ebea739a68e7565499fa47220adf1cff1d29e443f00a16a34240300c",
+        "modified": "2026-11-04T14:28:28.782182+00:00",
+        "sha256_matches_writer_snapshot": true,
+        "mtime_matches_writer_snapshot": true
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/source-xmind.md",
+        "sha256": "3c8381d233acc0b34f94e216ab9f650c13a1b87718195d2411ca64f63fb9d1a1",
+        "modified": "2026-11-04T14:28:28.785369+00:00",
+        "sha256_matches_writer_snapshot": true,
+        "mtime_matches_writer_snapshot": true
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/source-rendering.md",
+        "sha256": "aa890d0ed52bb508d4dcee4e42c9289a441bcc40cb4350e0ed1721a03b1bdab1",
+        "modified": "2026-11-04T14:33:54.158781+00:00",
+        "sha256_matches_writer_snapshot": true,
+        "mtime_matches_writer_snapshot": true
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/design-validation.md",
+        "sha256": "e9df5774e799160e10e383a402c5d431228d14fcaa2a339f46c429758bd482e0",
+        "modified": "2026-11-04T14:46:20.881597+00:00",
+        "sha256_matches_writer_snapshot": true,
+        "mtime_matches_writer_snapshot": true
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/draft.md",
+        "sha256": "433cc9028fb225bc9c2132b3003212785bfad62be4921a413afedba92d987848",
+        "modified": "2026-11-04T15:09:37.243351+00:00",
+        "sha256_matches_writer_snapshot": true,
+        "mtime_matches_writer_snapshot": true
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/review.md",
+        "sha256": "42b973e760fb95f880a85bae6edaecb650898ab5b16eaf89fa6aa0b3b47eead9",
+        "modified": "2026-11-04T15:11:50.893893+00:00",
+        "sha256_matches_writer_snapshot": true,
+        "mtime_matches_writer_snapshot": true
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/decision.md",
+        "sha256": "a1d529ce30486a83ffac39a3d473cfdf0a7616f8a487360021977876636963a5",
+        "modified": "2026-11-04T15:13:18.922049+00:00",
+        "sha256_matches_writer_snapshot": true,
+        "mtime_matches_writer_snapshot": true
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/revision.md",
+        "sha256": "5f6a06dc0b0355cd9b39635ccf371f358e716ea9997826e52a03540b3a9caf6e",
+        "modified": "2026-11-04T15:09:37.249198+00:00",
+        "sha256_matches_writer_snapshot": true,
+        "mtime_matches_writer_snapshot": true
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/coverage.yaml",
+        "sha256": "b9243fef4a0aee705491f67e29b678fe547badb22146c0a5bf6520bcc3cc34c4",
+        "modified": "2026-11-04T15:09:37.246855+00:00",
+        "sha256_matches_writer_snapshot": true,
+        "mtime_matches_writer_snapshot": true
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/input-snapshot.yaml",
+        "sha256": "387ece3eda9156d0847ba849e85721ca9590512d9a5f6fb8385f5f697661a8c1",
+        "modified": "2026-11-04T15:14:35.828096+00:00",
+        "sha256_matches_writer_snapshot": true,
+        "mtime_matches_writer_snapshot": true
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/ui-concept.svg",
+        "sha256": "10b00faef75b22c2a3cb8d50e505fa1037851f8e54c57507cee0a4f926ae453b",
+        "modified": "2026-11-04T14:30:37.206799+00:00",
+        "sha256_matches_writer_snapshot": true,
+        "mtime_matches_writer_snapshot": true
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/ui-concept.png",
+        "sha256": "93c727eab733b0e95671033c6efb7d4ea7f0014d12249137421337b78ab46459",
+        "modified": "2026-11-04T14:30:38.111817+00:00",
+        "sha256_matches_writer_snapshot": true,
+        "mtime_matches_writer_snapshot": true
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/draft.md",
+        "sha256": "ad36cd91945a211eb111e208259447284f610f321459dfef61e104b796413b38",
+        "modified": "2026-11-04T15:15:27.269981+00:00",
+        "sha256_matches_writer_snapshot": true,
+        "mtime_matches_writer_snapshot": true
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/coverage.yaml",
+        "sha256": "994077ca0d33fa0dde3d7fdbed6d8c6a69bcd5cd39431c1d34a8c5ac4d9b98ba",
+        "modified": "2026-11-04T15:16:14.054690+00:00",
+        "sha256_matches_writer_snapshot": true,
+        "mtime_matches_writer_snapshot": true
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/revision.md",
+        "sha256": "a508d41256ba3048d8b99bb1676c66ccbc013ad80a9479b5d6a88925b223c2e8",
+        "modified": "2026-11-04T15:16:14.056447+00:00",
+        "sha256_matches_writer_snapshot": true,
+        "mtime_matches_writer_snapshot": true
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/ui-concept.svg",
+        "sha256": "10b00faef75b22c2a3cb8d50e505fa1037851f8e54c57507cee0a4f926ae453b",
+        "modified": "2026-11-04T14:30:37.206799+00:00",
+        "sha256_matches_writer_snapshot": true,
+        "mtime_matches_writer_snapshot": true
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/ui-concept.png",
+        "sha256": "93c727eab733b0e95671033c6efb7d4ea7f0014d12249137421337b78ab46459",
+        "modified": "2026-11-04T14:30:38.111817+00:00",
+        "sha256_matches_writer_snapshot": true,
+        "mtime_matches_writer_snapshot": true
+      }
+    ],
+    "local_source_12_sha_verification": [
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/README.md",
+        "sha256": "d2979fa422fa500d518946bf440d69e52c6e1540ce281eb9f4bc8991207a3e3b",
+        "modified": "2026-08-15T10:30:54.723847+00:00",
+        "sha256_matches_source": true
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/PLUGIN-DEVELOPMENT-GUIDE.md",
+        "sha256": "57da020b9af3457fd568e5fd3f7f2f582d3a8aea3b08aa1599ba8062de4a5692",
+        "modified": "2026-08-29T10:58:53.217520+00:00",
+        "sha256_matches_source": true
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/TREASURE-HOST-DESIGN.md",
+        "sha256": "d903e5e31ae8ba051634d0e7cb8d84a3f82ff438e91b5a86a8737aa8fee1a389",
+        "modified": "2026-08-09T11:22:00.619191+00:00",
+        "sha256_matches_source": true
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/excalidraw/README.md",
+        "sha256": "c05aba0d12d804757b30d8a162e8569cfdd46c4b4539888d9dce97245ffa6d79",
+        "modified": "2026-10-29T13:08:53.771795+00:00",
+        "sha256_matches_source": true
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/excalidraw/package.json",
+        "sha256": "c554579f5ac4326859242d636c288f9c8a36b80cde5f7927b316465297fef06c",
+        "modified": "2026-11-03T13:45:39.676826+00:00",
+        "sha256_matches_source": true
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/excalidraw/node_modules/treasure-sdk/package.json",
+        "sha256": "28264268d1117fdeb7f5050fe19f03dfb99472d68dcb39a9b61e8da329cb70fc",
+        "modified": "2026-11-02T01:51:34.170254+00:00",
+        "sha256_matches_source": true
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/excalidraw/node_modules/treasure-sdk/dist/index.d.ts",
+        "sha256": "5426d4c327a9bb07d118b58e5a0fdc311d64118072f363e832cafc1ec05ac035",
+        "modified": "2026-11-02T01:51:34.228818+00:00",
+        "sha256_matches_source": true
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/excalidraw/src/services/directory-service.ts",
+        "sha256": "2ceb2387b1665fedd02d4a2702eb5c213b4ec211c513f9a2247d717ee159bf96",
+        "modified": "2026-10-30T10:32:42.981411+00:00",
+        "sha256_matches_source": true
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/excalidraw/src/services/drawing-file-service.ts",
+        "sha256": "9e2d37298e611f83fcac71bff71dd19d78bde8493b8fc4a92fc6314a21187709",
+        "modified": "2026-10-30T09:42:13.570621+00:00",
+        "sha256_matches_source": true
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/excalidraw/src/services/mind-map-import-service.ts",
+        "sha256": "b20b71cccc4939c1c941506baf06fdbc784b956d98a27e1b54a62f57273bdf5d",
+        "modified": "2026-11-02T02:36:53.822137+00:00",
+        "sha256_matches_source": true
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/excalidraw/src/domain/mind-map.ts",
+        "sha256": "23b374ba1e5ca5911703e2fbc8fb7c83af284d489a40757ad17d45b4574114a6",
+        "modified": "2026-11-02T09:45:54.898324+00:00",
+        "sha256_matches_source": true
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/excalidraw/src/App.vue",
+        "sha256": "bf1378c5740e674038750e3e83872ffb42e040429e45651aa8c737bb02113a67",
+        "modified": "2026-11-02T09:56:04.769883+00:00",
+        "sha256_matches_source": true
+      }
+    ],
+    "draft_sha_matches_frozen_version": true,
+    "only_five_cancel_boundary_passages_changed": true,
+    "svg_read_and_png_visually_inspected_in_same_checker_role": true,
+    "svg_png_unchanged_from_inspected_version": true,
+    "final_directory_local_link_verification": [
+      {
+        "href": "council/source-local.md",
+        "resolved": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/source-local.md",
+        "result": "exists"
+      },
+      {
+        "href": "../../excalidraw/src/services/mind-map-import-service.ts",
+        "resolved": "/Volumes/MacExtend/FrontProjects/treasure-plugins/excalidraw/src/services/mind-map-import-service.ts",
+        "result": "exists"
+      },
+      {
+        "href": "../../excalidraw/src/domain/mind-map.ts",
+        "resolved": "/Volumes/MacExtend/FrontProjects/treasure-plugins/excalidraw/src/domain/mind-map.ts",
+        "result": "exists"
+      },
+      {
+        "href": "../../excalidraw/node_modules/treasure-sdk/dist/index.d.ts",
+        "resolved": "/Volumes/MacExtend/FrontProjects/treasure-plugins/excalidraw/node_modules/treasure-sdk/dist/index.d.ts",
+        "result": "exists"
+      },
+      {
+        "href": "../PLUGIN-DEVELOPMENT-GUIDE.md",
+        "resolved": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/PLUGIN-DEVELOPMENT-GUIDE.md",
+        "result": "exists"
+      },
+      {
+        "href": "../../excalidraw/node_modules/treasure-sdk/dist/index.d.ts",
+        "resolved": "/Volumes/MacExtend/FrontProjects/treasure-plugins/excalidraw/node_modules/treasure-sdk/dist/index.d.ts",
+        "result": "exists"
+      },
+      {
+        "href": "../PLUGIN-DEVELOPMENT-GUIDE.md",
+        "resolved": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/PLUGIN-DEVELOPMENT-GUIDE.md",
+        "result": "exists"
+      },
+      {
+        "href": "council/source-local.md",
+        "resolved": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/source-local.md",
+        "result": "exists"
+      },
+      {
+        "href": "ui-concept.png",
+        "resolved": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/ui-concept.png",
+        "result": "approved_asset_to_copy"
+      },
+      {
+        "href": "../TREASURE-HOST-DESIGN.md",
+        "resolved": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/TREASURE-HOST-DESIGN.md",
+        "result": "exists"
+      },
+      {
+        "href": "council/design-validation.md",
+        "resolved": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/design-validation.md",
+        "result": "exists"
+      },
+      {
+        "href": "council/source-engines.md",
+        "resolved": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/source-engines.md",
+        "result": "exists"
+      },
+      {
+        "href": "council/source-rendering.md",
+        "resolved": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/source-rendering.md",
+        "result": "exists"
+      },
+      {
+        "href": "council/source-xmind.md",
+        "resolved": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/source-xmind.md",
+        "result": "exists"
+      },
+      {
+        "href": "council/source-local.md",
+        "resolved": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/source-local.md",
+        "result": "exists"
+      },
+      {
+        "href": "council/source-index.md",
+        "resolved": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/source-index.md",
+        "result": "exists"
+      },
+      {
+        "href": "council/requirements-ledger.yaml",
+        "resolved": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/requirements-ledger.yaml",
+        "result": "exists"
+      }
+    ],
+    "approved_publication_assets_to_copy": [
+      "ui-concept.png",
+      "ui-concept.svg"
+    ],
+    "no_new_network_research": true,
+    "no_poc_or_product_test_performed": true,
+    "no_draft_or_business_code_modified": true,
+    "inputs": [
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rules-snapshot.yaml",
+        "sha256": "075f51d99b7a9278b9cd5903482c4e62d162f624e42d155db6fc59decca1df22",
+        "modified": "2026-11-04T14:25:07.564563+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/user-brief.md",
+        "sha256": "f5aa0785af03c87876a9daeee6dac726a918b07480491af79cfaac1f01fa7850",
+        "modified": "2026-11-04T14:25:07.555670+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/requirements-ledger.yaml",
+        "sha256": "52848f7057b103775f930b74e608e4fd826bad1174398c2cf559dc6b8e9a3f31",
+        "modified": "2026-11-04T15:16:14.055676+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/adaptive-contract.yaml",
+        "sha256": "5046ea33cfb2b3d95a4fa0e4825ed45b287bb0648d8656e9419490b4069bc96c",
+        "modified": "2026-11-04T14:25:07.560574+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/source-index.md",
+        "sha256": "579986f02291276be7a294b36982536c35ca5d17d60227316e52dc0ba19dee33",
+        "modified": "2026-11-04T14:46:27.370230+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/source-engines.md",
+        "sha256": "8828c324ebea739a68e7565499fa47220adf1cff1d29e443f00a16a34240300c",
+        "modified": "2026-11-04T14:28:28.782182+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/source-xmind.md",
+        "sha256": "3c8381d233acc0b34f94e216ab9f650c13a1b87718195d2411ca64f63fb9d1a1",
+        "modified": "2026-11-04T14:28:28.785369+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/source-local.md",
+        "sha256": "a9f9e72ee5f63955eaf627a9c5d1365abe6e1c41b1228168cbc18d5928c0caf7",
+        "modified": "2026-11-04T14:25:58.629135+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/source-rendering.md",
+        "sha256": "aa890d0ed52bb508d4dcee4e42c9289a441bcc40cb4350e0ed1721a03b1bdab1",
+        "modified": "2026-11-04T14:33:54.158781+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/design-validation.md",
+        "sha256": "e9df5774e799160e10e383a402c5d431228d14fcaa2a339f46c429758bd482e0",
+        "modified": "2026-11-04T14:46:20.881597+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/draft.md",
+        "sha256": "433cc9028fb225bc9c2132b3003212785bfad62be4921a413afedba92d987848",
+        "modified": "2026-11-04T15:09:37.243351+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/review.md",
+        "sha256": "42b973e760fb95f880a85bae6edaecb650898ab5b16eaf89fa6aa0b3b47eead9",
+        "modified": "2026-11-04T15:11:50.893893+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/decision.md",
+        "sha256": "a1d529ce30486a83ffac39a3d473cfdf0a7616f8a487360021977876636963a5",
+        "modified": "2026-11-04T15:13:18.922049+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/revision.md",
+        "sha256": "5f6a06dc0b0355cd9b39635ccf371f358e716ea9997826e52a03540b3a9caf6e",
+        "modified": "2026-11-04T15:09:37.249198+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-02/coverage.yaml",
+        "sha256": "b9243fef4a0aee705491f67e29b678fe547badb22146c0a5bf6520bcc3cc34c4",
+        "modified": "2026-11-04T15:09:37.246855+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/draft.md",
+        "sha256": "ad36cd91945a211eb111e208259447284f610f321459dfef61e104b796413b38",
+        "modified": "2026-11-04T15:15:27.269981+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/coverage.yaml",
+        "sha256": "994077ca0d33fa0dde3d7fdbed6d8c6a69bcd5cd39431c1d34a8c5ac4d9b98ba",
+        "modified": "2026-11-04T15:16:14.054690+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/revision.md",
+        "sha256": "a508d41256ba3048d8b99bb1676c66ccbc013ad80a9479b5d6a88925b223c2e8",
+        "modified": "2026-11-04T15:16:14.056447+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/review.md",
+        "sha256": "3cd8d804a24561f78f75ddb069b9a2921cdf2f6906758072552e881957b393f0",
+        "modified": "2026-11-04T15:17:35.562218+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/ui-concept.svg",
+        "sha256": "10b00faef75b22c2a3cb8d50e505fa1037851f8e54c57507cee0a4f926ae453b",
+        "modified": "2026-11-04T14:30:37.206799+00:00"
+      },
+      {
+        "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/ui-concept.png",
+        "sha256": "93c727eab733b0e95671033c6efb7d4ea7f0014d12249137421337b78ab46459",
+        "modified": "2026-11-04T14:30:38.111817+00:00"
+      }
+    ],
+    "verdict": "approve",
+    "closed_findings": [
+      "R1-001",
+      "R1-002"
+    ],
+    "remaining_findings": [],
+    "hard_requirements_passed": [
+      "U-001",
+      "U-002",
+      "U-003",
+      "U-004",
+      "U-005",
+      "U-006",
+      "U-007",
+      "U-008",
+      "U-009",
+      "U-010",
+      "U-011",
+      "U-012",
+      "U-013",
+      "U-014"
+    ],
+    "hard_requirements_requiring_revision": [],
+    "decision_output": {
+      "path": "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council/rounds/round-01/iterations/iteration-03/decision.md",
+      "sha256": "dba5b0b0a45667d47bb4cce9c73b86d927d3828e4e38800fa903c95dea16f052",
+      "modified": "2026-11-04T15:18:49.899114+00:00"
+    }
+  }
+}

@@ -162,7 +162,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
-import { logs } from 'treasure-sdk';
+import { logs } from '@luzenrocy/treasure-sdk';
 import { ElMessageBox } from 'element-plus';
 import { db } from '@/db';
 import type { Task, Priority, TaskStatus, Tag } from '@/types';

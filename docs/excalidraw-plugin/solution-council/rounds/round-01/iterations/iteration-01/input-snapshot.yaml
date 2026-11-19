@@ -1,0 +1,9 @@
+round: 1
+iteration: 1
+rules_snapshot: "../../../../rules-snapshot.yaml"
+ledger: "../../../../requirements-ledger.yaml"
+contract: "../../../../adaptive-contract.yaml"
+source_index: "../../../../source-index.md"
+role: "writer"
+fresh_context: true
+checked_at: "2026-10-29"

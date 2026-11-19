@@ -1,0 +1,50 @@
+document_id: "excalidraw-plugin-plan"
+title: "Treasure Excalidraw 实施计划与设计工件"
+document_type: "implementation plan"
+locale: "zh-CN"
+owner: "Codex"
+created: 2026-10-16
+updated: 2026-10-18
+version: "0.2"
+status: published
+round_limit: 10
+current_round: 2
+roles:
+  writer:
+    profile: "技术方案作者 + Excalidraw 集成领域分析师"
+    rationale: "负责将规格转成完整、可执行且带证据的计划"
+  reviewer:
+    profile: "独立 Treasure SDK 评审者 + 安全/可访问性评审者"
+    rationale: "挑战范围、来源、权限、失败路径与验证完整性"
+  approver:
+    profile: "计划交付审核者"
+    rationale: "确认外部契约、宪章、路径和清洁最终工件"
+document_contract:
+  mode: hybrid
+  family: "normative"
+  label: "Treasure Excalidraw 实施计划与设计工件"
+  purpose: "把已确认的 Excalidraw 插件规格转成可执行的架构、数据模型、接口契约和端到端验证路径"
+  reader_job: "开发者和评审者能够据此拆分任务、验证边界并识别实现风险"
+  audience: ["插件开发者", "测试人员", "评审者", "产品负责人"]
+  medium: markdown
+  locale: zh-CN
+  tone: "直接、可执行、证据驱动"
+  evidence_style: "仓库文档、官方 Excalidraw 文档与可复现的宿主验收场景"
+  required_sections: ["Summary", "Technical Context", "Constitution Check", "Project Structure", "Phase 0 research", "Phase 1 data model/contracts/quickstart"]
+  optional_sections: ["Complexity Tracking", "Decision traceability"]
+  forbidden_sections: ["未确认的技术承诺", "完整实现代码", "任务清单（由 speckit-tasks 生成）"]
+  quality_checks: ["所有 NEEDS CLARIFICATION 均已解决或标记为明确假设", "设计遵守宪章且不扩大规格范围", "数据模型和接口契约可由自动化或宿主手测验证", "中文说明完整，标准模板标题和技术标识符保留可追踪性"]
+publication:
+  target_path: "specs/004-excalidraw-plugin/plan.md"
+  target_path_source: external_contract
+  target_format: "markdown"
+  final_filename: "plan.md"
+  overwrite_policy: replace_after_hitl
+artifacts:
+  artifact_root: "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/excalidraw-plugin"
+  council_path: "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/excalidraw-plugin/plan-council"
+integration_mode: optional-overlay
+target_skill: "speckit-plan"
+contract_snapshot: rules-snapshot.yaml#contract_snapshot
+skill_snapshot: rules-snapshot.yaml#skill_snapshot
+sources: [S-001, S-002, S-003, S-004, S-005, S-006, S-007, S-008, S-009]

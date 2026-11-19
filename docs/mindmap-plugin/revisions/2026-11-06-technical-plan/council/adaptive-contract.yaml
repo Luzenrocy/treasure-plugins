@@ -1,0 +1,21 @@
+document_contract:
+  mode: hybrid
+  family: normative
+  label: "观象谱技术与 UI 实施方案（校对版）"
+  purpose: "把已获确认的原型交互转化为受 Treasure 插件研发指南与公开 SDK 约束的实施决定、边界、分期与验收。"
+  reader_job: "研发能据此创建插件工程、实现文件与画布会话、对接 SDK，并知道哪些能力仍需 PoC/样本验证。"
+  audience: ["产品负责人", "Vue/TypeScript 插件研发", "技术评审"]
+  medium: markdown
+  locale: zh-CN
+  tone: "明确、克制、可核验；区分已决定、来源事实、实施建议与待验证项。"
+  evidence_style: "本地文件相对链接；SDK 结论以已锁定的 2.1.1 d.ts 为准，指南与原型作为补充。"
+  required_sections: ["结论与校对范围", "已确认产品契约与旧方案更正", "SDK/插件研发约束矩阵", "目标架构与模块职责", "文件、目录、会话与权限流程", "原生 .gxp、外部解析与兼容边界", "画布/大纲/UI 实现契约", "状态、错误、可访问性与安全", "分期、验收与发布门槛", "风险、待验证项与来源"]
+  optional_sections: ["接口伪代码", "决策记录"]
+  forbidden_sections: ["把浏览器原型的内存模拟描述为已完成的真实格式解析或磁盘持久化", "未公开 SDK、Tauri API、绝对路径或手写桥接协议", "外部 .smm/.xmind 的回写或兼容性承诺", "没有来源的性能数字、兼容率或发布日期"]
+  terminology:
+    native: ".gxp 原生工作簿"
+    external: ".smm/.xmind 外部只读来源"
+    workspace: "经用户选择和 SDK 授权的工作目录"
+    canvas: "工作簿中的一张画布"
+  quality_checks: ["每个硬性 U-* 有定位、证据与验证方式。", "明确 SDK 2.1.1 为正式实现门槛；说明原型适配器在 2.0.0 环境的局限。", "所有文件操作显式处理 Result 与 CANCELLED。", "方案与当前原型 README 的交互口径一致，且不把原型模拟当实现。", "含宿主调试、构建、打包和发布前验证路径。"]
+  source: inferred-and-local

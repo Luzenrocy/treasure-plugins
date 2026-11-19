@@ -99,7 +99,7 @@ import { defineComponent } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import Cherry from 'cherry-markdown';
 import 'cherry-markdown/dist/cherry-markdown.css';
-import { files, logs, menus } from 'treasure-sdk';
+import { files, logs, menus } from '@luzenrocy/treasure-sdk';
 import { scanMarkdownDirectory, type FileEntry } from './utils/fileScanner';
 import { workspace } from './utils/workspace';
 import { resolveContextPath } from './utils/contextMenu';
@@ -123,6 +123,8 @@ export default defineComponent({
       cherryInstance: null as Cherry | null,
       autoSaveTimer: null as number | null,
       saveDebounceTimer: null as number | null,
+      saveInFlight: null as Promise<boolean> | null,
+      editRevision: 0,
       assetPreviewRefreshTimer: null as number | null,
       isDirty: false,
       isSidebarOpen: true,
@@ -139,6 +141,7 @@ editorMode: 'edit&preview' as 'edit&preview' | 'editOnly' | 'previewOnly',
       exportingType: '' as 'pdf' | 'img' | '',
       exportStage: '',
       menuRegistered: false,
+      menuSubTokens: [] as string[],
       modeMenuId: 'shi-yu-lu-view',
       exportMenuId: 'shi-yu-lu-export',
       closeFileMenuId: 'shi-yu-lu-close-file',
@@ -181,13 +184,11 @@ editorMode: 'edit&preview' as 'edit&preview' | 'editOnly' | 'previewOnly',
     document.addEventListener('click', this.closeContextMenu);
     window.addEventListener('keydown', this.handleKeydown);
     this.registerHostMenu();
-    window.addEventListener('message', this.handleHostMenuEvent);
   },
   beforeUnmount() {
     document.removeEventListener('click', this.closeContextMenu);
     window.removeEventListener('keydown', this.handleKeydown);
     this.unregisterHostMenu();
-    window.removeEventListener('message', this.handleHostMenuEvent);
     if (this.isDirty) this.saveFile();
     if (this.autoSaveTimer) clearInterval(this.autoSaveTimer);
     if (this.saveDebounceTimer) clearTimeout(this.saveDebounceTimer);
@@ -316,6 +317,7 @@ editorMode: 'edit&preview' as 'edit&preview' | 'editOnly' | 'previewOnly',
     scheduleSave() {
       if (this.saveDebounceTimer) clearTimeout(this.saveDebounceTimer);
       this.saveDebounceTimer = window.setTimeout(() => {
+        this.saveDebounceTimer = null;
         if (this.isDirty) this.saveFile();
       }, 800);
     },
@@ -348,6 +350,7 @@ editorMode: 'edit&preview' as 'edit&preview' | 'editOnly' | 'previewOnly',
           afterChange: (markdown: string) => {
             if (markdown !== this.fileContent) {
               this.isDirty = true;
+              this.editRevision += 1;
               this.scheduleSave();
             }
             this.scheduleAssetPreviewFallback();
@@ -357,23 +360,45 @@ editorMode: 'edit&preview' as 'edit&preview' | 'editOnly' | 'previewOnly',
       });
       this.autoSaveTimer = window.setInterval(() => { if (this.isDirty) this.saveFile(); }, 30000);
     },
-    async saveFile() {
-      if (!this.cherryInstance) return;
-      try {
-        const oldContent = this.fileContent;
-        const content = this.cherryInstance.getMarkdown();
-        const slash = this.filePath.lastIndexOf('/');
-        const saved = await workspace.writeText(slash < 0 ? '' : this.filePath.slice(0, slash), slash < 0 ? this.filePath : this.filePath.slice(slash + 1), content);
-        if (!saved) throw new Error('文件引用已失效或没有写入权限');
+    async saveFile(): Promise<boolean> {
+      if (!this.cherryInstance || !this.filePath) return false;
+      // 统一复用进行中的保存。否则防抖自动保存与 Cmd/Ctrl+S 会分别清理同一附件，
+      // 造成第二次移入废纸篓时目标已经不存在。
+      if (this.saveInFlight) return this.saveInFlight;
+      if (this.saveDebounceTimer) {
+        clearTimeout(this.saveDebounceTimer);
+        this.saveDebounceTimer = null;
+      }
+
+      const task = (async (): Promise<boolean> => {
         try {
-          await cleanupRemovedAssets(this.dirPath, this.filePath, oldContent, content);
-        } catch (e: any) {
-          ElMessage.warning(e.message || '资产索引不可用，请手动重建资产索引');
+          do {
+            const revision = this.editRevision;
+            const oldContent = this.fileContent;
+            const content = this.cherryInstance!.getMarkdown();
+            const slash = this.filePath.lastIndexOf('/');
+            const saved = await workspace.writeText(slash < 0 ? '' : this.filePath.slice(0, slash), slash < 0 ? this.filePath : this.filePath.slice(slash + 1), content);
+            if (!saved) throw new Error('文件引用已失效或没有写入权限');
+            try {
+              await cleanupRemovedAssets(this.dirPath, this.filePath, oldContent, content);
+            } catch (e: any) {
+              ElMessage.warning(e.message || '资产索引不可用，请手动重建资产索引');
+            }
+            this.fileContent = content;
+            // 保存期间若又编辑过，则在同一保存队列内重新快照并保存，不能把新修改标为已保存。
+            this.isDirty = this.editRevision !== revision;
+          } while (this.isDirty && this.cherryInstance && this.filePath);
+          return true;
+        } catch (err: any) {
+          console.error('Error saving file:', err);
+          return false;
         }
-        this.fileContent = content;
-        this.isDirty = false;
-      } catch (err: any) {
-        console.error('Error saving file:', err);
+      })();
+      this.saveInFlight = task;
+      try {
+        return await task;
+      } finally {
+        if (this.saveInFlight === task) this.saveInFlight = null;
       }
     },
     async checkAndSetDirectory(): Promise<boolean> {
@@ -494,7 +519,10 @@ editorMode: 'edit&preview' as 'edit&preview' | 'editOnly' | 'previewOnly',
       const isSave = (e.metaKey || e.ctrlKey) && (e.key === 's' || e.key === 'S');
       if (!isSave || !this.filePath || !this.cherryInstance) return;
       e.preventDefault();
-      if (this.isDirty) this.saveFile().then(() => ElMessage.success('已保存'));
+      if (this.isDirty) this.saveFile().then(saved => {
+        if (saved) ElMessage.success('已保存');
+        else ElMessage.error('保存失败，请检查文件访问权限');
+      });
       else ElMessage.info('内容已是最新');
     },
     async handleCloseCurrentFile() {
@@ -532,6 +560,8 @@ editorMode: 'edit&preview' as 'edit&preview' | 'editOnly' | 'previewOnly',
       this.syncMenuState();
     },
     async registerHostMenu() {
+      if (this.menuRegistered) return;
+      const tokens: string[] = [];
       try {
         const modeReg = { menuId: this.modeMenuId, rootLabel: 'View', submenuLabel: 'Mode', items: this.modeItems.map(it => ({
           id: it.id, label: it.labelEN, type: 'check' as const, checked: it.id === this.editorMode,
@@ -544,39 +574,75 @@ editorMode: 'edit&preview' as 'edit&preview' | 'editOnly' | 'previewOnly',
           { id: 'close', label: 'Close Current File', type: 'normal' as const },
         ]};
         // 注册顺序决定菜单在 File 下的排列顺序：Close Current File 放在 Export 之前
-        await menus.register(closeFileReg);
-        await menus.register(exportReg);
-        await menus.register(modeReg);
+        for (const registration of [closeFileReg, exportReg, modeReg]) {
+          const registered = await menus.register(registration);
+          if (!registered.ok) throw new Error(registered.error.message);
+        }
+        // 通过 SDK 类型化订阅接收菜单点击（不再监听内部 treasure-menu-event）
+        for (const menuId of [this.modeMenuId, this.exportMenuId, this.closeFileMenuId]) {
+          const subscription = await menus.subscribe(menuId, (event) => this.onHostMenuClick(event.menuId, event.itemId));
+          if (subscription.ok) {
+            tokens.push(subscription.value.token);
+            // 捕获块需要能清理已经确认的部分订阅。
+            this.menuSubTokens = tokens;
+          }
+          else throw new Error(subscription.error.message);
+        }
+        this.menuSubTokens = tokens;
         this.menuRegistered = true;
-      } catch (e) { /* 静默 */ }
+      } catch (e: any) {
+        // 以前这里静默吞掉 Result 错误，插件会误以为菜单已注册，运行时也无法定位。
+        const message = e?.message || '未知错误';
+        console.error('[host-menu] registration failed', message);
+        void logs.write({ level: 'error', category: 'host-menu', message: 'registration-failed', details: { error: message } }).catch(() => undefined);
+        for (const token of tokens) {
+          try { await menus.unsubscribe(token); } catch { /* best-effort rollback */ }
+        }
+        // 清理已注册但尚未完整订阅的菜单，避免留下不可响应的原生菜单项。
+        for (const menuId of [this.modeMenuId, this.exportMenuId, this.closeFileMenuId]) {
+          try { await menus.unregister(menuId); } catch { /* best-effort rollback */ }
+        }
+        this.menuSubTokens = [];
+        this.menuRegistered = false;
+        ElMessage.warning(`系统窗口菜单注册失败：${message}`);
+      }
     },
     async unregisterHostMenu() {
       if (!this.menuRegistered) return;
       try {
+        for (const token of this.menuSubTokens) await menus.unsubscribe(token);
+        this.menuSubTokens = [];
         await menus.unregister(this.modeMenuId);
         await menus.unregister(this.exportMenuId);
         await menus.unregister(this.closeFileMenuId);
         this.menuRegistered = false;
-      } catch (e) { /* 静默 */ }
+      } catch (e: any) {
+        const message = e?.message || '未知错误';
+        console.error('[host-menu] unregister failed', message);
+        void logs.write({ level: 'warn', category: 'host-menu', message: 'unregister-failed', details: { error: message } }).catch(() => undefined);
+      }
     },
     async syncMenuState() {
       if (!this.menuRegistered) return;
       try {
-        const modeReg = { menuId: this.modeMenuId, rootLabel: 'View', submenuLabel: 'Mode', items: this.modeItems.map(it => ({
-          id: it.id, label: it.labelEN, type: 'check' as const, checked: it.id === this.editorMode,
-        })) };
-        await menus.register(modeReg);
-      } catch (e) { /* 静默 */ }
+        // 轻量路径：仅同步 Mode 菜单勾选，不触发整窗菜单重建（建议 3）
+        for (const item of this.modeItems) {
+          const updated = await menus.updateChecked(this.modeMenuId, item.id, item.id === this.editorMode);
+          if (!updated.ok) throw new Error(updated.error.message);
+        }
+      } catch (e: any) {
+        const message = e?.message || '未知错误';
+        console.error('[host-menu] state synchronization failed', message);
+        void logs.write({ level: 'warn', category: 'host-menu', message: 'state-sync-failed', details: { error: message } }).catch(() => undefined);
+      }
     },
-    handleHostMenuEvent(event: MessageEvent) {
-      const d = event.data;
-      if (!d || d.type !== 'treasure-menu-event') return;
-      if (d.menuId === this.modeMenuId) {
-        const mode = d.itemId as 'edit&preview' | 'editOnly' | 'previewOnly';
+    onHostMenuClick(menuId: string, itemId: string) {
+      if (menuId === this.modeMenuId) {
+        const mode = itemId as 'edit&preview' | 'editOnly' | 'previewOnly';
         if (['edit&preview','editOnly','previewOnly'].includes(mode)) this.switchEditorMode(mode);
-      } else if (d.menuId === this.exportMenuId) {
-        this.handleExport(null, d.itemId as 'pdf' | 'img');
-      } else if (d.menuId === this.closeFileMenuId) {
+      } else if (menuId === this.exportMenuId) {
+        this.handleExport(null, itemId as 'pdf' | 'img');
+      } else if (menuId === this.closeFileMenuId) {
         this.handleCloseCurrentFile();
       }
     },
@@ -767,7 +833,7 @@ editorMode: 'edit&preview' as 'edit&preview' | 'editOnly' | 'previewOnly',
   z-index: 0;
   overflow: hidden;
   overflow-anchor: none;
-  padding: 14px 0px 20px 12px;
+  padding: 14px 0 20px;
   color: #5c5347;
   background: transparent;
 }
@@ -798,25 +864,22 @@ editorMode: 'edit&preview' as 'edit&preview' | 'editOnly' | 'previewOnly',
 }
 
 .sidebar-content .el-tree-node__content {
-  width: 246px;
+  box-sizing: border-box;
+  width: 100%;
   height: 38px;
   margin: 4px 0;
-  border-radius: 16px;
   color: #5c5347;
-  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+  transition: background-color 0.2s;
 }
 
 .sidebar-content .el-tree-node__content:hover {
   background: rgba(255, 255, 255, 0.28);
-  box-shadow: 0 4px 14px rgba(154, 132, 189, 0.14);
-  transform: translateX(2px);
 }
 
 .sidebar-content .el-tree .el-tree-node.is-current > .el-tree-node__content,
-.sidebar-content .el-tree .el-tree-node:focus > .el-tree-node__content,
-.sidebar-content .el-tree .el-tree-node.is-current:focus > .el-tree-node__content {
+.sidebar-content .el-tree .el-tree-node:focus > .el-tree-node__content {
   background: rgba(255, 255, 255, 0.18);
-  box-shadow: inset 0 0 0 1px rgba(154, 132, 189, 0.30), 0 6px 20px rgba(154, 132, 189, 0.10);
+  box-shadow: inset 3px 0 rgba(154, 132, 189, 0.30);
 }
 
 .sidebar-content .el-tree-node__expand-icon {
@@ -830,9 +893,10 @@ editorMode: 'edit&preview' as 'edit&preview' | 'editOnly' | 'previewOnly',
 .custom-tree-node {
   display: flex;
   align-items: center;
+  box-sizing: border-box;
   font-size: 13px;
   width: 100%;
-  padding-right: 10px;
+  padding: 0 10px 0 12px;
 }
 
 .node-content {

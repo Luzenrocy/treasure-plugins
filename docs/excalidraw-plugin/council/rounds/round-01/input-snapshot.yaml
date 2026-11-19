@@ -1,0 +1,11 @@
+rules_snapshot: docs/excalidraw-plugin/council/rules-snapshot.yaml
+ledger_version: 1
+contract_snapshot: docs/excalidraw-plugin/council/rules-snapshot.yaml#contract_snapshot
+current_spec: specs/003-prototype-source-parity/spec.md
+current_spec_match: false
+blocking_question: resolved
+path_decision: specs/004-excalidraw-plugin/spec.md
+scope_decision: local core editor + files/libraries/export; no collaboration/accounts/cloud
+integration_decision: direct official @excalidraw/excalidraw integration with Vue/SDK adapter
+file_policy_decision: single configured directory + explicit save + unsaved/conflict confirmation
+library_policy_decision: persist installed libraries in plugin-private storage with offline reuse

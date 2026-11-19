@@ -1,0 +1,12 @@
+round: 1
+rules_snapshot: docs/excalidraw-plugin/tasks-council/rules-snapshot.yaml
+ledger_version: 1
+contract_snapshot: docs/excalidraw-plugin/tasks-council/rules-snapshot.yaml#contract_snapshot
+source_spec: specs/004-excalidraw-plugin/spec.md
+source_plan: specs/004-excalidraw-plugin/plan.md
+source_design:
+  - specs/004-excalidraw-plugin/research.md
+  - specs/004-excalidraw-plugin/data-model.md
+  - specs/004-excalidraw-plugin/contracts/
+  - specs/004-excalidraw-plugin/quickstart.md
+setup_output: setup-tasks.sh --json

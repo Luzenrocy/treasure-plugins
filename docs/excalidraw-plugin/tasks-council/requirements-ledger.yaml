@@ -1,0 +1,118 @@
+version: 3
+source_message: "user invocation 2026-10-16, active Codex task"
+entries:
+  - id: U-001
+    type: goal
+    verbatim: "[$speckit-tasks] [$writing-workshop]"
+    normalized: "根据已发布规格和计划生成可立即执行的 tasks.md。"
+    hardness: hard
+    priority: P0
+    acceptance: "tasks.md 按用户故事和阶段组织，任务有顺序、依赖、并行标记和独立验收标准。"
+    verification: "格式扫描、任务覆盖审查和 council 审批。"
+    owner: "Codex/项目维护者"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+  - id: U-002
+    type: must
+    verbatim: "speckit-tasks workflow"
+    normalized: "遵循 setup-tasks 输出和任务模板，生成 Setup、Foundational、按优先级的用户故事阶段及 Polish 阶段。"
+    hardness: hard
+    priority: P0
+    acceptance: "所有任务均使用 `- [ ] Txxx` 格式；故事任务包含 `[USn]`，可并行任务只在无未完成依赖时标记 `[P]`。"
+    verification: "逐任务格式与依赖检查。"
+    owner: "Codex/项目维护者"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+  - id: U-003
+    type: scope
+    verbatim: "specs/004-excalidraw-plugin/spec.md"
+    normalized: "任务覆盖核心编辑和文件生命周期、官方素材库持久化/离线使用、PNG/SVG 全画布/选区/透明背景导出，以及 FR-001..FR-016 和 SC-001..SC-006。"
+    hardness: hard
+    priority: P0
+    acceptance: "每个用户故事都有目标、独立验收标准、实现任务和必要测试任务。"
+    verification: "规格追踪矩阵和故事阶段审查。"
+    owner: "产品负责人/开发者"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+  - id: U-004
+    type: must
+    verbatim: "specs/004-excalidraw-plugin/plan.md"
+    normalized: "任务遵守 TypeScript/Vue/Vite/Treasure SDK/React/Excalidraw 技术栈、独立插件目录、SDK Result<T>、32 MiB 限制、React 生命周期和契约文件。"
+    hardness: hard
+    priority: P0
+    acceptance: "任务路径与 plan.md 项目结构一致，foundation 先于用户故事，构建和宿主验证有明确任务。"
+    verification: "对照 plan.md、data-model.md、contracts/ 和 quickstart.md。"
+    owner: "开发者/评审者"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+  - id: U-005
+    type: must-not
+    verbatim: "constitution.md 与计划中的范围边界"
+    normalized: "不得生成协作/账户/分享/云端同步、远程 iframe、自研画布、Tauri/宿主内部 API、绝对路径或绕过 SDK 的任务。"
+    hardness: hard
+    priority: P0
+    acceptance: "任务明确关闭 Excalidraw 浏览器文件动作，所有文件/导出走 SDK，且不包含非目标功能任务。"
+    verification: "范围和依赖审查。"
+    owner: "项目维护者"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+  - id: U-006
+    type: format
+    verbatim: "中文项目文档与 writing-workshop"
+    normalized: "正文和说明使用简体中文；writer/reviewer/approver 记录独立保留，发布前需要人工确认。"
+    hardness: hard
+    priority: P1
+    acceptance: "tasks.md 可读中文，过程目录包含本轮 draft/review/revision/decision/coverage/input-snapshot。"
+    verification: "语言审阅与 validate_council.py。"
+    owner: "项目维护者"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+  - id: U-007
+    type: path
+    verbatim: "setup-tasks.sh 输出的 TASKS_TEMPLATE 和 FEATURE_DIR"
+    normalized: "最终候选目标为 `specs/004-excalidraw-plugin/tasks.md`，过程目录为 `docs/excalidraw-plugin/tasks-council/`。"
+    hardness: hard
+    priority: P0
+    acceptance: "候选和发布记录精确指向 tasks.md，发布前经过人工确认。"
+    verification: "检查 manifest、candidate 和 publish。"
+    owner: "Codex/项目维护者"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+amendments:
+  - date: 2026-10-20
+    source: "已发布 plan.md 的菜单公共 API 决定"
+    entries:
+      - id: U-009
+        type: must
+        verbatim: "窗口菜单点击能力必须通过公开 treasure-sdk 提供；SDK 与 Treasure 宿主同步调整；插件不得直接依赖 treasure-menu-event。"
+        normalized: "任务清单必须先安排 SDK/宿主公共菜单契约，再安排插件的 register/update/subscribe/unsubscribe/unregister 接入；listener 留在 SDK 本地 registry，能力版本与平台版本分离。"
+        hardness: hard
+        priority: P0
+        acceptance: "任务包含 SDK、Treasure 宿主和插件三个边界的明确文件路径、依赖顺序、自动化契约测试任务，以及由用户执行的宿主手工验证说明。"
+        verification: "对照 plan.md、contracts/menu-actions.md、contracts/treasure-sdk-boundary.md 和 quickstart.md。"
+        owner: "SDK/宿主维护者与插件开发者"
+        status: open
+        document_refs: []
+        last_checked_round: 0
+  - date: 2026-10-20
+    source: "speckit-analyze 反馈的用户确认修订项"
+    entries:
+      - id: U-010
+        type: must
+        verbatim: "按 speckit-analyze 反馈更新相关文档"
+        normalized: "在官方 API 契约确认前设置阻塞门，Quickstart 只描述预配置官方 API，补充本地素材包回退、计划新增文件、工具支持矩阵、性能约束说明、SDK/宿主测试命令和历史验证版本证据。"
+        hardness: hard
+        priority: P0
+        acceptance: "spec.md、plan.md、quickstart.md、tasks.md 与相关契约在术语、路径、依赖和验证边界上保持一致。"
+        verification: "Round 03 writer/reviewer/approver 审查、任务格式检查和 council validator。"
+        owner: "Codex/项目维护者"
+        status: open
+        document_refs: []
+        last_checked_round: 3

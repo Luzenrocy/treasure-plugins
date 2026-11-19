@@ -1,5 +1,5 @@
 import { createApp } from 'vue';
-import { initTreasure } from 'treasure-sdk';
+import { initTreasure } from '@luzenrocy/treasure-sdk';
 import '@excalidraw/excalidraw/index.css';
 import App from './App.vue';
 import './styles/host.css';

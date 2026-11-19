@@ -1,0 +1,59 @@
+round: 1
+ledger_version: 1
+contract: docs/excalidraw-plugin/checklist-council/adaptive-contract.yaml#document_contract
+source_index: docs/excalidraw-plugin/checklist-council/source-index.md
+item_range: CHK049-CHK106
+item_count: 58
+all_unchecked: true
+traceability:
+  referenced_or_marked_count: 58
+  required_minimum_percent: 80
+  actual_percent: 100
+  reference_types:
+    - Spec
+    - Plan
+    - Contract
+    - Data model
+    - Tasks
+    - Quickstart
+    - Gap
+    - Ambiguity
+    - Conflict
+    - Open question
+categories:
+  requirement_completeness:
+    ids: [CHK049, CHK050, CHK051, CHK052, CHK053, CHK054, CHK055, CHK056, CHK057, CHK058]
+    focus: "FR/SC 追踪、SDK/宿主公共 API、菜单生命周期、能力版本、来源校验和证据归属"
+  requirement_clarity:
+    ids: [CHK059, CHK060, CHK061, CHK062, CHK063, CHK064, CHK065, CHK066, CHK067, CHK068]
+    focus: "API 语义、Result<T> 错误、状态条件、信任边界、幂等、能力缺失和重试"
+  requirement_consistency:
+    ids: [CHK069, CHK070, CHK071, CHK072, CHK073, CHK074, CHK075, CHK076]
+    focus: "规格、计划、数据模型、契约和 quickstart 的一致性"
+  acceptance_quality:
+    ids: [CHK077, CHK078, CHK079, CHK080, CHK081, CHK082, CHK083]
+    focus: "SC-007..SC-011 和菜单契约验收结果是否可观察、可区分、可追踪"
+  scenario_edge_recovery:
+    ids: [CHK084, CHK085, CHK086, CHK087, CHK088, CHK089, CHK090]
+    focus: "主流程、替代流程、部分失败、引用过期、tab 生命周期、重复事件和来源异常"
+  nonfunctional_dependencies:
+    ids: [CHK091, CHK092, CHK093, CHK094, CHK095, CHK096, CHK097, CHK098]
+    focus: "安全、隐私、可访问性、本地化、可观测性、同步发布和既有非功能约束"
+  ambiguities_conflicts:
+    ids: [CHK099, CHK100, CHK101, CHK102, CHK103, CHK104, CHK105, CHK106]
+    focus: "兼容命名、不可用呈现、失败入口、去重、API 合并、错误码、暂停与证据边界"
+ledger_coverage:
+  U-001: "CHK049-CHK106; 全部条目为需求质量问句"
+  U-002: "CHK049-CHK058, CHK077-CHK098; 覆盖 FR-001..FR-028、SC-001..SC-011 与 SDK/宿主菜单边界"
+  U-003: "CHK049-CHK106; 无实现测试措辞，全部保持未勾选"
+  U-004: "CHK049-CHK106; 连续追加范围，不改变既有 CHK001-CHK048"
+  U-005: "draft.md、coverage.yaml、revision.md 与 artifacts/append.md 组成 round-01 writer 工件"
+source_coverage:
+  S-001: "CHK049-CHK058, CHK061-CHK068, CHK077-CHK090, CHK094, CHK097"
+  S-002: "CHK049, CHK054, CHK057, CHK058, CHK067, CHK072, CHK076, CHK096-CHK099"
+  S-003: "CHK058, CHK081"
+  S-004: "CHK050-CHK056, CHK059-CHK060, CHK063-CHK066, CHK069-CHK076, CHK082, CHK086-CHK090, CHK095, CHK099-CHK106"
+  S-005: "CHK050, CHK052-CHK055, CHK060, CHK064, CHK069-CHK076, CHK082, CHK087, CHK090-CHK092, CHK096, CHK098, CHK104, CHK106"
+  S-006: "CHK051-CHK053, CHK063, CHK065-CHK066, CHK071, CHK074, CHK080, CHK088-CHK089, CHK092, CHK106"
+  S-007: "CHK053-CHK054, CHK058, CHK070, CHK072-CHK074, CHK076, CHK082, CHK085, CHK088, CHK097"
+  S-008: "通过当前 contract 与 ledger 治理要求体现；不额外引入未在来源中声明的事实"

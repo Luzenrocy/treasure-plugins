@@ -1,0 +1,74 @@
+document_id: "mindmap-research"
+title: "Treasure 思维导图插件：技术调研与 UI 设计方案"
+document_type: "技术研究与产品设计决策书"
+locale: "zh-CN"
+owner: "Writing Workshop"
+created: 2026-11-04
+updated: 2026-11-04
+version: "1.0"
+status: published
+round_limit: 10
+iterations_per_round: 10
+current_round: 1
+current_iteration: 3
+round_gate: none
+roles:
+  writer: "/root/writer_r1_i2 / senior mindmap product-architecture writer"
+  reviewer: "/root/reviewer_r1_i2 / independent compatibility and UX reviewer"
+  approver: "/root/checker_r1_i2 / evidence and requirements checker"
+document_contract:
+  mode: hybrid
+  family: record
+  label: "技术研究与产品设计决策书"
+  purpose: "将用户的思维导图插件愿景转化为有证据、可实施的技术与 UI 方案"
+  reader_job: "选择技术路线、理解兼容边界、据此启动设计与工程验证"
+  audience: ["产品负责人", "前端开发者", "设计者"]
+  medium: markdown
+  locale: zh-CN
+  tone: "具体、务实、清楚；建议与已验证事实分开"
+  evidence_style: "官方一手网页就近 Markdown 链接；本地来源准确路径；访问日 2026-11-04；无虚构跑分/PoC"
+  risk_level: medium
+  terminology: ["Xmind", "SimpleMindMap", ".smm 方言", "工作目录", "重置视图", "重新布局", "清空内容", "兼容报告"]
+  required_sections:
+    - "推荐路线与适用条件"
+    - "研究边界与本地现状"
+    - "官方产品功能映射"
+    - "候选技术、渲染与布局比较及许可证/维护风险"
+    - "格式兼容矩阵、往返保真与降级规则"
+    - "应用架构、数据模型、宿主 SDK 能力与限制"
+    - "文件目录与完整生命周期"
+    - "UI 线框、节点连线主题、设计 tokens、响应与可访问性"
+    - "阶段建议、PoC 决策门槛、可验证验收场景"
+    - "待确认问题与来源"
+  optional_sections: ["概念 UI SVG", "开发目录建议"]
+  forbidden_sections: ["角色争论", "内部提示词", "隐藏思维过程", "伪称已完成的产品实现", "未声明的不兼容数据静默覆盖"]
+  quality_checks:
+    - "所有 hard U 项均可在 draft 和 coverage 定位"
+    - "兼容分读取/编辑/写出，明确多 sheet、图片、富文本、关系/概要/边界、未知字段和源文件保护"
+    - "SMM 低维护、闭源客户端/插件边界和 fork 成本纳入选择"
+    - "本地 SDK 无公开能力不得描述为已可调用；版本锁定和样本验证为前置门槛"
+    - "UI 有具体可执行规格，不把审美判断称为市场统计"
+    - "性能数字必须标为验收目标，无实测数据；不虚构工期"
+    - "最终主文清洁、相对链接有效、元数据及精确路径正确"
+  source: inferred
+publication:
+  target_path: "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/technical-ui-proposal.md"
+  target_path_source: default
+  target_format: "markdown"
+  final_filename: "technical-ui-proposal.md"
+  overwrite_policy: refuse
+artifacts:
+  artifact_root: "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin"
+  process_base_path: "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin"
+  council_path: "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council"
+  process_path: "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/mindmap-plugin/council"
+  process_path_resolution: "derived-from-target/council"
+  process_path_source: default
+integration_mode: none
+target_skill: "none"
+contract_snapshot: null
+skill_snapshot: "rules-snapshot.yaml"
+sources: ["source-index.md", "source-engines.md", "source-xmind.md", "source-rendering.md", "source-local.md"]
+rules_snapshot_sha256: "075f51d99b7a9278b9cd5903482c4e62d162f624e42d155db6fc59decca1df22"
+ledger_version: 1
+publication_assets: ["ui-concept.svg", "ui-concept.png"]

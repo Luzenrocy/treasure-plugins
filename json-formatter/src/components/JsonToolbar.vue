@@ -11,12 +11,13 @@
     <button type="button" @click="$emit('load')">从文件载入</button>
     <span class="toolbar-spacer" />
     <button type="button" :disabled="!hasText" @click="$emit('copy')">复制当前文本</button>
+    <span v-if="copyFeedback" class="copy-feedback" :class="`state-${copyFeedbackState}`" role="status" aria-live="polite">{{ copyFeedback }}</span>
   </section>
 </template>
 
 <script setup lang="ts">
 import type { EscapeTarget } from '../domain/json';
-defineProps<{ hasText: boolean; escaped: boolean; escapeTarget: EscapeTarget }>();
+defineProps<{ hasText: boolean; escaped: boolean; escapeTarget: EscapeTarget; copyFeedback: string; copyFeedbackState: 'success' | 'error' }>();
 defineEmits<{ (event: 'format' | 'compact' | 'escape' | 'load' | 'copy'): void; (event: 'update:escapeTarget', value: string): void }>();
 </script>
 
@@ -25,5 +26,6 @@ defineEmits<{ (event: 'format' | 'compact' | 'escape' | 'load' | 'copy'): void; 
 button, select { min-height: 32px; border: 1px solid var(--json-border); border-radius: 6px; background: var(--json-panel); color: var(--json-ink); padding: 6px 11px; font: inherit; font-weight: 650; cursor: pointer; }
 button:hover:not(:disabled), select:hover:not(:disabled) { border-color: var(--json-border-strong); } button.primary { border-color: var(--json-purple); background: var(--json-purple); color: #fffaf1; } button:disabled, select:disabled { color: var(--json-disabled); cursor: not-allowed; opacity: .82; }
 .toolbar-select { display: inline-flex; align-items: center; gap: 7px; color: var(--json-muted); font-size: 13px; } .toolbar-select select { min-width: 150px; } .toolbar-spacer { flex: 1; }
+.copy-feedback { font-size: 13px; font-weight: 650; white-space: nowrap; } .copy-feedback.state-success { color: var(--json-purple); } .copy-feedback.state-error { color: var(--json-error); }
 @media (max-width: 720px) { .toolbar-spacer { flex-basis: 100%; } .json-toolbar { margin: 6px 10px 5px; } }
 </style>

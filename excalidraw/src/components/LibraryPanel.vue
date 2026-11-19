@@ -8,7 +8,7 @@
 </template>
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue';
-import { files } from 'treasure-sdk';
+import { files } from '@luzenrocy/treasure-sdk';
 import { loadLibraryFromBlob } from '@excalidraw/excalidraw';
 import { OfficialLibraryClient } from '../services/official-library-client';
 import { LibraryService } from '../services/library-service';

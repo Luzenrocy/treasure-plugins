@@ -1,0 +1,28 @@
+run_id: "excalidraw-library-directory-solution-2026-10-29"
+status: "published"
+current_round: 1
+current_iteration: 1
+round_limit: 10
+iterations_per_round: 10
+round_gate: "none"
+publication:
+  target_path: "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/excalidraw-plugin/technical-solution.md"
+  format: "markdown"
+  target_path_source: "default"
+  target_source: "inferred default because user did not provide a filename"
+artifacts:
+  process_base_path: "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/excalidraw-plugin"
+  process_path: "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/excalidraw-plugin/solution-council"
+  resolution_rule: "default dedicated council child of the inferred target's parent"
+  process_path_source: "default"
+  source: "writing-workshop process-artifacts.md"
+roles:
+  writer: "fresh writer context"
+  reviewer: "fresh reviewer context"
+  checker: "fresh checker context"
+integration:
+  mode: "optional-overlay"
+  skill_id: "awesome-ai-tools:writing-workshop"
+  source: "/Users/luzenrocy/.codex/plugins/cache/awesome-ai-tools/awesome-ai-tools/1.0.0/skills/writing-workshop/SKILL.md"
+ledger_version: 1
+rules_snapshot: "rules-snapshot.yaml"

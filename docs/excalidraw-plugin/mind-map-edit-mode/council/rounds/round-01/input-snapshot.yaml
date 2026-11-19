@@ -1,0 +1,4 @@
+rules_snapshot: "rules-snapshot.yaml#2026-11-02T13:32:12+08:00"
+ledger_version: 1
+contract_snapshot: "adaptive-contract.yaml#v1"
+shared_inputs: ["user-brief.md", "requirements-ledger.yaml", "adaptive-contract.yaml", "source-index.md", "memory.md"]

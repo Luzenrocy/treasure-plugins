@@ -5,5 +5,5 @@ export function exportStatus(stage: string, type: 'pdf' | 'img' | ''): string {
 
 /** The native save sheet owns the selection phase; the app overlay starts afterwards. */
 export function exportStageAfterSave(saveConfirmed: boolean): string {
-  return saveConfirmed ? '正在分析导出内容…' : '请选择导出位置…';
+  return saveConfirmed ? '导出中…' : '请选择导出位置…';
 }

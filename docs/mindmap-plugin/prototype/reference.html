@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>思维导图 · 研发参考</title>
+  <style>
+    :root { color-scheme: light; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; color: #292634; background: #eeedf1; font-size: 14px; }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    button, select, a { -webkit-tap-highlight-color: transparent; }
+    button, select { font: inherit; }
+    button, .product-link { min-height: 40px; border: 1px solid #d5d0dd; background: #fff; color: #49365e; border-radius: 8px; padding: 0 14px; cursor: pointer; white-space: nowrap; }
+    button:hover, .product-link:hover { background: #f4f0f9; border-color: #a998bd; }
+    :focus-visible { outline: 3px solid #9675bd; outline-offset: 3px; }
+    a { color: #60427f; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .reference-shell { padding: 20px 24px 24px; max-width: 1760px; margin: 0 auto; }
+    .reference-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
+    .reference-heading { margin-right: auto; min-width: 240px; }
+    .eyebrow { display: block; color: #6d637d; font-size: 11px; font-weight: 700; letter-spacing: .13em; margin-bottom: 5px; }
+    h1 { margin: 0; font-size: 19px; font-weight: 650; line-height: 1.35; }
+    .scenario-control { display: flex; align-items: center; gap: 9px; color: #62586e; font-size: 13px; }
+    select { min-height: 40px; padding: 0 32px 0 12px; border: 1px solid #d5d0dd; border-radius: 8px; background: #fff; color: #292634; max-width: 100%; }
+    .product-link { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; }
+    .product-link:hover { text-decoration: none; }
+    .state-bar { border: 1px solid #dcd8e3; border-radius: 10px; background: #f9f8fb; padding: 10px 14px; margin-bottom: 14px; }
+    .state-line { display: flex; align-items: baseline; flex-wrap: wrap; gap: 7px 18px; margin: 0; font-size: 12px; }
+    .state-line div { display: inline-flex; gap: 6px; min-width: 0; }
+    dt { color: #80758c; }
+    dd { margin: 0; color: #4c4259; max-width: 230px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .last-event { font-size: 12px; color: #62586e; border-top: 1px solid #e7e3ec; padding-top: 8px; margin: 8px 0 0; }
+    .last-event strong { color: #49365e; font-weight: 550; }
+    .product-frame { overflow-x: auto; border: 1px solid #d4cedd; border-radius: 12px; background: #faf8f3; box-shadow: 0 5px 25px #36244d09; }
+    iframe { display: block; width: 100%; min-width: 900px; height: 760px; border: 0; background: #faf8f3; }
+    .frame-caption { margin: 8px 2px 14px; font-size: 12px; color: #80758c; }
+    details { border: 1px solid #dcd8e3; border-radius: 10px; background: #f9f8fb; }
+    summary { min-height: 44px; padding: 12px 16px; color: #51435f; font-size: 13px; cursor: pointer; }
+    .contracts { padding: 0 18px 18px; }
+    .contracts > p { color: #6b6076; font-size: 13px; line-height: 1.7; margin: 3px 0 14px; }
+    .contract-scroll { overflow-x: auto; }
+    table { border-collapse: collapse; width: 100%; font-size: 13px; text-align: left; line-height: 1.65; min-width: 680px; }
+    th, td { border-bottom: 1px solid #e6e0ec; padding: 10px 12px; vertical-align: top; }
+    th { background: #f0ebf5; color: #554063; font-weight: 600; }
+    td:first-child { width: 13%; font-weight: 550; color: #4b3c58; }
+    .contract-note { margin: 12px 0 0 !important; font-size: 12px !important; }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: #68527b; background: #eee8f4; border-radius: 3px; padding: 1px 4px; font-size: 12px; }
+    @media (max-width: 760px) {
+      .reference-shell { padding: 14px 12px; }
+      .reference-heading { flex-basis: 100%; margin-bottom: 2px; }
+      .reference-toolbar { gap: 10px; }
+      .scenario-control { flex: 1 1 210px; }
+      select { flex: 1; min-width: 0; }
+      .product-link, button { padding: 0 11px; font-size: 12px; }
+      .state-line { gap: 7px 14px; }
+      .contracts { padding: 0 12px 14px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="reference-shell">
+    <header class="reference-toolbar" aria-label="研发场景工具栏">
+      <div class="reference-heading">
+        <span class="eyebrow">DEVELOPMENT REFERENCE</span>
+        <h1>思维导图 · 交互参考</h1>
+      </div>
+      <label class="scenario-control" for="scenario">单一场景
+        <select id="scenario">
+          <option value="default">默认工作台</option>
+          <option value="selected">选中节点</option>
+          <option value="style">样式属性</option>
+          <option value="directory">更换目录抽屉</option>
+          <option value="export">导出对话框</option>
+          <option value="unsaved">未保存保护</option>
+          <option value="delete">删除确认</option>
+          <option value="deleting">删除进行中</option>
+          <option value="compat">预览兼容说明</option>
+          <option value="preview-smm">SMM 只读预览</option>
+          <option value="preview-xmind">Xmind 只读预览</option>
+          <option value="empty">空目录</option>
+          <option value="error">目录异常</option>
+          <option value="save-error">保存失败</option>
+          <option value="delete-error">删除失败</option>
+        </select>
+      </label>
+      <button type="button" id="reset">重置该场景</button>
+      <a class="product-link" id="product-link" href="index.html?scenario=default" target="_blank" rel="noopener">打开纯产品原型 <span aria-hidden="true">↗</span></a>
+    </header>
+
+    <section class="state-bar" aria-label="原型状态观察">
+      <dl class="state-line">
+        <div><dt>场景</dt><dd id="state-scenario">默认工作台</dd></div>
+        <div><dt>浮层</dt><dd id="state-overlay">—</dd></div>
+        <div><dt>属性</dt><dd id="state-inspector">—</dd></div>
+        <div><dt>选区</dt><dd id="state-selected">—</dd></div>
+        <div><dt>文件</dt><dd id="state-file">—</dd></div>
+        <div><dt>Sheet</dt><dd id="state-sheet">—</dd></div>
+        <div><dt>未保存</dt><dd id="state-dirty">—</dd></div>
+        <div><dt>保存中</dt><dd id="state-saving">—</dd></div>
+        <div><dt>删除中</dt><dd id="state-deleting">—</dd></div>
+      </dl>
+      <p class="last-event" role="status" aria-live="polite">最近操作：<strong id="last-event">等待原型状态</strong></p>
+    </section>
+
+    <div class="product-frame">
+      <iframe id="prototype" src="index.html?scenario=default" title="思维导图产品交互原型"></iframe>
+    </div>
+    <p class="frame-caption">上方工具与状态仅供研发观察。框内为产品界面；窄屏可横向滚动，建议以 1440 px 宽度查看。</p>
+
+    <details>
+      <summary>交互契约：触发、退出、遮罩、焦点与互斥</summary>
+      <div class="contracts">
+        <p>每个场景都是一次独立加载。可在框内继续操作；重新选择场景或点击“重置该场景”会丢弃本次内存改动，恢复该场景。所有标注与说明均留在产品框外。</p>
+        <div class="contract-scroll">
+          <table>
+            <thead><tr><th>界面状态</th><th>触发与退出</th><th>遮罩与焦点</th><th>互斥规则</th></tr></thead>
+            <tbody>
+              <tr><td>节点选中</td><td>单击节点选中；双击编辑标题；点击画布空白或 Esc 退出选区。</td><td>不遮罩画布；选区显示轮廓和节点工具条。</td><td>工具条跟随当前选区，默认态不常驻。</td></tr>
+              <tr><td>样式属性</td><td>由选区样式入口打开；关闭按钮或 Esc 收起。</td><td>侧栏不冻结整个工作台；关闭回到触发入口，入口不可用则回到画布。</td><td>只编辑当前选区；切换选区同步属性。</td></tr>
+              <tr><td>目录/大纲</td><td>悬停左侧短横标记展开，可切换文件与大纲；“更换工作目录”打开目录选择。</td><td>悬浮面板覆盖画布，移出后收起；目录选择是独立模态抽屉。</td><td>默认无整列占位及侧栏按钮。</td></tr>
+              <tr><td>导出</td><td>顶栏导出打开；取消、关闭按钮、Esc 或允许的遮罩点击退出。</td><td>模态遮罩；焦点停留于对话框，关闭回到触发入口，入口不可用则回到画布。</td><td>仅提供 SVG 与 PNG；SMM/Xmind 为输入格式。导出不改变未保存状态。</td></tr>
+              <tr><td>未保存保护</td><td>脏文档切文件、关闭、换目录时触发；保存/放弃后继续目标操作，取消留在原文件。</td><td>模态遮罩；暂锁内容编辑，明确显示来源文件和离开目标。</td><td>保护流程串行执行；取消不隐含放弃，保存完成后再继续离开。</td></tr>
+              <tr><td>文件删除</td><td>目录文件菜单打开确认；发起前可取消。请求开始后等待结果。</td><td>模态遮罩；删除中禁用取消与返回编辑，Esc 和遮罩不能解锁。</td><td>固定目标文件；成功才移除列表项。节点 Delete 与文件删除分开。</td></tr>
+              <tr><td>外部预览</td><td>SMM 与 Xmind 以只读预览打开；Xmind 预览前提示高级对象的呈现限制。</td><td>预览允许缩放、切换已有画布、选中与导出；来源文件不进入内容编辑状态。</td><td>保存禁用，外部来源不直接写回；不自动创建副本。</td></tr>
+              <tr><td>编辑副本</td><td>点击“创建可编辑副本”或尝试编辑时触发；取消保留来源预览。</td><td>确认后新建原生工作文件，再继续原编辑动作；新副本标记未保存。</td><td>节点编辑、画布新增/改名、主题、结构、备注及撤销都适用复制保护。</td></tr>
+              <tr><td>空/异常目录</td><td>空态新建或导入；异常态重试或重新选择目录。</td><td>替换目录内容区，不额外遮住画布。</td><td>目录异常不等于当前内存文档丢失。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="contract-note">Esc 按“当前可取消的浮层 → 属性/抽屉 → 选区”的优先级退出；删除请求已开始时不可取消。Tab / Enter 增加子节点 / 同级节点，双击改名，Ctrl / Cmd + S 保存，Ctrl / Cmd + Z 撤销。输入框与中文组合输入期间保留文字输入行为。</p>
+        <p class="contract-note">状态桥只接收当前 iframe 发出的 <code>mindmap-prototype-state</code> 消息；展示值通过纯文本写入。原型能力与模拟边界见 <a href="README.md">README</a>。</p>
+      </div>
+    </details>
+  </main>
+  <script>
+    (() => {
+      'use strict';
+      const frame = document.getElementById('prototype');
+      const picker = document.getElementById('scenario');
+      const productLink = document.getElementById('product-link');
+      const names = Object.fromEntries(Array.from(picker.options, option => [option.value, option.textContent]));
+      const fieldIds = ['overlay', 'inspector', 'selected', 'file', 'sheet', 'dirty', 'saving', 'deleting'];
+      const asText = (value, fallback = '—') => {
+        if (typeof value === 'string' || typeof value === 'number') return String(value).slice(0, 220) || fallback;
+        if (typeof value === 'boolean') return value ? '是' : '否';
+        return fallback;
+      };
+      const put = (id, value) => {
+        const element = document.getElementById(id);
+        element.textContent = value;
+        element.title = value;
+      };
+      const loadScenario = () => {
+        const scenario = picker.value;
+        const destination = 'index.html?scenario=' + encodeURIComponent(scenario);
+        put('state-scenario', names[scenario]);
+        fieldIds.forEach(field => put('state-' + field, '—'));
+        put('last-event', '等待原型状态');
+        productLink.href = destination;
+        frame.src = destination;
+      };
+      window.addEventListener('message', event => {
+        if (event.source !== frame.contentWindow) return;
+        const message = event.data;
+        if (!message || typeof message !== 'object' || message.type !== 'mindmap-prototype-state') return;
+        const state = message.state;
+        if (!state || typeof state !== 'object' || Array.isArray(state)) return;
+        put('state-scenario', names[state.scenario] || asText(state.scenario));
+        put('state-overlay', asText(state.overlay, '无'));
+        put('state-inspector', asText(state.inspector, '收起'));
+        put('state-selected', asText(state.selectedNodeId, '无'));
+        put('state-file', asText(state.fileName, '未打开'));
+        put('state-sheet', asText(state.sheetName, '无'));
+        put('state-dirty', asText(state.dirty));
+        put('state-saving', asText(state.saving));
+        put('state-deleting', asText(state.deleting));
+        put('last-event', asText(message.event, '状态已更新'));
+      });
+      picker.addEventListener('change', loadScenario);
+      document.getElementById('reset').addEventListener('click', loadScenario);
+      const initial = new URLSearchParams(window.location.search).get('scenario');
+      if (Object.prototype.hasOwnProperty.call(names, initial)) picker.value = initial;
+      loadScenario();
+    })();
+  </script>
+</body>
+</html>

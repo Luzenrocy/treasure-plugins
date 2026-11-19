@@ -1,0 +1,16 @@
+ledger_version: 1
+draft: "draft.md"
+items:
+  U-001: {status: satisfied, location: "§1, entire document", evidence: "Technical solution only; no task plan."}
+  U-002: {status: satisfied, location: "§2.1, §4.2", evidence: "No UIOptions library flag; version-locked CSS/fork fallback and tests."}
+  U-003: {status: satisfied, location: "§4.1", evidence: "renderTopRightUI public slot and accessibility behavior."}
+  U-004: {status: satisfied, location: "§4.1, §5", evidence: "Right drawer state/title and no page navigation."}
+  U-005: {status: satisfied, location: "§5", evidence: "settings-backed URL, adapter, cache/error handling."}
+  U-006: {status: satisfied, location: "§6.2", evidence: "Install/uninstall state machine and idempotency."}
+  U-007: {status: satisfied, location: "§1, §6.1, §8", evidence: "Private storage default and explicit visible-directory alternative."}
+  U-008: {status: satisfied, location: "§5.1", evidence: "library_url setting and exact default."}
+  U-009: {status: satisfied, location: "§7.2-§7.3", evidence: "UIOptions hide mapping and directory file list replacement."}
+  U-010: {status: satisfied, location: "§7.3", evidence: "Fixed-height/overflow model and guide scrollbar CSS."}
+  U-011: {status: satisfied, location: "§1, §10", evidence: "No implementation task breakdown or schedule."}
+  U-012: {status: satisfied, location: "§2.1", evidence: "Explicit feasibility table and decision."}
+  U-013: {status: satisfied, location: "§3, §8, §9", evidence: "Result<T>, references, permissions and relative storage keys."}

@@ -1,0 +1,78 @@
+version: 1
+source_message: "user-brief.md; user request dated 2026-11-05"
+locale: zh-CN
+scope_note: "U-003 to U-006 include explicit acceptance details supplied by the coordinator to make the requested alternatives concrete; they do not select a product name."
+entries:
+  - id: U-001
+    type: must
+    verbatim: "smm 、xmind 文件只要支持外部导入 或打开查看预览就可以 设计编辑、修改等操作都按当前 复制文件到新的文件处理"
+    normalized: "SMM/Xmind are external read-only sources; any content or design modification first creates a separate native work file. No source overwrite and no second-sheet-only conversion gate."
+    hardness: hard
+    priority: P0
+    acceptance: "Draft states both formats use the same preview-to-copy boundary, covers first modification/new/one-sheet/multiple-sheet/save/cancel/failure paths, and explicitly supersedes former SMM in-place editing."
+    verification: "Inspect sections 1, 2 and 6; current prototype is described as a simulation, not real parsing."
+    status: satisfied
+    document_refs: ["1 修订结论与适用范围", "2 外部来源与原生工作文件", "6 落地核对"]
+    last_checked_round: 1
+    last_checked_iteration: 1
+  - id: U-002
+    type: must
+    verbatim: "借鉴 石玉录、考成策 这两个项目的命令思路和逻辑"
+    normalized: "Follow the user-provided pattern: grounded classical concept or practice, meaningful modern product interpretation, and a suitable carrier word. Explain each component instead of assembling decorative archaic words."
+    hardness: hard
+    priority: P0
+    acceptance: "Draft accurately restates both user rationales and derives a naming rubric that fits a mind-map tool."
+    verification: "Inspect section 3 against user-brief.md; repository READMEs support plugin functions only."
+    status: satisfied
+    document_refs: ["3 命名方法", "4 六组名称与后缀候选"]
+    last_checked_round: 1
+    last_checked_iteration: 1
+  - id: U-003
+    type: must
+    verbatim: "给这个思维导图插件设计一个合适的名称（多给出几个方案选择）"
+    normalized: "Provide at least six distinct viable candidates, explain meanings and product fit, compare strengths and tradeoffs, and clearly recommend one without treating recommendation as user selection."
+    hardness: hard
+    priority: P1
+    acceptance: "Six named options have component meanings, source/interpretation, benefit/tradeoff and a clear ranked recommendation."
+    verification: "Inspect sections 4 and 5."
+    status: satisfied
+    document_refs: ["4 六组名称与后缀候选", "5 推荐次序与待选项"]
+    last_checked_round: 1
+    last_checked_iteration: 1
+  - id: U-004
+    type: must
+    verbatim: "并依据名称确定落地的文件的后缀"
+    normalized: "Each candidate has a lowercase ASCII extension derived from its name, a full pinyin repository slug and concrete single-sheet/multiple-sheet examples using the same native format. All remain proposed until user selection."
+    hardness: hard
+    priority: P1
+    acceptance: "Six candidate mappings are explicit; each has two file examples, one format for all sheet counts, and extension choice does not claim to define a complete schema."
+    verification: "Inspect section 4 comparison table and section 5 implementation rules."
+    status: satisfied
+    document_refs: ["4 六组名称与后缀候选", "5 推荐次序与待选项"]
+    last_checked_round: 1
+    last_checked_iteration: 1
+  - id: U-005
+    type: must
+    verbatim: "整体上命令思路逻辑“仿古”（或“考古”）"
+    normalized: "Link grounded ancient text to each proposal and explicitly separate the text's historical context from modern product interpretation; label reconstructed names as such and make no fabricated quotation."
+    hardness: hard
+    priority: P0
+    acceptance: "Each candidate gives a verifiable primary-text passage and says which part is the writer's present-day naming interpretation."
+    verification: "Check section 4 against S-004 to S-007 in source-index.md."
+    status: satisfied
+    document_refs: ["3 命名方法", "4 六组名称与后缀候选"]
+    last_checked_round: 1
+    last_checked_iteration: 1
+  - id: U-006
+    type: must-not
+    verbatim: "项目命名需要重新确认；多给出几个方案选择"
+    normalized: "Do not finalize the name/extension without user selection, do not claim uniqueness or trademark clearance, and treat .treasuremind only as the historical prototype placeholder. Publish this as an explicit amendment while preserving prior approved material."
+    hardness: hard
+    priority: P0
+    acceptance: "Candidate status is prominent; selected name/extension remain open; new proposal explicitly takes precedence on these two issues, links older documents, and does not overwrite them."
+    verification: "Inspect metadata, sections 1/5/6 and publication target; review repository diff."
+    status: satisfied
+    document_refs: ["metadata", "1 修订结论与适用范围", "5 推荐次序与待选项", "6 落地核对"]
+    last_checked_round: 1
+    last_checked_iteration: 1
+amendments: []

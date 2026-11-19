@@ -1,0 +1,63 @@
+round: 2
+ledger_version: 2
+entries:
+  - id: U-001
+    status: satisfied
+    draft_refs: ["Summary", "Phase 0: Research", "Phase 1: Design & Contracts"]
+    evidence: "round-02 提供完整 plan、research、data-model、contracts 和 quickstart，并复制到 artifacts/。"
+    verification: "检查 round-02/artifacts 文件清单及链接。"
+  - id: U-002
+    status: satisfied
+    draft_refs: ["Technical Context", "Constitution Check", "Phase 0: Research", "Phase 1: Design & Contracts"]
+    evidence: "模板必需章节已填充；菜单 API 的当前事实、建议版本和待确认命名均显式标记。"
+    verification: "搜索 NEEDS CLARIFICATION，并对照 speckit-plan 模板。"
+  - id: U-003
+    status: satisfied
+    draft_refs: ["Summary", "Project Structure", "Phase 1: Design & Contracts"]
+    evidence: "FR-001..FR-016、SC-001..SC-006 继续沿用，并在契约、数据模型和 quickstart 中有验证位置。"
+    verification: "对照 spec.md 和 artifacts/contracts。"
+  - id: U-004
+    status: satisfied
+    draft_refs: ["Technical Context", "Constitution Check", "contracts/treasure-sdk-boundary.md", "contracts/menu-actions.md"]
+    evidence: "明确排除内部菜单事件、裸 postMessage、Tauri、绝对路径、协作/账户/云同步，并保留 Result<T>、权限和 32 MiB 边界。"
+    verification: "源码门禁和 reviewer 范围检查。"
+  - id: U-005
+    status: satisfied
+    draft_refs: ["Constitution Check", "Post-Design Constitution Check", "quickstart.md"]
+    evidence: "constitution v1.4.0 的 SDK-first、跨仓库同步门槛、Result<T>、无障碍、中文文档和发布验证均有检查。"
+    verification: "逐项对照 constitution.md v1.4.0。"
+  - id: U-006
+    status: satisfied
+    draft_refs: ["round-02/draft.md", "round-02/research.md", "round-02/coverage.yaml", "round-02/revision.md"]
+    evidence: "本轮保存 writer 工件、coverage、revision，并保留 Phase 0/1 artifacts；review/approver 由后续角色处理。"
+    verification: "运行 validate_council.py 并检查 round-02 清单。"
+  - id: U-007
+    status: satisfied
+    draft_refs: ["全部 round-02 正文工件"]
+    evidence: "正文使用简体中文，英文仅保留 API、命令、路径、字段和模板标题。"
+    verification: "人工检查标题、表格和说明文字。"
+  - id: U-008
+    status: satisfied
+    draft_refs: ["artifacts/plan.md"]
+    evidence: "可发布完整计划写入 round-02/artifacts/plan.md；未修改 specs 目标文件。"
+    verification: "检查 artifacts/plan.md 与目标路径声明。"
+  - id: U-009
+    status: satisfied
+    draft_refs: ["research.md", "data-model.md", "contracts/*", "quickstart.md"]
+    evidence: "Excalidraw 版本/ESM、React 挂载、序列化、素材、冲突、storage、32 MiB、测试和宿主验证均有研究决策或探针。"
+    verification: "逐项核对 research 决策与 quickstart。"
+  - id: U-010
+    status: satisfied
+    draft_refs: ["research.md#决策-8", "contracts/menu-actions.md", "contracts/treasure-sdk-boundary.md", "data-model.md", "quickstart.md", "plan.md#Phase-1-Design--Contracts"]
+    evidence: "明确 SDK 注册/更新/订阅/注销 API；listener 仅保存在 SDK 本地 registry，bridge payload 不含函数；事件字段、来源校验、暂停/恢复生命周期、独立 capabilityVersion、旧 bridge 错误归一化和 SDK/宿主同步清单均已写明；插件不依赖 treasure-menu-event。"
+    verification: "检查菜单契约、跨仓库同步清单、SDK mock、源码门禁和切 tab/版本矩阵宿主手测。"
+  - id: FR-028
+    status: satisfied
+    draft_refs: ["Scale/Scope", "Phase 1: Design & Contracts", "quickstart.md"]
+    evidence: "明确本轮不改变核心绘图、文件/导出格式或宿主全局菜单，交付物只为计划与契约，不包含直接实现或代理代跑宿主测试。"
+    verification: "范围审查与 speckit-tasks 输入检查。"
+  - id: SC-011
+    status: satisfied
+    draft_refs: ["规格追踪", "quickstart.md", "revision.md"]
+    evidence: "增加核心能力、既定导出范围、全局菜单未改变及交付边界的手工复核步骤。"
+    verification: "用户宿主验收记录和工件清单。"

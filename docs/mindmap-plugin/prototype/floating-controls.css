@@ -1,0 +1,301 @@
+/*
+ * Canvas-first controls, inspired by Excalidraw's compact grouped toolbars.
+ * This stays separate from app.css so the prototype's design decision is easy
+ * for implementation teams to review or replace.
+ */
+.app-header {
+  position: absolute;
+  inset: 16px 16px auto;
+  z-index: 12;
+  height: auto;
+  min-height: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.floating-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  border: 1px solid var(--mm-line);
+  border-radius: 10px;
+  background: var(--mm-surface);
+  box-shadow: 0 4px 16px #3027420d;
+  pointer-events: auto;
+}
+
+.floating-group .icon-button,
+.canvas-commands .icon-button { border-radius: 7px; }
+
+.floating-group .icon-button:hover,
+.canvas-commands .icon-button:hover { background: #f0eae2; }
+
+.app-action-group { margin-left: auto; }
+
+.save-control {
+  display: grid;
+  position: relative;
+}
+
+.save-control.is-dirty:after {
+  content: "";
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  width: 6px;
+  height: 6px;
+  border: 1.5px solid var(--mm-surface);
+  border-radius: 50%;
+  background: var(--mm-accent);
+  pointer-events: none;
+}
+
+.save-control.is-saving:after { display: none; }
+
+.save-control.is-saving .icon-button {
+  color: var(--mm-accent);
+  background: var(--mm-accent-soft);
+}
+
+.save-control.is-saving .icon-button svg { animation: spin .75s linear infinite; }
+
+.canvas-commands {
+  top: 16px;
+  padding: 4px;
+  box-shadow: 0 4px 16px #3027420d;
+}
+
+.canvas-status { top: 62px; }
+.contextbar { z-index: 10; }
+.preview-label { display: inline-flex; align-items: center; gap: 6px; padding: 0 8px; color: var(--mm-muted); font-size: 12px; }
+.export-destination-note { margin: 14px 0 0 !important; }
+.export-download.is-saved { color: #426f61; cursor:default; }
+.export-download small { margin-left:auto; color:var(--mm-muted); white-space:nowrap; }
+
+/* DingTalk Docs-inspired edge reveal: only the compact outline markers remain
+   visible at the left canvas edge until the pointer reaches them. */
+.workspace { position: relative; }
+
+.file-sidebar {
+  --sidebar-panel-width: 280px;
+  position: absolute;
+  inset: 0 auto 0 0;
+  z-index: 7;
+  display: block;
+  width: 44px;
+  padding: 0;
+  overflow: visible;
+  background: transparent;
+  border: 0;
+  pointer-events: none;
+  transition: width .16s ease;
+}
+
+.file-sidebar::after {
+  content: "";
+  position: absolute;
+  top: 72px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  pointer-events: auto;
+}
+
+.outline-preview {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  left: 7px;
+  width: 25px;
+  display: grid;
+  gap: var(--outline-gap, 7px);
+  justify-items: start;
+  padding: 8px 0;
+  transform: translateY(-50%);
+  pointer-events: none;
+  transition: opacity .12s ease;
+}
+
+.outline-marker {
+  display: block;
+  width: 17px;
+  height: 3px;
+  border-radius: 1px;
+  background: #cfcfca;
+}
+
+.outline-marker.depth-1 { width: 13px; background: #d8d8d3; }
+
+.outline-marker.depth-2 {
+  width: 13px;
+  height: 2px;
+  background: repeating-linear-gradient(to right, #d8d8d3 0 3px, transparent 3px 5px);
+}
+
+.outline-marker.is-active { background: #716c75; }
+.outline-marker.depth-2.is-active { background: repeating-linear-gradient(to right, #716c75 0 3px, transparent 3px 5px); }
+
+/* File and outline are mutually exclusive views, so they use a compact
+   underline tab treatment instead of looking like two primary actions. */
+.sidebar-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  margin: 0 0 15px;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  border-bottom: 1px solid var(--mm-line);
+}
+
+.sidebar-tabs button,
+.sidebar-tabs button.active {
+  position: relative;
+  min-height: 42px;
+  padding: 10px 10px 11px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: var(--mm-muted);
+  background: transparent;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  font-size: 13px;
+  font-weight: 500;
+  transition: color .12s ease;
+}
+
+.sidebar-tabs button:hover { color: var(--mm-text); background: transparent !important; }
+
+.sidebar-tabs button.active {
+  color: #4a385f;
+  font-weight: 600;
+}
+
+.sidebar-tabs button.active::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  border-radius: 0;
+  background: var(--mm-accent);
+}
+
+.sidebar-tabs button svg { width: 15px; height: 15px; }
+
+/* The outline has two deliberate targets: its text selects a topic, while its
+   leading chevron independently expands or collapses that topic's subtree. */
+.outline-row {
+  gap: 2px;
+  padding: 4px 6px 4px var(--indent, 8px);
+}
+
+.outline-toggle,
+.outline-leaf {
+  width: 24px;
+  height: 28px;
+  flex: 0 0 24px;
+  display: inline-grid;
+  place-items: center;
+}
+
+.outline-toggle {
+  border-radius: 5px;
+  color: var(--mm-muted);
+}
+
+.outline-toggle:hover { background: #e5ded4; color: var(--mm-text); }
+
+.outline-leaf { color: var(--mm-muted); }
+
+.outline-select {
+  min-width: 0;
+  flex: 1;
+  padding: 5px 4px;
+  border-radius: 5px;
+  color: inherit;
+  overflow: hidden;
+  text-align: left;
+}
+
+.outline-select:hover { background: #e5ded4; }
+.outline-label { display: block; overflow: hidden; text-overflow: ellipsis; }
+
+.sheet-name-input {
+  width: min(180px, 38vw);
+  height: 29px;
+  margin: 0;
+  padding: 4px 9px;
+  color: var(--mm-text);
+  background: var(--mm-surface);
+  border: 1px solid var(--mm-accent);
+  border-radius: 6px;
+  box-shadow: 0 0 0 2px var(--mm-accent-soft);
+  outline: 0 !important;
+  font-size: 12px;
+}
+
+.sidebar-content {
+  position: absolute;
+  z-index: 1;
+  top: 12px;
+  left: 12px;
+  bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  width: var(--sidebar-panel-width);
+  padding: 18px 12px 14px;
+  overflow: hidden;
+  background: var(--mm-sidebar);
+  border: 1px solid var(--mm-line);
+  border-radius: 12px;
+  box-shadow: 8px 8px 28px #30274218;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateX(-12px);
+  transition: opacity .14s ease, transform .16s ease, visibility .16s step-end;
+}
+
+.file-sidebar:hover,
+.file-sidebar:focus-within {
+  z-index: 14;
+  width: calc(var(--sidebar-panel-width) + 24px);
+}
+
+.file-sidebar:hover .sidebar-content,
+.file-sidebar:focus-within .sidebar-content {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(0);
+  transition: opacity .14s ease, transform .16s ease;
+}
+
+.file-sidebar:hover .outline-preview,
+.file-sidebar:focus-within .outline-preview { opacity: 0; }
+
+#view-controls { justify-content: flex-end; }
+
+@media (max-width: 600px) {
+  .app-header { inset: 10px 10px auto; }
+  .canvas-commands { top: 10px; }
+  .canvas-status { top: 56px; }
+  .floating-group { padding: 3px; }
+  .floating-group .icon-button { width: 31px; height: 31px; }
+}
+
+@media (min-width: 941px) and (max-width: 1040px) {
+  .file-sidebar { --sidebar-panel-width: 250px; }
+}

@@ -1,0 +1,48 @@
+round: 1
+ledger_version: 2
+entries:
+  - id: U-001
+    status: satisfied
+    draft_refs: ["全部阶段", "Dependencies & Execution Order", "Implementation Strategy"]
+    evidence: "tasks.md 由 41 个带 ID 的任务组成，按 Setup、Foundational、US1-US3、Polish 组织。"
+    verification: "格式扫描、故事覆盖审查和独立验收标准检查。"
+  - id: U-002
+    status: satisfied
+    draft_refs: ["所有任务行", "阶段 1-6", "说明"]
+    evidence: "每个任务包含 - [ ]、Txxx、必要的 [P]/[USn] 标签和确切文件路径；阶段和依赖顺序与模板一致。"
+    verification: "逐任务正则扫描并检查故事任务标签。"
+  - id: U-003
+    status: satisfied
+    draft_refs: ["US1", "US2", "US3", "Polish", "阶段检查点"]
+    evidence: "US1 覆盖 FR-001..FR-009/SC-001..SC-002，US2 覆盖 FR-010..FR-012/SC-003，US3 覆盖 FR-013..FR-016/SC-004，Polish 覆盖 SC-005..SC-006。"
+    verification: "对照 spec.md 和 plan.md 的规格追踪。"
+  - id: U-004
+    status: satisfied
+    draft_refs: ["阶段 1", "阶段 2", "数据/服务任务", "Polish T037-T040"]
+    evidence: "任务使用计划中的插件结构、SDK/React/Excalidraw 技术栈、契约路径和 quickstart 命令。"
+    verification: "对照 plan.md、data-model.md、contracts/ 和 quickstart.md。"
+  - id: U-005
+    status: satisfied
+    draft_refs: ["T009", "T010", "T019", "T038", "说明"]
+    evidence: "任务明确 SDK-only、Result<T>、浏览器文件动作关闭、路径不持久化和非目标功能排除。"
+    verification: "范围、安全和默认文件动作审查。"
+  - id: U-006
+    status: satisfied
+    draft_refs: ["tasks-council/rounds/round-01/*", "全部中文说明"]
+    evidence: "过程目录保存 input-snapshot、coverage、draft；任务正文和说明使用简体中文，发布前遵循 HITL。"
+    verification: "validate_council.py 和语言人工审阅。"
+  - id: U-007
+    status: satisfied
+    draft_refs: ["manifest.yaml", "candidate.md", "publish.md"]
+    evidence: "候选目标固定为 specs/004-excalidraw-plugin/tasks.md，过程目录独立为 docs/excalidraw-plugin/tasks-council。"
+    verification: "检查 manifest publication 和发布记录。"
+  - id: U-009
+    status: superseded
+    draft_refs: ["未纳入 round-01；由 round-02 重新编排"]
+    evidence: "round-01 形成于公开菜单 API 决策之前，未覆盖 SDK/宿主同步；round-02 的 T012-T020、T027、T057 和 T061 补足该硬性要求。"
+    verification: "对照 round-02/coverage.yaml 和 requirements-ledger.yaml amendment。"
+  - id: U-010
+    status: superseded
+    draft_refs: ["未纳入 round-01；由 round-03 根据分析反馈重新修订"]
+    evidence: "round-03 补充官方 API 契约门、本地素材回退、计划结构、工具矩阵、性能说明、测试命令和历史证据版本。"
+    verification: "对照 round-03/coverage.yaml 和 requirements-ledger.yaml amendment。"

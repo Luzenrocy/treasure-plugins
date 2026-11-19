@@ -1,0 +1,53 @@
+round: 1
+ledger_version: 1
+entries:
+  - id: U-001
+    status: satisfied
+    draft_refs: ["Summary", "Phase 0: Research", "Phase 1: Design & Contracts"]
+    evidence: "计划、research、data-model、contracts 和 quickstart 均已生成。"
+    verification: "检查 specs/004-excalidraw-plugin/ 下的文件和链接。"
+  - id: U-002
+    status: satisfied
+    draft_refs: ["Technical Context", "Constitution Check", "Phase 0: Research", "Phase 1: Design & Contracts"]
+    evidence: "所有模板必需段落已填充，研究决策覆盖技术未知，未保留模板占位符。"
+    verification: "运行占位符搜索并逐节审阅 plan.md。"
+  - id: U-003
+    status: satisfied
+    draft_refs: ["Summary", "Technical Context", "Project Structure", "Phase 0: Research", "Phase 1: Design & Contracts"]
+    evidence: "范围覆盖本地编辑、.excalidraw CRUD、.excalidrawlib 私有素材、PNG/SVG 全画布/选区/透明背景，并引用 FR/SC。"
+    verification: "对照 spec.md FR-001..FR-016、SC-001..SC-006 和四份契约。"
+  - id: U-004
+    status: satisfied
+    draft_refs: ["Summary", "Technical Context", "Constitution Check", "Project Structure", "Phase 0: Research"]
+    evidence: "明确关闭浏览器文件动作，排除协作/账户/云端/iframe/Tauri/绝对路径并保留 SDK 边界。"
+    verification: "reviewer 检查非目标、UIOptions、SDK 契约和错误处理。"
+  - id: U-005
+    status: satisfied
+    draft_refs: ["Constitution Check", "Post-Design Constitution Check", "Project Structure", "quickstart.md"]
+    evidence: "I-VI 均有前置和设计后检查，包含 scaffold、Result<T>、可访问性、手工宿主门槛和中文文档。"
+    verification: "逐项对照 constitution.md v1.3.0。"
+  - id: U-006
+    status: satisfied
+    draft_refs: ["plan-council/rounds/round-01/*"]
+    evidence: "本轮保存 draft、review、revision、decision、coverage 和 input-snapshot，最终计划不含角色讨论。"
+    verification: "运行 validate_council.py 并检查最终候选。"
+  - id: U-007
+    status: satisfied
+    draft_refs: ["全部中文工件"]
+    evidence: "中文正文和表格说明，英文仅保留标准标题、API、命令、路径和标识符。"
+    verification: "人工检查语言与技术术语上下文。"
+  - id: U-008
+    status: satisfied
+    draft_refs: ["manifest.yaml", "candidate.md", "publish.md"]
+    evidence: "目标固定为 specs/004-excalidraw-plugin/plan.md，过程目录为 docs/excalidraw-plugin/plan-council。"
+    verification: "检查 manifest publication 字段与发布记录。"
+  - id: U-009
+    status: satisfied
+    draft_refs: ["Technical Context", "Phase 0: Research", "data-model.md", "contracts/*", "quickstart.md"]
+    evidence: "版本/ESM、挂载、序列化、素材回退、冲突、storage、32 MiB、测试和宿主验证均有决策或明确实现探针。"
+    verification: "逐项核对 research.md 决策与 quickstart 场景。"
+  - id: U-010
+    status: introduced-after-round
+    draft_refs: []
+    evidence: "该硬需求在 2026-10-18 用户修正中新增，round-01 已结束；round-02 重新纳入并完成覆盖。"
+    verification: "检查 round-02/coverage.yaml、review.md 和 decision.md。"

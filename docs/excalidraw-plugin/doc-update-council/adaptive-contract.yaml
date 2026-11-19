@@ -1,0 +1,16 @@
+document_contract:
+  mode: hybrid
+  family: normative
+  label: "Treasure Excalidraw 文档职责边界修订"
+  purpose: "把用户确认的分析结论同步到任务清单、实施计划和验证指南"
+  reader_job: "开发者知道代理任务边界，用户知道需要自行完成的 Treasure 宿主验证"
+  audience: ["插件开发者", "测试人员", "评审者", "产品负责人"]
+  medium: markdown
+  locale: zh-CN
+  tone: "直接、可追踪、职责清晰"
+  evidence_style: "分析结论、宪章条款、任务/计划/quickstart 交叉引用"
+  required_sections: ["修订范围", "任务清单变更", "计划变更", "用户手工验证说明"]
+  optional_sections: ["变更记录"]
+  forbidden_sections: ["自动执行 Treasure 宿主测试的任务", "修改已关闭分析项为新缺陷", "新增功能范围"]
+  quality_checks: ["宿主测试不出现在代理任务中", "quickstart 保留用户验收路径", "tasks/plan/quickstart 术语一致", "任务 ID 连续且格式有效"]
+  source: user-confirmed-amendment

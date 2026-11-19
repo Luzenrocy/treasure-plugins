@@ -6,7 +6,7 @@ describe('manifest consistency contract', () => {
   it('keeps the plugin identity and workspace setting stable', () => {
     const manifest = JSON.parse(readFileSync(resolve(process.cwd(), 'manifest.json'), 'utf8')) as { name: string; minPlatformVersion: string; settings: Array<{ key: string; param_type: string }> };
     expect(manifest.name).toBe('excalidraw');
-    expect(manifest.minPlatformVersion).toBe('2.3.0');
+    expect(manifest.minPlatformVersion).toBe('2.4.0');
     expect(manifest.settings.some((setting) => setting.key === 'workspace_dir')).toBe(true);
   });
 

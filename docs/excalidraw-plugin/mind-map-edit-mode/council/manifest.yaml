@@ -1,0 +1,52 @@
+document_id: "mind-map-edit-mode"
+title: "思维导图编辑模式技术方案"
+document_type: "技术方案"
+locale: "zh-CN"
+owner: "Codex"
+created: 2026-11-02
+updated: 2026-11-02
+version: "0.1"
+status: published
+round_limit: 10
+iterations_per_round: 10
+current_round: 1
+current_iteration: 1
+round_gate: none
+roles:
+  writer:
+    profile: "插件架构师兼技术方案主写者"
+    rationale: "需要将现有 Vue/Excalidraw/Treasure 集成约束转化为可实施架构。"
+  reviewer:
+    profile: "独立前端架构与数据一致性评审者"
+    rationale: "重点挑战元素映射、编辑一致性、撤销重做和存储兼容性。"
+  approver:
+    profile: "技术方案审核者"
+    rationale: "核验范围、可验证性和不超出现有 SDK 公开能力。"
+document_contract:
+  mode: hybrid
+  family: "custom"
+  label: "技术方案"
+  purpose: "为 Treasure Excalidraw 插件设计可编辑思维导图模式，使新增、删除、改名和移动分支后节点位置、文本和箭头可预测地校正。"
+  audience: ["Treasure 插件研发与技术评审人员"]
+  required_sections: ["目标与边界", "现状与问题", "方案比较与决策", "总体架构", "数据模型", "编辑交互与重排事务", "同步与持久化", "撤销重做", "兼容与迁移", "验证与发布", "风险与未决问题"]
+  optional_sections: ["伪代码", "里程碑"]
+  forbidden_sections: ["将方案表述为已实现", "未经证实的 SDK 能力承诺", "无授权的宿主改造"]
+  quality_checks: ["需求可追溯", "公开 API 边界", "元素和模型一致性", "失败与恢复路径", "验收可测试"]
+publication:
+  target_path: "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/excalidraw-plugin/mind-map-edit-mode/technical-plan.md"
+  target_path_source: default
+  target_format: "markdown"
+  final_filename: "technical-plan.md"
+  overwrite_policy: refuse
+artifacts:
+  artifact_root: "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/excalidraw-plugin/mind-map-edit-mode"
+  process_base_path: "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/excalidraw-plugin/mind-map-edit-mode"
+  council_path: "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/excalidraw-plugin/mind-map-edit-mode/council"
+  process_path: "/Volumes/MacExtend/FrontProjects/treasure-plugins/docs/excalidraw-plugin/mind-map-edit-mode/council"
+  process_path_resolution: "derived-from-target/council"
+  process_path_source: default
+integration_mode: optional-overlay
+target_skill: "awesome-ai-tools:writing-workshop"
+contract_snapshot: "adaptive-contract.yaml#v1"
+skill_snapshot: "rules-snapshot.yaml#2026-11-02T13:32:12+08:00"
+sources: ["S-001", "S-002", "S-003", "S-004", "S-005"]

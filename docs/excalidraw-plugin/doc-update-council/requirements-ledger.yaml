@@ -1,0 +1,52 @@
+version: 1
+source_message: "user correction 2026-10-16, active Codex task"
+entries:
+  - id: U-001
+    type: goal
+    verbatim: "根据 speckit-analyze 分析出来的结果以及反馈、确认后的结果对相关文档进行调整更新。"
+    normalized: "将已确认的分析结论同步到 tasks.md、plan.md 和 quickstart.md。"
+    hardness: hard
+    priority: P0
+    acceptance: "三个文档对代理任务与用户宿主验证的职责边界一致。"
+    verification: "交叉扫描和 council 审查。"
+    owner: "用户/项目维护者"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+  - id: U-002
+    type: must
+    verbatim: "所有涉及宿主的测试需要用户自己测试，不应出现在任务清单中。"
+    normalized: "从 tasks.md 移除 Treasure 宿主测试执行任务；quickstart.md 保留用户手工验收步骤并明确归属。"
+    hardness: hard
+    priority: P0
+    acceptance: "任务清单不要求代理启动 Treasure 或执行宿主测试，且用户仍有完整手工验证路径。"
+    verification: "tasks.md/quickstart.md 交叉审查。"
+    owner: "用户/项目维护者"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+  - id: U-003
+    type: must
+    verbatim: "上述问题的结论"
+    normalized: "I1/U1/A1/I2/L1 作为已确认关闭项处理，不重新引入为文档缺陷。"
+    hardness: hard
+    priority: P1
+    acceptance: "修订不把脚手架目录、暂不支持工具清单、优先级假设、路径或历史分析记录误报为新问题。"
+    verification: "修订记录和 review。"
+    owner: "用户/项目维护者"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+  - id: U-004
+    type: must
+    verbatim: "中文项目文档和 writing-workshop"
+    normalized: "正文使用简体中文，保留 writer/reviewer/approver 记录并在发布前取得确认。"
+    hardness: hard
+    priority: P1
+    acceptance: "round-01 记录完整，候选在用户确认前不覆盖最终文档。"
+    verification: "validate_council.py。"
+    owner: "项目维护者"
+    status: open
+    document_refs: []
+    last_checked_round: 0
+amendments: []

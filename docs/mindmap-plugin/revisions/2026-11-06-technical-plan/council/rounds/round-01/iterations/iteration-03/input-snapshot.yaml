@@ -1,0 +1,15 @@
+round: 1
+iteration: 3
+role_inputs:
+  shared_rules: "../../../../rules-snapshot.yaml#a0231c87"
+  user_brief: "../../../../user-brief.md#92c3144b"
+  ledger: "../../../../requirements-ledger.yaml#7a540797"
+  contract: "../../../../adaptive-contract.yaml#e460f101"
+  sources: "../../../../source-index.md (including S-11)"
+  prior_draft: "../iteration-02/draft.md"
+  prior_coverage: "../iteration-02/coverage.yaml"
+  prior_revision: "../iteration-02/revision.md"
+role: writer-decision-revision
+freshness_checked_at: "2026-11-06T02:36:37Z"
+rule_change_detected: false
+notes: "Use the local evidence added as S-11 and the current prototype code only to close two proposal-level decisions; retain target-host validation as an acceptance check, not an open publication blocker."

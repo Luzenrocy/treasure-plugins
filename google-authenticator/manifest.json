@@ -6,7 +6,7 @@
   "author": "Treasure",
   "icon": "icon.png",
   "entry": "index.html",
-  "minPlatformVersion": "2.1.2",
+  "minPlatformVersion": "1.0.0",
   "menu": { "name": "谷歌验证器", "icon": "menu-icon.png", "order": 130 },
   "_frozen": true
 }

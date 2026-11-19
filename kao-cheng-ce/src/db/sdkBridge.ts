@@ -1,4 +1,4 @@
-import { database, logs } from 'treasure-sdk';
+import { database, logs } from '@luzenrocy/treasure-sdk';
 
 export type LegacyResponse<T = unknown> = { code: 1; data?: T; msg?: never } | { code: 0; data?: never; msg: string };
 export type Statement = { sql: string; tables: string[]; params?: unknown[] };

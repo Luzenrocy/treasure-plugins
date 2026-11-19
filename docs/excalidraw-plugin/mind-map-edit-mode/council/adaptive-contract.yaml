@@ -1,0 +1,17 @@
+document_contract:
+  mode: hybrid
+  family: "custom"
+  label: "思维导图编辑模式技术方案"
+  purpose: "为 Treasure Excalidraw 插件设计受控编辑模式，使树模型、节点、文本与曲线箭头在编辑后保持一致。"
+  reader_job: "研发人员据此评估、拆分并实现编辑模式；评审人员据此判断 API、数据和风险边界。"
+  audience: ["Treasure 插件研发", "技术评审人员"]
+  medium: "markdown"
+  locale: "zh-CN"
+  tone: "工程化、明确、可验证"
+  evidence_style: "本地源码事实使用路径引用；未确认决策明确标注为开放问题或假设。"
+  required_sections: ["目标与边界", "现状与问题", "方案比较与决策", "总体架构", "数据模型", "编辑交互与重排事务", "同步与持久化", "撤销重做", "兼容与迁移", "验证与发布", "风险与未决问题"]
+  optional_sections: ["伪代码", "里程碑"]
+  forbidden_sections: ["将方案表述为已实现", "未经证实的 SDK 能力承诺", "无授权的宿主改造"]
+  terminology: ["脑图文档模型", "节点布局框", "受控元素", "自由元素", "重排事务", "脏状态"]
+  quality_checks: ["U-001 至 U-005 全量覆盖", "每项决策有理由和替代方案", "明确 Excalidraw 公开 API 边界", "多行文本和箭头的同源几何", "验收可测试"]
+  source: "user + inferred from current plugin source"

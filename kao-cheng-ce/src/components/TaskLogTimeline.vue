@@ -54,7 +54,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
-import { database } from 'treasure-sdk';
+import { database } from '@luzenrocy/treasure-sdk';
 import { ElMessage } from 'element-plus';
 import { db } from '@/db';
 import type { TaskLog } from '@/types';

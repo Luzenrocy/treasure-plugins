@@ -1,5 +1,5 @@
-import { files, storage } from 'treasure-sdk';
-import type { FileReference, Result } from 'treasure-sdk';
+import { files, storage } from '@luzenrocy/treasure-sdk';
+import type { FileReference, Result } from '@luzenrocy/treasure-sdk';
 
 export interface DownloadableAttachment {
   file_path: string;

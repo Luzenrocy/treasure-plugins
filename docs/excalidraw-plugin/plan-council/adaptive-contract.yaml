@@ -1,0 +1,35 @@
+document_contract:
+  mode: hybrid
+  family: normative
+  label: "Treasure Excalidraw 实施计划与设计工件"
+  purpose: "把已确认的功能规格转成可执行的架构、数据模型、接口契约和端到端验证路径"
+  reader_job: "开发者和评审者能够据此拆分任务、验证边界并识别实现风险"
+  audience:
+    - 插件开发者
+    - 测试人员
+    - 评审者
+    - 产品负责人
+  medium: markdown
+  locale: zh-CN
+  tone: "直接、可执行、证据驱动"
+  evidence_style: "仓库文档、官方 Excalidraw 文档与可复现的宿主验收场景"
+  required_sections:
+    - Summary
+    - Technical Context
+    - Constitution Check
+    - Project Structure
+    - Phase 0 research
+    - Phase 1 data model/contracts/quickstart
+  optional_sections:
+    - Complexity Tracking
+    - Decision traceability
+  forbidden_sections:
+    - 未确认的技术承诺
+    - 完整实现代码
+    - 任务清单（由 speckit-tasks 生成）
+  quality_checks:
+    - 所有 NEEDS CLARIFICATION 均已解决或标记为明确假设
+    - 设计遵守宪章且不扩大规格范围
+    - 数据模型和接口契约可由自动化或宿主手测验证
+    - 中文说明完整，标准模板标题和技术标识符保留可追踪性
+  source: external-contract

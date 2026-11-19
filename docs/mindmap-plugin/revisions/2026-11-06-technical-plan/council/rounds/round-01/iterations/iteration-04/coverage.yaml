@@ -1,0 +1,83 @@
+version: 2
+document: draft.md
+iteration: round-01/iteration-04
+sdk_implementation_baseline: "treasure-sdk 2.1.1"
+minimum_host_version: "2.3.0"
+acceptance_risks:
+  - id: B-001
+    condition: "以同仓 Excalidraw 的 treasure-sdk ^2.1.1 + manifest 2.3.0 组合为首版保守基线，并在目标宿主验收注册、目录授权恢复和文件调用链。"
+    status: pending-target-host-acceptance
+  - id: B-002
+    condition: "折叠按内容态实现：持久化至 .gxp，进入 revision/undo/dirty；验证保存重开、撤销重做与根主题左右独立状态。"
+    status: pending-regression-acceptance
+review_dispositions:
+  - id: R01-I01-001
+    status: resolved
+    locations: ["§3 正常保存、首次保存/另存为/导出", "§5.2"]
+  - id: R01-I01-002
+    status: resolved-with-acceptance-risk
+    locations: ["§1", "§3 最低宿主", "§9 P0", "§10"]
+  - id: R01-I01-003
+    status: resolved
+    locations: ["§7 键盘结构命令", "§9 验收 5"]
+  - id: R01-I01-004
+    status: resolved
+    locations: ["§1", "§10 本地证据链接"]
+  - id: R01-I01-005
+    status: resolved
+    locations: ["§5.2 外部编辑意图", "§5.2 副本事务不变量", "§9 验收 3"]
+  - id: R01-I01-006
+    status: resolved-with-acceptance-risk
+    locations: ["§6 折叠状态契约", "§7 命令表", "§9 P0/验收 7", "§10"]
+coverage:
+  - id: U-001
+    status: covered
+    locations: ["§1", "§2", "§7", "§9"]
+    evidence: ["S-01", "S-10"]
+    verification: "视觉、键盘和命令语义回归。"
+  - id: U-002
+    status: covered-with-acceptance-risk
+    locations: ["§1", "§3", "§9", "§10"]
+    evidence: ["S-04", "S-05", "S-06"]
+    verification: "锁定 2.1.1 与 minPlatformVersion 2.3.0；完成目标宿主注册调试、目录恢复和文件调用链验收。"
+  - id: U-003
+    status: covered
+    locations: ["§1", "§2", "§6"]
+    evidence: ["S-03", "S-01"]
+    verification: "仅 .gxp 标为原生可编辑和保存格式。"
+  - id: U-004
+    status: covered
+    locations: ["§1", "§2", "§5.2", "§6"]
+    evidence: ["S-01", "S-03"]
+    verification: "真实外部样本只读；副本成功、取消、失败均验证不回写。"
+  - id: U-005
+    status: covered
+    locations: ["§2", "§7", "§9 验收 6"]
+    evidence: ["S-01", "S-10"]
+    verification: "浮层覆盖画布且高于主菜单；无侧栏新建。"
+  - id: U-006
+    status: covered
+    locations: ["§3", "§5.2", "§9 验收 2"]
+    evidence: ["S-02", "S-04", "S-06"]
+    verification: "宿主联调 openDialog/readFile 与 saveDialog/writeFile；取消不改变会话。"
+  - id: U-007
+    status: covered
+    locations: ["§2", "§7", "§9 验收 7"]
+    evidence: ["S-01", "S-10"]
+    verification: "验证折叠内容态的持久化、根主题左右独立状态、视图同步、历史和脏状态。"
+  - id: U-008
+    status: covered
+    locations: ["§2", "§7", "§9 验收 6"]
+    evidence: ["S-01"]
+    verification: "DOM/可访问性和视觉回归确认入口唯一。"
+  - id: U-009
+    status: covered
+    locations: ["文档元数据", "§9", "§10"]
+    evidence: ["requirements-ledger.yaml", "adaptive-contract.yaml"]
+    verification: "独立 revision 路径、中文 Markdown、来源、风险、阶段和验收。"
+global_checks:
+  - "SDK 2.1.1 是正式实现基线；minPlatformVersion 固定为 2.3.0，仍须目标宿主验收。"
+  - "折叠是内容态，必须写入 .gxp、revision、undo/redo 与 dirty 状态；根主题左右状态独立。"
+  - "每个文件操作处理 Result；CANCELLED 不改编辑会话。"
+  - "浏览器原型和适配器未被描述为真实解析或磁盘持久化完成证据。"
+  - "所有正文 Markdown 本地链接均从 iteration-02/draft.md 解析。"

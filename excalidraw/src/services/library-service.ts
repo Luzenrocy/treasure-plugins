@@ -1,4 +1,4 @@
-import { files, storage, type FileReference } from 'treasure-sdk';
+import { files, storage, type FileReference } from '@luzenrocy/treasure-sdk';
 import { loadLibraryFromBlob, serializeLibraryAsJSON } from '@excalidraw/excalidraw';
 import type { LibraryItems } from '@excalidraw/excalidraw/types';
 import { err, ok, sdkError, type Result } from '../domain/errors';
