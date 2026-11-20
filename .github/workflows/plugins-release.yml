@@ -3,7 +3,13 @@ name: Release Plugin
 on:
   push:
     tags:
-      - 'plugin/**/v*'
+      - 'plugin/excalidraw/v*'
+      - 'plugin/google-authenticator/v*'
+      - 'plugin/guan-xiang-pu/v*'
+      - 'plugin/json-formatter/v*'
+      - 'plugin/kao-cheng-ce/v*'
+      - 'plugin/shi-yu-lu/v*'
+      - 'plugin/text-diff/v*'
   workflow_dispatch:
     inputs:
       plugin:
