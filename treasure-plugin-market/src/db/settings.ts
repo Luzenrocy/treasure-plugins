@@ -1,4 +1,4 @@
-import { supabase } from '../supabase.js';
+import { database as supabase } from '../database.js';
 
 export const settings = {
   async byUserId(userId: string) {

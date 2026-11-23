@@ -24,6 +24,8 @@
     "src/handler.ts",
     "src/security.ts",
     "src/supabase.ts",
+    "src/database.ts",
+    "src/mysql.ts",
     "src/db/**/*.ts"
   ],
   "exclude": [

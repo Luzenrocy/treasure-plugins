@@ -25,12 +25,11 @@ export function isSessionActive(session: SessionRow | null | undefined, now = Da
   return !!session && !session.revoked_at && Date.parse(session.expires_at) > now;
 }
 
-// service-role 客户端懒加载：避免无环境变量时模块加载即抛错（supabase.ts 顶部校验），
-// 便于纯函数单测；运行时 handler 调用时才有环境。
+// Supabase 使用 service-role，MySQL 使用应用连接池；均在运行时惰性取得，便于纯函数单测。
 async function client() {
-  const { supabaseService } = await import('../supabase.js');
-  if (!supabaseService) throw new Error('SUPABASE_SERVICE_ROLE_KEY 未配置（会话存储认证需要 service-role 客户端）');
-  return supabaseService;
+  const { databaseService, databaseProvider } = await import('../database.js');
+  if (!databaseService) throw new Error(databaseProvider === 'supabase' ? 'SUPABASE_SERVICE_ROLE_KEY 未配置（会话存储认证需要 service-role 客户端）' : 'MySQL 数据源未初始化');
+  return databaseService;
 }
 
 export const authSessions = {

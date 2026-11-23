@@ -1,4 +1,4 @@
-import { supabase } from '../supabase.js';
+import { database as supabase } from '../database.js';
 import { normalizeLogin } from './query-utils.js';
 
 export const users = {

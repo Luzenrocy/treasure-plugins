@@ -2,10 +2,9 @@ import { createClient } from '@supabase/supabase-js';
 
 const url = process.env.VITE_SUPABASE_URL;
 const key = process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+const useSupabase = (process.env.DATABASE_PROVIDER ?? 'supabase').trim().toLowerCase() === 'supabase';
 
-if (!url || !key) {
-  throw new Error('VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY 未配置');
-}
+if (useSupabase && (!url || !key)) throw new Error('VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY 未配置');
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -26,17 +25,18 @@ async function retryFetch(input: Parameters<typeof fetch>[0], init?: RequestInit
   throw lastError;
 }
 
-export const supabase = createClient(url, key, {
+// 在 MySQL 模式不创建 Supabase 客户端；database.ts 不会访问这个占位值。
+export const supabase: any = useSupabase ? createClient(url!, key!, {
   auth: { persistSession: false, autoRefreshToken: false },
   global: { fetch: retryFetch },
-});
+}) : null;
 
 // service-role 客户端：仅供会话存储认证（auth_sessions 表）使用，全库全权，绕过 RLS。
 // 密钥只存服务端环境变量/FC Secret，绝不进入前端 bundle。未配置时置 null，
 // 登录/会话接口会报错（JWT 过渡路径与开发者 token 接口不受影响）。
 const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-export const supabaseService = serviceKey
-  ? createClient(url, serviceKey, {
+export const supabaseService: any = useSupabase && serviceKey
+  ? createClient(url!, serviceKey, {
       auth: { persistSession: false, autoRefreshToken: false },
       global: { fetch: retryFetch },
     })

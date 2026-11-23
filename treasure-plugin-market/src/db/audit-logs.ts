@@ -1,4 +1,4 @@
-import { supabase } from '../supabase.js';
+import { database as supabase } from '../database.js';
 
 export const auditLogs = {
   async create(actorId: string | null, action: string, resourceType: string, resourceId?: string) {

@@ -5,14 +5,14 @@
 ## 一、技术栈与架构
 
 - **单一 Node 进程**（无前后端分离）：`index.ts` 同时托管 Vue 构建产物（`dist/`）与 `/api` 业务接口。
-- **数据访问**：`@supabase/supabase-js` 纯 REST（PostgREST 单表 CRUD），业务逻辑全部在 TS 层（`src/db/`），不建 RPC、不依赖 Supabase Auth。
+- **数据访问**：通过 `DATABASE_PROVIDER` 在 **Supabase**（PostgREST）与 **MySQL 8+** 间二选一；业务逻辑全部在 TS 层（`src/db/`），不依赖 Supabase Auth。
 - **前端**：Vue 3 + Element Plus + Pinia，构建产物由同一 Node 进程输出（`VITE_API_BASE_URL=/api`，同源无 CORS）。
 
 ```
 Node 进程
 ├── /      dist/（Vue 构建产物）
 ├── /api   handler.ts 业务路由
-└── src/db supabase-js REST ──► Supabase PostgREST / PostgreSQL
+└── src/db ──► src/database.ts ──► Supabase PostgREST / PostgreSQL 或 MySQL 8+
 ```
 
 ## 二、本地开发
@@ -85,6 +85,7 @@ cp .env.example .env    # 填入 VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_K
 | `src/handler.ts` | 业务路由 + `currentUser` 角色/MFA 鉴权 + 错误透传 |
 | `src/security.ts` | PBKDF2 / JWT / TOTP / AES-GCM / 绑定物料 |
 | `src/supabase.ts` | supabase-js 客户端（含网络异常重试包装）|
+| `src/database.ts` / `src/mysql.ts` | 数据源选择与 MySQL 兼容访问层 |
 | `src/db/query-utils.ts` | 纯逻辑：登录归一化、最新版本、审核状态机、角色判定、请求体解析 |
 | `src/db/*.ts` | 各资源数据访问（唯一碰数据库的地方）|
 | `test/*.test.ts` | 纯函数单元测试（TDD 先行）|
@@ -97,6 +98,10 @@ cp .env.example .env    # 填入 VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_K
 ## 六、插件开发者接入（CI 自动化）
 
 登记接口：`POST /api/plugins/with-release`（详见 `docs/API.md` 第二节）。
+
+## 数据源配置
+
+`DATABASE_PROVIDER` 仅接受 `supabase`（默认）或 `mysql`，两者互斥。Supabase 继续使用 `VITE_SUPABASE_URL`、`VITE_SUPABASE_PUBLISHABLE_KEY` 与 `SUPABASE_SERVICE_ROLE_KEY`；MySQL 使用 `MYSQL_URL`，并先执行 `migrations/mysql/202611210001_plugin_market.sql`。不要把两套配置混用。
 
 **GitHub Actions 工作流思路**：
 

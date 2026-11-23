@@ -100,6 +100,16 @@ const server = createServer((incoming, outgoing) => {
     console.log(`[icons] ${method} ${rawPath} -> ${status} ${Date.now() - startedAt}ms`);
   };
 
+  // 公共存活接口：不依赖静态构建产物，适用于反向代理、容器编排和第三方探测。
+  if (rawPath === '/health' && (method === 'GET' || method === 'HEAD')) {
+    outgoing.statusCode = 200;
+    outgoing.setHeader('Content-Type', 'application/json; charset=utf-8');
+    outgoing.setHeader('Access-Control-Allow-Origin', '*');
+    outgoing.end(method === 'HEAD' ? undefined : JSON.stringify({ status: 'ok', service: 'treasure-plugin-icons', timestamp: new Date().toISOString() }));
+    log(200);
+    return;
+  }
+
   if (method === 'GET' || method === 'HEAD') {
     serveStatic(rawPath, incoming, outgoing)
       .then((status) => log(status))

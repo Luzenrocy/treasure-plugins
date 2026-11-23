@@ -6,6 +6,7 @@ import { plugins } from './db/plugins.js';
 import { extractDeveloperToken, extractSessionId, readBody, roleAtLeast, canManagePlugin, type ReleaseReviewAction, type ReviewAction, type Role } from './db/query-utils.js';
 import { settings } from './db/settings.js';
 import { users } from './db/users.js';
+import { checkDatabaseHealth, databaseProvider } from './database.js';
 import { buildTotpUri, createMfaKey, createTotpSecret, decryptMfaSecret, encryptMfaSecret, hashPassword, needsMfaVerification, verifyPassword, verifyTotp } from './security.js';
 
 const cors = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': 'same-origin', 'Access-Control-Allow-Headers': 'content-type' };
@@ -117,6 +118,22 @@ export async function handle(request: Request): Promise<Response> {
   try {
     const path = route(request);
     const body: any = await readBody(request);
+
+    // 供负载均衡、监控和第三方调用的就绪检查；会实际探测已选择的数据源。
+    if (path === '/health' && (request.method === 'GET' || request.method === 'HEAD')) {
+      try {
+        await checkDatabaseHealth();
+      } catch (error) {
+        console.error('[app] api health check failed', error);
+        return new Response(JSON.stringify({ status: 'error', service: 'treasure-plugin-market', database: databaseProvider }), {
+          status: 503,
+          headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+        });
+      }
+      return new Response(JSON.stringify({ status: 'ok', service: 'treasure-plugin-market', database: databaseProvider, timestamp: new Date().toISOString() }), {
+        headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+      });
+    }
 
     if (path === '/admin/login' && request.method === 'POST') {
       const loginName = String(body.username ?? '').trim();

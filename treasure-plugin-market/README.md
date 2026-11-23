@@ -1,6 +1,6 @@
 # Treasure Plugin Market
 
-单一 Node 应用的插件市场管理台。**无前后端划分、无独立后端服务、无 Nginx**：一个 Node 进程同时托管页面、提供 `/api` 接口、通过 Supabase REST（PostgREST）访问数据库。Vue 构建产物作为静态资源由同一个 Node 进程输出，无需部署第二套服务。
+单一 Node 应用的插件市场管理台。**无前后端划分、无独立后端服务、无 Nginx**：一个 Node 进程同时托管页面、提供 `/api` 接口。数据源通过 `DATABASE_PROVIDER` 明确选择 **Supabase** 或 **MySQL 8+**（二选一）。Vue 构建产物作为静态资源由同一个 Node 进程输出，无需部署第二套服务。
 
 ## 文档导航
 
@@ -21,12 +21,9 @@
 Node 进程（一个容器 / 一个进程）
 ├── /        Vue 构建产物（dist/）
 ├── /api     业务处理器（handler.ts）
-└── db       @supabase/supabase-js（src/supabase.ts）
-              ├── REST /rest/v1（单表 CRUD）
- └── REST /rest/v1（单表 CRUD，业务逻辑全部在 TS 层）
-                     │
-                     ▼
-              Supabase PostgREST / PostgreSQL
+└── db       src/database.ts
+              ├── Supabase REST / PostgREST
+              └── MySQL 8+（mysql2 连接池）
 ```
 
 页面与接口同源（`VITE_API_BASE_URL=/api`），无 CORS。
@@ -65,7 +62,7 @@ src/
 
 ```bash
 npm install
-cp .env.example .env   # 填入 VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY / SUPABASE_SERVICE_ROLE_KEY / AUTH_JWT_SECRET
+cp .env.example .env   # 选择 DATABASE_PROVIDER，并填写对应数据源变量与 AUTH_JWT_SECRET
 
 npm run dev            # 一键启动：后端 API（7860）+ Vite 前端（5174，/api 代理到 7860）
 ```
@@ -89,6 +86,7 @@ Docker：
 ```bash
 docker build -t treasure-plugin-market .
 docker run -p 7860:7860 \
+  -e DATABASE_PROVIDER=supabase \
   -e VITE_SUPABASE_URL=https://<ref>.supabase.co \
   -e VITE_SUPABASE_PUBLISHABLE_KEY=<anon key> \
   -e SUPABASE_SERVICE_ROLE_KEY=<service role key> \
@@ -100,6 +98,16 @@ docker run -p 7860:7860 \
 
 > 运行时必需环境变量：`VITE_SUPABASE_URL`、`VITE_SUPABASE_PUBLISHABLE_KEY`（服务端 `supabase.ts` 以 `process.env` 读取）、`SUPABASE_SERVICE_ROLE_KEY`（会话存储认证专用，全库全权，仅存服务端 Secret）、`AUTH_JWT_SECRET`（JWT 过渡路径签名）。这些在部署平台注入即可生效，**无需重新构建**。
 > `VITE_API_BASE_URL` 是构建期变量，默认 `/api`（同源部署无需设置）。
+
+### 选择 MySQL 数据源
+
+1. 在目标 MySQL 8+ 数据库执行 [`migrations/mysql/202611210001_plugin_market.sql`](migrations/mysql/202611210001_plugin_market.sql)；该脚本会重建本项目表。
+2. 设置 `DATABASE_PROVIDER=mysql` 和 `MYSQL_URL=mysql://<user>:<url-encoded-password>@<host>:3306/<database>`。
+3. 不要同时配置或使用 Supabase 变量；应用只会初始化被选择的数据源。默认值为 `supabase`，保持原有部署兼容。
+
+### 健康检查
+
+两个路径均可用于探测市场服务：`GET /health`（推荐）和 `GET /api/health`。成功时返回 `200` 及 `status: "ok"`、服务名、选中的 `database` 与时间；数据源不可用时市场的 `/health` 返回 `503`。图标服务也提供 `GET /health`（进程存活检查）。
 
 ### Hugging Face Space 部署
 

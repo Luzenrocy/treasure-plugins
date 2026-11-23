@@ -2,6 +2,21 @@
 
 服务地址：`http://127.0.0.1:7860`（生产环境替换为部署域名）。所有接口经 `/api` 前缀暴露（服务入口 `index.ts` 剥离前缀后进入业务路由）。
 
+## 健康检查
+
+```
+GET /health
+GET /api/health
+```
+
+两个地址均返回市场服务的就绪状态。成功时响应 `200`：
+
+```json
+{ "status": "ok", "service": "treasure-plugin-market", "database": "mysql", "timestamp": "2026-11-21T00:00:00.000Z" }
+```
+
+`database` 为实际选中的 `mysql` 或 `supabase`。市场接口会探测数据库连通性；数据源不可用时返回 `503`。接口允许跨域读取，适合第三方监控调用。
+
 统一响应包装：
 
 ```json

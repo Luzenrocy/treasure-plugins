@@ -58,3 +58,6 @@ CI：`.github/workflows/icons-image.yml` 在插件图标/manifest 或图标墙�
 | 本地冒烟 | `npm start` 后 curl | 图标 200 `image/svg+xml`；`icons.json` 200 JSON；路径穿越 400 |
 | 缓存头 | `curl -I` | `/icons/*` 带 `ETag` 且 `max-age=3600`；`/assets/*` 带 `immutable`；`/icons.json` 为 `no-cache` |
 | 图标墙 | 浏览器 `http://localhost:7860/` | 网格展示、搜索过滤、复制 URL/SVG 正常 |
+# 健康检查
+
+服务已提供 `GET /health`，返回 `200` 和 JSON：`{ "status": "ok", "service": "treasure-plugin-icons", "timestamp": "..." }`。该接口可直接供第三方、反向代理和容器平台调用。

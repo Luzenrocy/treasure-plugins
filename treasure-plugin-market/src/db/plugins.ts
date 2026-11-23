@@ -1,4 +1,4 @@
-import { supabase } from '../supabase.js';
+import { database as supabase } from '../database.js';
 import { enrichSummary, pickLatestVersion, planPluginReview, planReleaseReview, type ReviewAction, type ReleaseReviewAction } from './query-utils.js';
 
 export const plugins = {
