@@ -17,8 +17,28 @@ function slugify(text: string) {
   return text.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]+/g, '-').replace(/^-|-$/g, '').replace(/[\u4e00-\u9fa5]/g, '');
 }
 
+function freezePluginIdentity(root: string) {
+  const manifestPath = resolve(root, 'manifest.json');
+  const htmlPath = resolve(root, 'index.html');
+  if (!existsSync(manifestPath)) return;
+  const manifest = JSON.parse(readFileSync(manifestPath, 'utf-8'));
+  if (!manifest._frozen) {
+    const baseName = String(manifest.name || basename(root)).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'plugin';
+    manifest.name = `${baseName}-${generateRandomSuffix(6)}`;
+    manifest._frozen = true;
+    writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
+    console.log(`❄️  plugin_code 已冻结: ${manifest.name}`);
+  }
+  if (!existsSync(htmlPath)) return;
+  const html = readFileSync(htmlPath, 'utf-8');
+  const updatedHtml = html.replace(/<meta\s+name=["']treasure-plugin-code["']\s+content=["'][^"']*["']/, `<meta name="treasure-plugin-code" content="${manifest.name}"`);
+  if (html !== updatedHtml) writeFileSync(htmlPath, updatedHtml);
+}
+
 function treasureDevEndpoints(): any {
   const root = resolve(__dirname);
+  // Runs while Vite loads its config, for both `vite` and `vite build`.
+  freezePluginIdentity(root);
   return {
     name: 'treasure-dev-endpoints',
     configureServer(server: any) {

@@ -144,13 +144,21 @@ jobs:
           VERSION: ${{ steps.meta.outputs.version }}
         run: |
           tag="plugin/${PLUGIN}/v${VERSION}"
-          gh release create "$tag" \
-            "${PLUGIN}/build-output/${PLUGIN}.zip" \
-            "${PLUGIN}/build-output/${PLUGIN}-source-v${VERSION}.zip" \
-            "${PLUGIN}/build-output/SHA256SUMS.txt" \
-            --title "${PLUGIN} v${VERSION}" \
-            --generate-notes \
-            --target "$GITHUB_SHA"
+          assets=(
+            "${PLUGIN}/build-output/${PLUGIN}.zip"
+            "${PLUGIN}/build-output/${PLUGIN}-source-v${VERSION}.zip"
+            "${PLUGIN}/build-output/SHA256SUMS.txt"
+          )
+          if gh release view "$tag" >/dev/null 2>&1; then
+            # Re-running an existing version must replace its artifacts instead of
+            # failing on the pre-existing release.
+            gh release upload "$tag" "${assets[@]}" --clobber
+          else
+            gh release create "$tag" "${assets[@]}" \
+              --title "${PLUGIN} v${VERSION}" \
+              --generate-notes \
+              --target "$GITHUB_SHA"
+          fi
 
       - name: Mirror release assets to Gitee
         shell: bash
