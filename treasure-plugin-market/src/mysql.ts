@@ -174,13 +174,19 @@ class MysqlQuery implements PromiseLike<any> {
 
   private async selectRows() {
     const joinsPlugins = this.table === 'plugin_releases' && this.filters.some((filter) => filter.column.startsWith('plugins.'));
-    const { sql, values } = this.where();
+    // A release query that filters a related plugin joins two tables that both
+    // expose `status` and `created_at`. Qualify fields owned by the primary
+    // table so MySQL does not reject the query as ambiguous.
+    const { sql, values } = this.where(joinsPlugins ? this.table : '');
     const join = joinsPlugins ? ' INNER JOIN plugins p ON p.id = plugin_releases.plugin_id' : '';
     if (this.countOnly) {
       const [rows] = await this.pool.query<RowDataPacket[]>(`SELECT COUNT(*) AS count FROM ${quote(this.table)}${join}${sql}`, values);
       return { data: null, error: null, count: Number(rows[0]?.count ?? 0) };
     }
-    const order = this.orderBy ? ` ORDER BY ${quote(this.orderBy.column)} ${this.orderBy.ascending ? 'ASC' : 'DESC'}` : '';
+    const orderColumn = this.orderBy
+      ? `${joinsPlugins ? `${quote(this.table)}.` : ''}${quote(this.orderBy.column)}`
+      : '';
+    const order = this.orderBy ? ` ORDER BY ${orderColumn} ${this.orderBy.ascending ? 'ASC' : 'DESC'}` : '';
     const limit = this.rowLimit === undefined ? '' : ` LIMIT ${Math.max(0, this.rowLimit)}`;
     const [result] = await this.pool.query<RowDataPacket[]>(`SELECT ${quote(this.table)}.* FROM ${quote(this.table)}${join}${sql}${order}${limit}`, values);
     const rows = await this.attachRelations(result.map((row) => normalize({ ...row })));

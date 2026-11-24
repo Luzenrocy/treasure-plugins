@@ -76,6 +76,20 @@ export const authSessions = {
     return (data as SessionRow) ?? null;
   },
 
+  /** Successful authenticated activity renews the session for the configured idle timeout. */
+  async touch(sessionId: string, ttlSeconds: number) {
+    const { data, error } = await (await client())
+      .from('auth_sessions')
+      .update({ expires_at: new Date(Date.now() + ttlSeconds * 1000).toISOString() })
+      .eq('session_id', sessionId)
+      .is('revoked_at', null)
+      .gt('expires_at', new Date().toISOString())
+      .select('session_id')
+      .maybeSingle();
+    if (error) throw error;
+    return data as Pick<SessionRow, 'session_id'> | null;
+  },
+
   /** 修改密码 / 重置 Token：作废该用户全部未过期会话。 */
   async revokeAllForUser(userId: string) {
     const { error } = await (await client())

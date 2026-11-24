@@ -95,6 +95,11 @@ async function currentUser(request: Request, requireRole: Role = 'admin', requir
   if (requireMfa) {
     if (needsMfaVerification(true, security?.mfa_enabled, session.aal)) throw new Error('该操作必须完成 MFA 验证');
   }
+  // token_ttl_seconds is the idle timeout: only a request that completed
+  // authentication and authorization extends the session.
+  const ttlSeconds = Number(security?.token_ttl_seconds ?? 600);
+  const refreshed = await authSessions.touch(session.session_id, ttlSeconds);
+  if (!refreshed) throw new Error('登录已过期');
   console.log(`[app] auth OK sub=${user.id} aal=${session.aal} path=${new URL(request.url).pathname}`);
   return { claims: { sub: user.id, aal: session.aal, sessionId: session.session_id }, user };
 }
@@ -162,6 +167,13 @@ export async function handle(request: Request): Promise<Response> {
       }
       console.log(`[app:logout] 步骤`, { sessionIdPrefix: sessionId.slice(0, 12) || null, sessionFound: !!session, revoked: !!session });
       return ok({ loggedOut: true });
+    }
+
+    // The client only calls this while the user is actively interacting with
+    // the console. currentUser renews the idle timeout after authentication.
+    if (path === '/admin/session/keepalive' && request.method === 'POST') {
+      await currentUser(request, 'user');
+      return ok({ active: true });
     }
 
     if (path === '/admin/mfa/verify' && request.method === 'POST') {
