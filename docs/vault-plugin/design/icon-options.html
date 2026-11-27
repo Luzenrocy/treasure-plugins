@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>缄符册图标方案</title>
+<style>
+  :root {
+    color-scheme: light;
+    --ink: #302735;
+    --muted: #6e5f72;
+    --accent: #5b407b;
+    --line: #e2d7ce;
+    --paper: #fffbf5;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: #f3eee6;
+    color: var(--ink);
+    font: 14px/1.5 -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+  main { max-width: 1112px; margin: auto; padding: 34px 28px; }
+  h1, h2, h3, p { margin: 0; }
+  h1 { font-size: 30px; line-height: 1.2; letter-spacing: .055em; }
+  .intro { margin: 8px 0 22px; color: var(--muted); }
+  .options { display: grid; gap: 12px; }
+  .option {
+    padding: 15px 18px 12px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--paper);
+  }
+  .option:first-child { border-color: #bfa7d3; }
+  .option-title { display: flex; align-items: center; gap: 10px; }
+  h2 { font-size: 19px; letter-spacing: .025em; }
+  .current {
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: #eee4f6;
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 650;
+  }
+  .option p { margin: 2px 0 12px; color: var(--muted); font-size: 13px; }
+  .samples { display: grid; grid-template-columns: .89fr 1.1fr 1fr; gap: 12px; }
+  .sample { min-width: 0; }
+  .sample h3 { margin-bottom: 5px; color: var(--muted); font-size: 11px; font-weight: 650; }
+  .sample h3 span { margin-inline-start: 4px; font-weight: 450; font-variant-numeric: tabular-nums; }
+  .catalog-sample, .header-sample, .sidebar-sample {
+    display: flex;
+    align-items: center;
+    height: 80px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+  }
+  .catalog-sample { gap: 13px; padding: 7px 14px; background: #ebe2d3; color: #5e427c; }
+  .header-sample { gap: 9px; padding: 0 13px; background: #f8f4ed; }
+  .header-sample strong { display: block; font-size: 17px; }
+  .header-sample small { display: block; color: var(--muted); font-size: 11px; }
+  .catalog-glyph, .header-glyph { flex: none; }
+  .catalog-glyph { width: 64px; height: 64px; }
+  .header-glyph { width: 40px; height: 40px; }
+  svg { display: block; width: 100%; height: 100%; }
+  .sidebar-sample { flex-direction: column; align-items: stretch; justify-content: center; border-color: #413650; background: #3b3149; }
+  .sidebar-row { display: flex; align-items: center; gap: 10px; height: 34px; padding: 0 13px; color: #dcccec; font-size: 13px; }
+  .sidebar-row.selected { background: #55466a; color: #acd1ff; }
+  .sidebar-row svg { flex: none; width: 16px; height: 16px; }
+  .exports { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
+  .exports button {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--accent);
+    font: inherit;
+    font-size: 11px;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .exports button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  @media (max-width: 650px) {
+    main { padding: 22px 14px; }
+    .samples { grid-template-columns: 1fr; }
+    .sample h3 { margin-bottom: 3px; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>缄符册图标方案</h1>
+  <p class="intro">同一标记在插件中心、页面页首和宿主侧栏的显示效果</p>
+  <div class="options">
+<article class="option">
+  <header class="option-title"><h2>A · 封签册</h2><span class="current">默认方案</span></header>
+  <p>书脊保留「册」的轮廓，金色封签表达收藏与保护。</p>
+  <div class="samples">
+    <div class="sample">
+      <h3>插件中心 <span>64 px</span></h3>
+      <div class="catalog-sample">
+        <div class="catalog-glyph"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="缄符册 · 封签册">
+  <defs>
+    <linearGradient id="tile-a" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#6B4E93"/>
+      <stop offset="1" stop-color="#513870"/>
+    </linearGradient>
+  </defs>
+  <rect x="1" y="1" width="62" height="62" rx="15" fill="url(#tile-a)"/>
+  <rect x="1.5" y="1.5" width="61" height="61" rx="14.5" fill="none" stroke="#A285BE"/>
+  <g transform="translate(8 8) scale(2)">
+    <g fill="none" stroke="#FFF9F2" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6.75 3.5H18a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6.75A2.75 2.75 0 0 1 4 17.75V6.25A2.75 2.75 0 0 1 6.75 3.5Z"/>
+      <path d="M8.25 3.5v17"/>
+    </g>
+    <path d="M12 9h5.25v5.75L14.625 13.5 12 14.75Z" fill="#F4CA87" stroke="#F4CA87" stroke-width="1.6" stroke-linejoin="round"/>
+  </g>
+</svg></div>
+        <strong>缄符册</strong>
+      </div>
+    </div>
+    <div class="sample">
+      <h3>插件页页首 <span>40 px</span></h3>
+      <div class="header-sample">
+        <div class="header-glyph"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="缄符册 · 封签册">
+  <defs>
+    <linearGradient id="tile-a-header" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#6B4E93"/>
+      <stop offset="1" stop-color="#513870"/>
+    </linearGradient>
+  </defs>
+  <rect x="1" y="1" width="62" height="62" rx="15" fill="url(#tile-a-header)"/>
+  <rect x="1.5" y="1.5" width="61" height="61" rx="14.5" fill="none" stroke="#A285BE"/>
+  <g transform="translate(8 8) scale(2)">
+    <g fill="none" stroke="#FFF9F2" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6.75 3.5H18a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6.75A2.75 2.75 0 0 1 4 17.75V6.25A2.75 2.75 0 0 1 6.75 3.5Z"/>
+      <path d="M8.25 3.5v17"/>
+    </g>
+    <path d="M12 9h5.25v5.75L14.625 13.5 12 14.75Z" fill="#F4CA87" stroke="#F4CA87" stroke-width="1.6" stroke-linejoin="round"/>
+  </g>
+</svg></div>
+        <div><strong>缄符册</strong><small>Treasure 私密信息库</small></div>
+      </div>
+    </div>
+    <div class="sample">
+      <h3>宿主侧栏 <span>16 px</span></h3>
+      <div class="sidebar-sample">
+        <div class="sidebar-row"><svg xmlns="http://www.w3.org/2000/svg" viewBox="1 1 22 22" role="img" aria-label="缄符册 · 封签册">
+  <g fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6.75 3.5H18a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6.75A2.75 2.75 0 0 1 4 17.75V6.25A2.75 2.75 0 0 1 6.75 3.5Z"/>
+    <path d="M8.25 3.5v17"/>
+  </g>
+  <path d="M12 9h5.25v5.75L14.625 13.5 12 14.75Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+</svg><span>缄符册</span></div>
+        <div class="sidebar-row selected"><svg xmlns="http://www.w3.org/2000/svg" viewBox="1 1 22 22" role="img" aria-label="缄符册 · 封签册">
+  <g fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6.75 3.5H18a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6.75A2.75 2.75 0 0 1 4 17.75V6.25A2.75 2.75 0 0 1 6.75 3.5Z"/>
+    <path d="M8.25 3.5v17"/>
+  </g>
+  <path d="M12 9h5.25v5.75L14.625 13.5 12 14.75Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+</svg><span>缄符册</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="exports">
+    <button type="button" data-export="catalog" aria-label="下载封签册应用图标">应用图标 SVG</button>
+    <button type="button" data-export="sidebar" aria-label="下载封签册侧栏图标">侧栏图标 SVG</button>
+  </div>
+</article>
+<article class="option">
+  <header class="option-title"><h2>B · 藏符夹</h2></header>
+  <p>用叠放的两张符笺表达分类收录，偏文具感。</p>
+  <div class="samples">
+    <div class="sample">
+      <h3>插件中心 <span>64 px</span></h3>
+      <div class="catalog-sample">
+        <div class="catalog-glyph"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="缄符册 · 藏符夹">
+  <defs>
+    <linearGradient id="tile-b" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#FFF7EB"/>
+      <stop offset="1" stop-color="#F4E7D6"/>
+    </linearGradient>
+  </defs>
+  <rect x="1" y="1" width="62" height="62" rx="15" fill="url(#tile-b)"/>
+  <rect x="1.5" y="1.5" width="61" height="61" rx="14.5" fill="none" stroke="#D6BED8"/>
+  <g transform="translate(8 8) scale(2)">
+    <g fill="none" stroke="#654A78" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3.75 16.75V5.5A2 2 0 0 1 5.75 3.5H15"/>
+      <path d="M9 7H17l3.5 3.5V18.5a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2V8a1 1 0 0 1 1-1Z"/>
+    </g>
+    <path d="M12.25 12.75h4M12.25 16.25h2.5" fill="none" stroke="#98612D" stroke-width="1.85" stroke-linecap="round"/>
+  </g>
+</svg></div>
+        <strong>缄符册</strong>
+      </div>
+    </div>
+    <div class="sample">
+      <h3>插件页页首 <span>40 px</span></h3>
+      <div class="header-sample">
+        <div class="header-glyph"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="缄符册 · 藏符夹">
+  <defs>
+    <linearGradient id="tile-b-header" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#FFF7EB"/>
+      <stop offset="1" stop-color="#F4E7D6"/>
+    </linearGradient>
+  </defs>
+  <rect x="1" y="1" width="62" height="62" rx="15" fill="url(#tile-b-header)"/>
+  <rect x="1.5" y="1.5" width="61" height="61" rx="14.5" fill="none" stroke="#D6BED8"/>
+  <g transform="translate(8 8) scale(2)">
+    <g fill="none" stroke="#654A78" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3.75 16.75V5.5A2 2 0 0 1 5.75 3.5H15"/>
+      <path d="M9 7H17l3.5 3.5V18.5a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2V8a1 1 0 0 1 1-1Z"/>
+    </g>
+    <path d="M12.25 12.75h4M12.25 16.25h2.5" fill="none" stroke="#98612D" stroke-width="1.85" stroke-linecap="round"/>
+  </g>
+</svg></div>
+        <div><strong>缄符册</strong><small>Treasure 私密信息库</small></div>
+      </div>
+    </div>
+    <div class="sample">
+      <h3>宿主侧栏 <span>16 px</span></h3>
+      <div class="sidebar-sample">
+        <div class="sidebar-row"><svg xmlns="http://www.w3.org/2000/svg" viewBox="1 1 22 22" role="img" aria-label="缄符册 · 藏符夹">
+  <g fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3.75 16.75V5.5A2 2 0 0 1 5.75 3.5H15"/>
+    <path d="M9 7H17l3.5 3.5V18.5a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2V8a1 1 0 0 1 1-1Z"/>
+  </g>
+  <path d="M12.25 12.75h4M12.25 16.25h2.5" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round"/>
+</svg><span>缄符册</span></div>
+        <div class="sidebar-row selected"><svg xmlns="http://www.w3.org/2000/svg" viewBox="1 1 22 22" role="img" aria-label="缄符册 · 藏符夹">
+  <g fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3.75 16.75V5.5A2 2 0 0 1 5.75 3.5H15"/>
+    <path d="M9 7H17l3.5 3.5V18.5a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2V8a1 1 0 0 1 1-1Z"/>
+  </g>
+  <path d="M12.25 12.75h4M12.25 16.25h2.5" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round"/>
+</svg><span>缄符册</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="exports">
+    <button type="button" data-export="catalog" aria-label="下载藏符夹应用图标">应用图标 SVG</button>
+    <button type="button" data-export="sidebar" aria-label="下载藏符夹侧栏图标">侧栏图标 SVG</button>
+  </div>
+</article>
+<article class="option">
+  <header class="option-title"><h2>C · 合扣书匣</h2></header>
+  <p>把收纳匣与中央扣合做成一个轮廓，强调私密保管。</p>
+  <div class="samples">
+    <div class="sample">
+      <h3>插件中心 <span>64 px</span></h3>
+      <div class="catalog-sample">
+        <div class="catalog-glyph"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="缄符册 · 合扣书匣">
+  <defs>
+    <linearGradient id="tile-c" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#534A78"/>
+      <stop offset="1" stop-color="#383553"/>
+    </linearGradient>
+  </defs>
+  <rect x="1" y="1" width="62" height="62" rx="15" fill="url(#tile-c)"/>
+  <rect x="1.5" y="1.5" width="61" height="61" rx="14.5" fill="none" stroke="#8B80AB"/>
+  <g transform="translate(8 8) scale(2)">
+    <g fill="none" stroke="#F9F1FF" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3.5 9h17M6 5.25h12a2.5 2.5 0 0 1 2.5 2.5v9a2.5 2.5 0 0 1-2.5 2.5H6a2.5 2.5 0 0 1-2.5-2.5v-9A2.5 2.5 0 0 1 6 5.25Z"/>
+    </g>
+    <path d="M9.25 9h5.5v4a2.75 2.75 0 0 1-5.5 0Z" fill="#ACE0CD" stroke="#ACE0CD" stroke-width="1.65" stroke-linejoin="round"/>
+  </g>
+</svg></div>
+        <strong>缄符册</strong>
+      </div>
+    </div>
+    <div class="sample">
+      <h3>插件页页首 <span>40 px</span></h3>
+      <div class="header-sample">
+        <div class="header-glyph"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="缄符册 · 合扣书匣">
+  <defs>
+    <linearGradient id="tile-c-header" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#534A78"/>
+      <stop offset="1" stop-color="#383553"/>
+    </linearGradient>
+  </defs>
+  <rect x="1" y="1" width="62" height="62" rx="15" fill="url(#tile-c-header)"/>
+  <rect x="1.5" y="1.5" width="61" height="61" rx="14.5" fill="none" stroke="#8B80AB"/>
+  <g transform="translate(8 8) scale(2)">
+    <g fill="none" stroke="#F9F1FF" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3.5 9h17M6 5.25h12a2.5 2.5 0 0 1 2.5 2.5v9a2.5 2.5 0 0 1-2.5 2.5H6a2.5 2.5 0 0 1-2.5-2.5v-9A2.5 2.5 0 0 1 6 5.25Z"/>
+    </g>
+    <path d="M9.25 9h5.5v4a2.75 2.75 0 0 1-5.5 0Z" fill="#ACE0CD" stroke="#ACE0CD" stroke-width="1.65" stroke-linejoin="round"/>
+  </g>
+</svg></div>
+        <div><strong>缄符册</strong><small>Treasure 私密信息库</small></div>
+      </div>
+    </div>
+    <div class="sample">
+      <h3>宿主侧栏 <span>16 px</span></h3>
+      <div class="sidebar-sample">
+        <div class="sidebar-row"><svg xmlns="http://www.w3.org/2000/svg" viewBox="1 1 22 22" role="img" aria-label="缄符册 · 合扣书匣">
+  <g fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3.5 9h17M6 5.25h12a2.5 2.5 0 0 1 2.5 2.5v9a2.5 2.5 0 0 1-2.5 2.5H6a2.5 2.5 0 0 1-2.5-2.5v-9A2.5 2.5 0 0 1 6 5.25Z"/>
+  </g>
+  <path d="M9.25 9h5.5v4a2.75 2.75 0 0 1-5.5 0Z" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linejoin="round"/>
+</svg><span>缄符册</span></div>
+        <div class="sidebar-row selected"><svg xmlns="http://www.w3.org/2000/svg" viewBox="1 1 22 22" role="img" aria-label="缄符册 · 合扣书匣">
+  <g fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3.5 9h17M6 5.25h12a2.5 2.5 0 0 1 2.5 2.5v9a2.5 2.5 0 0 1-2.5 2.5H6a2.5 2.5 0 0 1-2.5-2.5v-9A2.5 2.5 0 0 1 6 5.25Z"/>
+  </g>
+  <path d="M9.25 9h5.5v4a2.75 2.75 0 0 1-5.5 0Z" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linejoin="round"/>
+</svg><span>缄符册</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="exports">
+    <button type="button" data-export="catalog" aria-label="下载合扣书匣应用图标">应用图标 SVG</button>
+    <button type="button" data-export="sidebar" aria-label="下载合扣书匣侧栏图标">侧栏图标 SVG</button>
+  </div>
+</article>
+  </div>
+</main>
+<script>
+  document.querySelectorAll('[data-export]').forEach(button => {
+    button.addEventListener('click', () => {
+      const option = button.closest('.option');
+      const sidebar = button.dataset.export === 'sidebar';
+      const glyph = option.querySelector(sidebar ? '.sidebar-row svg' : '.catalog-glyph svg');
+      const source = new XMLSerializer().serializeToString(glyph);
+      const url = URL.createObjectURL(new Blob([source], { type: 'image/svg+xml' }));
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = sidebar ? 'menu-icon.svg' : 'icon.svg';
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="1 1 22 22" role="img" aria-label="缄符册 · 封签册">
+  <g fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6.75 3.5H18a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6.75A2.75 2.75 0 0 1 4 17.75V6.25A2.75 2.75 0 0 1 6.75 3.5Z"/>
+    <path d="M8.25 3.5v17"/>
+  </g>
+  <path d="M12 9h5.25v5.75L14.625 13.5 12 14.75Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+</svg>

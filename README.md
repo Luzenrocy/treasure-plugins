@@ -54,6 +54,7 @@ flowchart LR
 | --- | --- | --- |
 | [`shi-yu-lu`](shi-yu-lu/README.md) | 石玉录 | 面向本地 Markdown 文件的笔记编辑与资产管理工具。 |
 | [`kao-cheng-ce`](kao-cheng-ce/README.md) | 考成策 | 面向任务、进度、标签、日志与提醒的管理工具。 |
+| [`jian-fu-ce`](jian-fu-ce/README.md) | 缄符册 | 本地加密保存凭据、提示词和文本，支持搜索、标签和收藏。 |
 | [`treasure-plugin`](treasure-plugin/README.md) | 插件脚手架 | 可复制的最小插件参考实现，也是 SDK CLI 的模板依据。 |
 
 ## 目录结构
@@ -65,6 +66,7 @@ treasure-plugins/
 │   └── TREASURE-HOST-DESIGN.md      # Treasure 宿主视觉适配参考
 ├── treasure-plugin/                 # 最小插件脚手架
 ├── shi-yu-lu/                       # 石玉录源码与独立 README
+├── jian-fu-ce/                      # 缄符册源码与独立 README
 └── kao-cheng-ce/                    # 考成策源码与独立 README
 ```
 

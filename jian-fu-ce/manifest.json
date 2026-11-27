@@ -1,0 +1,16 @@
+{
+  "name": "jian-fu-ce-mrkt7z",
+  "alias": "缄符册",
+  "version": "1.0.0",
+  "description": "Treasure 本地加密资料库，保存凭据、提示词与文本。",
+  "author": "Treasure",
+  "icon": "icon.svg",
+  "entry": "index.html",
+  "minPlatformVersion": "1.0.0",
+  "menu": {
+    "name": "缄符册",
+    "icon": "menu-icon.svg",
+    "order": 100
+  },
+  "_frozen": true
+}

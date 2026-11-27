@@ -1,0 +1,28 @@
+{
+  "name": "jian-fu-ce",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Treasure 本地加密资料库，保存凭据、提示词与文本。",
+  "author": "Treasure",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "typecheck": "vue-tsc --noEmit",
+    "test": "vitest run",
+    "build:plugin": "node scripts/clean-build-output.mjs && npm run build && node scripts/build-plugin.mjs",
+    "build:plugin:zip": "node scripts/clean-build-output.mjs && npm run build && node scripts/build-plugin.mjs --zip"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
+    "@luzenrocy/treasure-sdk": "1.0.0",
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "typescript": "~5.6.2",
+    "vite": "^6.0.3",
+    "vitest": "^4.1.10",
+    "vue-tsc": "^2.1.10"
+  }
+}

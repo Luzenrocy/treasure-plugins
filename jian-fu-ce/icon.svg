@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="缄符册 · 封签册">
+  <defs>
+    <linearGradient id="tile-a" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#6B4E93"/>
+      <stop offset="1" stop-color="#513870"/>
+    </linearGradient>
+  </defs>
+  <rect x="1" y="1" width="62" height="62" rx="15" fill="url(#tile-a)"/>
+  <rect x="1.5" y="1.5" width="61" height="61" rx="14.5" fill="none" stroke="#A285BE"/>
+  <g transform="translate(8 8) scale(2)">
+    <g fill="none" stroke="#FFF9F2" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6.75 3.5H18a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6.75A2.75 2.75 0 0 1 4 17.75V6.25A2.75 2.75 0 0 1 6.75 3.5Z"/>
+      <path d="M8.25 3.5v17"/>
+    </g>
+    <path d="M12 9h5.25v5.75L14.625 13.5 12 14.75Z" fill="#F4CA87" stroke="#F4CA87" stroke-width="1.6" stroke-linejoin="round"/>
+  </g>
+</svg>

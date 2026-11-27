@@ -6,6 +6,7 @@ on:
       - 'plugin/excalidraw/v*'
       - 'plugin/google-authenticator/v*'
       - 'plugin/guan-xiang-pu/v*'
+      - 'plugin/jian-fu-ce/v*'
       - 'plugin/json-formatter/v*'
       - 'plugin/kao-cheng-ce/v*'
       - 'plugin/shi-yu-lu/v*'

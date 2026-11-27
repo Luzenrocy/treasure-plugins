@@ -1,0 +1,961 @@
+<style>
+  #treasure-vault {
+    color-scheme: light dark;
+    --vault-ink: light-dark(#302735, #f3eaf5);
+    --vault-muted: light-dark(#6d6170, #bfb1c4);
+    --vault-edge: light-dark(#e6ded6, #493f4c);
+    --vault-header: light-dark(#fcf9f4, #2c2530);
+    --vault-rail: light-dark(#f5eee5, #251f29);
+    --vault-paper: light-dark(#fffcf8, #302832);
+    --vault-inset: light-dark(#f5f0ec, #392f3e);
+    --vault-accent: light-dark(#65458d, #c9acec);
+    --vault-on-accent: light-dark(#fffafc, #2b1c36);
+    --vault-selection: light-dark(#ede5f4, #463653);
+    --vault-positive: light-dark(#396b59, #a2d4be);
+    --vault-danger: light-dark(#a23e4a, #ffadb4);
+    --vault-mono: ui-monospace, SFMono-Regular, Consolas, monospace;
+    position: relative;
+    isolation: isolate;
+    background: var(--vault-paper);
+    color: var(--vault-ink);
+    border: 1px solid var(--vault-edge);
+    border-radius: 16px;
+    font: 14px/1.45 -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  }
+
+  #treasure-vault *, #treasure-vault *::before, #treasure-vault *::after { box-sizing: border-box; }
+  #treasure-vault [hidden] { display: none !important; }
+  #treasure-vault :is(h1, h2, h3, p, ul, dl, dd) { margin: 0; }
+  #treasure-vault :is(button, input, select, textarea) { font: inherit; color: inherit; }
+  #treasure-vault button { border: 0; background: none; }
+  #treasure-vault button:disabled { opacity: .55; }
+  #treasure-vault :is(svg.lucide, i[data-lucide]) { flex: none; width: 17px; height: 17px; stroke-width: 1.75; }
+  #treasure-vault :focus-visible { outline: 2px solid var(--vault-accent); outline-offset: 2px; }
+  #treasure-vault .vault-sr {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  #treasure-vault .vault-header {
+    display: grid;
+    grid-template-columns: minmax(132px, 1fr) minmax(238px, 390px) minmax(105px, 1fr);
+    align-items: center;
+    gap: 20px;
+    padding: 14px 20px;
+    background: var(--vault-header);
+    border-block-end: 1px solid var(--vault-edge);
+    border-radius: 15px 15px 0 0;
+  }
+
+  #treasure-vault .vault-brand, #treasure-vault .vault-search, #treasure-vault .vault-action,
+  #treasure-vault .vault-group-label, #treasure-vault .vault-item-content, #treasure-vault .vault-item-title,
+  #treasure-vault .vault-value, #treasure-vault .vault-footer, #treasure-vault .vault-toast {
+    display: flex;
+    align-items: center;
+  }
+
+  #treasure-vault .vault-brand { gap: 10px; }
+  #treasure-vault .vault-brand-mark, #treasure-vault .vault-glyph {
+    display: inline-grid;
+    flex: none;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+  }
+  #treasure-vault .vault-brand-mark {
+    width: 40px;
+    height: 40px;
+    background: light-dark(#624780, #ccafed);
+    color: var(--vault-on-accent);
+  }
+  #treasure-vault .vault-brand-mark .lucide { width: 20px; height: 20px; }
+  #treasure-vault .vault-brand h1 { font-size: 19px; font-weight: 720; line-height: 1.25; letter-spacing: .06em; }
+  #treasure-vault .vault-brand p { margin-block-start: 2px; color: var(--vault-muted); font-size: 11px; white-space: nowrap; }
+  #treasure-vault .vault-search {
+    min-width: 0;
+    gap: 8px;
+    padding: 3px 6px 3px 11px;
+    border: 1px solid var(--vault-edge);
+    border-radius: 9px;
+    background: var(--vault-inset);
+    color: var(--vault-muted);
+  }
+  #treasure-vault .vault-search:focus-within {
+    border-color: var(--vault-accent);
+    box-shadow: 0 0 0 2px var(--vault-selection);
+  }
+  #treasure-vault .vault-search input {
+    flex: 1;
+    width: 0;
+    min-height: 30px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--vault-ink);
+    outline: none;
+  }
+  #treasure-vault :is(input, textarea)::placeholder { color: var(--vault-muted); opacity: 1; }
+  #treasure-vault kbd {
+    flex: none;
+    padding: 2px 6px;
+    border: 1px solid var(--vault-edge);
+    border-radius: 5px;
+    background: var(--vault-header);
+    font: 11px/1.25 var(--vault-mono);
+    white-space: nowrap;
+  }
+  #treasure-vault .vault-action {
+    justify-content: center;
+    width: fit-content;
+    min-height: 36px;
+    gap: 5px;
+    padding: 0 11px;
+    border-radius: 8px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+  #treasure-vault .vault-action:hover { background: var(--vault-inset); }
+  #treasure-vault .vault-primary { background: var(--vault-accent); color: var(--vault-on-accent); font-weight: 610; }
+  #treasure-vault .vault-primary:hover { background: color-mix(in srgb, var(--vault-accent) 90%, var(--vault-ink)); }
+  #treasure-vault .vault-outlined { border: 1px solid var(--vault-edge); }
+  #treasure-vault .vault-icon-button { width: 33px; min-height: 33px; padding: 0; color: var(--vault-muted); }
+  #treasure-vault .vault-header > .vault-primary { justify-self: end; }
+
+  #treasure-vault .vault-workspace {
+    display: grid;
+    grid-template-columns: 170px minmax(234px, .86fr) minmax(290px, 1.14fr);
+    min-height: 540px;
+  }
+  #treasure-vault .vault-rail {
+    display: flex;
+    flex-direction: column;
+    gap: 19px;
+    padding: 18px 11px;
+    background: var(--vault-rail);
+    border-inline-end: 1px solid var(--vault-edge);
+  }
+  #treasure-vault .vault-nav-group { display: grid; gap: 2px; }
+  #treasure-vault .vault-nav-heading {
+    padding: 0 10px 5px;
+    color: var(--vault-muted);
+    font-size: 11px;
+    font-weight: 630;
+    letter-spacing: .09em;
+  }
+  #treasure-vault .vault-nav-button {
+    display: grid;
+    grid-template-columns: 17px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 8px;
+    min-height: 32px;
+    padding: 4px 9px;
+    border-radius: 7px;
+    text-align: start;
+    font-size: 13px;
+  }
+  #treasure-vault .vault-nav-button:hover { background: var(--vault-inset); }
+  #treasure-vault .vault-nav-button[aria-current="true"] {
+    background: var(--vault-selection);
+    color: var(--vault-accent);
+    font-weight: 650;
+  }
+  #treasure-vault .vault-nav-button > span:nth-child(2) { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  #treasure-vault .vault-count { color: var(--vault-muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+  #treasure-vault .vault-narrow-filter, #treasure-vault .vault-back { display: none; }
+  #treasure-vault .vault-list { min-width: 0; padding: 16px 12px 13px; background: var(--vault-header); border-inline-end: 1px solid var(--vault-edge); }
+  #treasure-vault .vault-list-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-end;
+    gap: 8px;
+    min-height: 37px;
+    padding-inline: 7px;
+    margin-block-end: 2px;
+  }
+  #treasure-vault .vault-list-heading h2 { min-width: 0; overflow-wrap: anywhere; font-size: 17px; font-weight: 690; }
+  #treasure-vault .vault-list-heading span { flex: none; }
+  #treasure-vault .vault-records { display: grid; gap: 3px; padding: 0; list-style: none; }
+  #treasure-vault .vault-record {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    min-width: 0;
+    border: 1px solid transparent;
+    border-radius: 9px;
+  }
+  #treasure-vault .vault-record:hover { background: var(--vault-inset); }
+  #treasure-vault .vault-record[data-active="true"] {
+    background: var(--vault-selection);
+    border-color: color-mix(in srgb, var(--vault-accent) 14%, var(--vault-edge));
+  }
+  #treasure-vault .vault-item-content {
+    width: 100%;
+    min-width: 0;
+    min-height: 55px;
+    padding: 6px 3px 6px 8px;
+    gap: 9px;
+    border-radius: 8px;
+    text-align: start;
+  }
+  #treasure-vault .vault-item-content > span:last-child { display: block; min-width: 0; }
+  #treasure-vault .vault-item-title { gap: 5px; font-weight: 650; }
+  #treasure-vault .vault-item-title span, #treasure-vault .vault-item-meta { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  #treasure-vault .vault-item-meta { margin-block-start: 2px; color: var(--vault-muted); font-size: 11px; }
+  #treasure-vault .vault-item-title .lucide { width: 12px; height: 12px; }
+  #treasure-vault .vault-star, #treasure-vault .vault-action[aria-pressed="true"] .lucide-star {
+    color: light-dark(#916022, #edc581);
+    fill: color-mix(in srgb, currentColor 20%, transparent);
+  }
+  #treasure-vault .vault-record > button:last-child { margin-inline-end: 4px; }
+  #treasure-vault .vault-record > button:last-child:hover { background: var(--vault-paper); color: var(--vault-accent); }
+  #treasure-vault .vault-glyph[data-kind="api-key"] { color: light-dark(#6b4a96, #d7baf6); background: light-dark(#e9dff3, #503b60); }
+  #treasure-vault .vault-glyph[data-kind="secret-key"] { color: light-dark(#42677a, #b4d9eb); background: light-dark(#dfebf0, #354b57); }
+  #treasure-vault .vault-glyph[data-kind="token"] { color: light-dark(#36695f, #a5d7cc); background: light-dark(#dfece5, #304c45); }
+  #treasure-vault .vault-glyph[data-kind="password"] { color: light-dark(#875923, #efca96); background: light-dark(#f3e6d4, #57452f); }
+  #treasure-vault .vault-glyph[data-kind="prompt"] { color: light-dark(#8b4f62, #ecb0c5); background: light-dark(#f4e3e9, #583946); }
+  #treasure-vault .vault-glyph[data-kind="text"] { color: light-dark(#526472, #b5c9d9); background: light-dark(#e7ecee, #37444e); }
+
+  #treasure-vault .vault-details { min-width: 0; padding: 22px 23px 20px; }
+  #treasure-vault .vault-detail-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    margin-block-end: 16px;
+  }
+  #treasure-vault .vault-detail-head .vault-glyph { width: 48px; height: 48px; border-radius: 13px; }
+  #treasure-vault .vault-detail-head .vault-glyph .lucide { width: 23px; height: 23px; }
+  #treasure-vault .vault-detail-actions { display: flex; align-items: center; gap: 4px; }
+  #treasure-vault .vault-detail-title { font-size: 25px; font-weight: 700; line-height: 1.23; overflow-wrap: anywhere; }
+  #treasure-vault .vault-detail-type { padding-block: 4px 14px; color: var(--vault-muted); font-size: 12px; }
+  #treasure-vault .vault-fields { display: grid; gap: 17px; padding-block-start: 16px; border-block-start: 1px solid var(--vault-edge); }
+  #treasure-vault .vault-field-label { color: var(--vault-muted); font-size: 12px; font-weight: 630; }
+  #treasure-vault .vault-fields dd { margin-block-start: 6px; overflow-wrap: anywhere; }
+  #treasure-vault .vault-value {
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 5px;
+    border: 1px solid var(--vault-edge);
+    border-radius: 9px;
+    background: var(--vault-inset);
+  }
+  #treasure-vault .vault-value-body {
+    flex: 1 1 108px;
+    min-width: 0;
+    padding: 7px 6px;
+    font: 13px/1.55 var(--vault-mono);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  #treasure-vault .vault-masked { color: var(--vault-muted); font-size: 14px; letter-spacing: .14em; }
+  #treasure-vault .vault-value-actions { display: flex; align-items: center; gap: 2px; margin-inline-start: auto; }
+  #treasure-vault .vault-value-actions .vault-primary { min-height: 32px; }
+  #treasure-vault .vault-value[data-multiline="true"] .vault-value-body { flex-basis: 100%; padding: 8px 9px 5px; }
+  #treasure-vault .vault-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+  #treasure-vault .vault-tag { min-height: 27px; padding: 2px 8px; border: 1px solid var(--vault-edge); border-radius: 6px; color: var(--vault-accent); font-size: 12px; overflow-wrap: anywhere; }
+  #treasure-vault .vault-tag:hover { background: var(--vault-selection); }
+  #treasure-vault .vault-notes { white-space: pre-wrap; }
+  #treasure-vault .vault-detail-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 3px 9px;
+    margin-block-start: 22px;
+    padding-block-start: 10px;
+    border-block-start: 1px solid var(--vault-edge);
+    color: var(--vault-muted);
+    font-size: 11px;
+  }
+  #treasure-vault .vault-delete { color: var(--vault-danger); font-size: 12px; }
+  #treasure-vault .vault-empty {
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+    padding: 45px 8px;
+    text-align: center;
+    color: var(--vault-muted);
+  }
+  #treasure-vault .vault-empty > .lucide { width: 24px; height: 24px; }
+  #treasure-vault .vault-empty p { color: var(--vault-ink); font-weight: 620; }
+  #treasure-vault .vault-footer {
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    column-gap: 12px;
+    row-gap: 5px;
+    min-height: 37px;
+    padding: 6px 16px;
+    border-block-start: 1px solid var(--vault-edge);
+    border-radius: 0 0 15px 15px;
+    background: var(--vault-header);
+    color: var(--vault-muted);
+    font-size: 11px;
+  }
+  #treasure-vault .vault-group-label { gap: 6px; }
+  #treasure-vault .vault-toast {
+    position: absolute;
+    z-index: 1;
+    inset-inline-end: 14px;
+    inset-block-end: 48px;
+    gap: 7px;
+    max-width: calc(100% - 28px);
+    padding: 9px 12px;
+    border: 1px solid var(--vault-edge);
+    border-radius: 9px;
+    background: var(--vault-paper);
+    box-shadow: 0 5px 18px light-dark(#43304923, #100a1460);
+    color: var(--vault-positive);
+    font-size: 13px;
+    overflow-wrap: anywhere;
+  }
+
+  #treasure-vault dialog {
+    width: min(480px, calc(100% - 26px));
+    max-height: calc(100% - 24px);
+    padding: 0;
+    border: 1px solid var(--vault-edge);
+    border-radius: 14px;
+    background: var(--vault-paper);
+    color: var(--vault-ink);
+    box-shadow: 0 16px 48px #23152840;
+  }
+  #treasure-vault dialog::backdrop { background: #21172b6b; }
+  #treasure-vault .vault-dialog-head, #treasure-vault .vault-dialog-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 17px;
+  }
+  #treasure-vault .vault-dialog-head { justify-content: space-between; border-block-end: 1px solid var(--vault-edge); }
+  #treasure-vault .vault-dialog-head h2 { font-size: 18px; }
+  #treasure-vault .vault-dialog-content { display: grid; gap: 13px; padding: 16px 17px; }
+  #treasure-vault .vault-form-first { display: grid; grid-template-columns: minmax(0, 1fr) minmax(102px, .52fr); gap: 10px; }
+  #treasure-vault .vault-form-field { display: grid; gap: 4px; }
+  #treasure-vault .vault-form-field span { font-size: 12px; font-weight: 630; }
+  #treasure-vault :is(.vault-form-field input, .vault-form-field textarea, .vault-form-field select, .vault-narrow-filter, .vault-manual-value) {
+    width: 100%;
+    min-width: 0;
+    min-height: 36px;
+    padding: 7px 9px;
+    border: 1px solid var(--vault-edge);
+    border-radius: 7px;
+    background: var(--vault-inset);
+  }
+  #treasure-vault :is(.vault-form-field textarea, .vault-manual-value) { resize: vertical; }
+  #treasure-vault .vault-secret-input { display: flex; align-items: center; gap: 5px; }
+  #treasure-vault .vault-secret-input > input { flex: 1; font-family: var(--vault-mono); }
+  #treasure-vault .vault-dialog-actions { justify-content: flex-end; border-block-start: 1px solid var(--vault-edge); }
+  #treasure-vault .vault-danger-button { background: var(--vault-danger); color: var(--vault-paper); font-weight: 610; }
+  #treasure-vault .vault-danger-button:hover { background: color-mix(in srgb, var(--vault-danger) 90%, var(--vault-ink)); }
+  #treasure-vault .vault-form-hint { color: var(--vault-muted); font-size: 12px; }
+
+  @media (max-width: 820px) {
+    #treasure-vault .vault-workspace { grid-template-columns: minmax(235px, .86fr) minmax(270px, 1.14fr); }
+    #treasure-vault .vault-rail { display: none; }
+    #treasure-vault .vault-narrow-filter { display: block; margin-block-end: 10px; }
+  }
+
+  @media (max-width: 560px) {
+    #treasure-vault .vault-header { grid-template-columns: minmax(0, 1fr) auto; gap: 10px; padding: 12px; }
+    #treasure-vault .vault-search { grid-column: 1 / -1; grid-row: 2; }
+    #treasure-vault .vault-workspace { display: block; min-height: 375px; }
+    #treasure-vault .vault-list { border: 0; }
+    #treasure-vault .vault-details { display: none; padding: 14px 13px; }
+    #treasure-vault .vault-workspace[data-view="details"] .vault-list { display: none; }
+    #treasure-vault .vault-workspace[data-view="details"] .vault-details { display: block; }
+    #treasure-vault .vault-back { display: flex; margin-block-end: 9px; }
+    #treasure-vault .vault-detail-title { font-size: 22px; }
+  }
+
+  @media (pointer: coarse) {
+    #treasure-vault :is(.vault-action, .vault-nav-button, .vault-tag, .vault-search, .vault-value-actions .vault-primary) { min-height: 44px; }
+    #treasure-vault .vault-icon-button { width: 44px; }
+    #treasure-vault :is(input, textarea, select) { font-size: 16px; }
+  }
+</style>
+
+<section id="treasure-vault" lang="zh-CN" aria-label="密笺交互原型">
+  <header class="vault-header">
+    <div class="vault-brand">
+      <span class="vault-brand-mark"><i data-lucide="archive" aria-hidden="true"></i></span>
+      <div><h1>密笺</h1><p>Treasure 私密信息库</p></div>
+    </div>
+    <div class="vault-search">
+      <i data-lucide="search" aria-hidden="true"></i>
+      <input id="vault-search" type="text" enterkeyhint="search" autocomplete="off" spellcheck="false" placeholder="搜索标题、标签或备注" aria-label="搜索条目" aria-keyshortcuts="Meta+K Control+K">
+      <button class="vault-action vault-icon-button cursor-interaction" type="button" data-command="clear-search" aria-label="清空搜索" hidden><i data-lucide="x" aria-hidden="true"></i></button>
+      <kbd aria-hidden="true" data-search-shortcut>⌘ K</kbd>
+    </div>
+    <button class="vault-action vault-primary cursor-interaction" type="button" data-command="create"><i data-lucide="plus" aria-hidden="true"></i>新建条目</button>
+  </header>
+
+  <div class="vault-workspace" data-view="list">
+    <nav class="vault-rail" aria-label="信息库筛选" data-navigation></nav>
+    <section class="vault-list" aria-labelledby="vault-list-title">
+      <select class="vault-narrow-filter" aria-label="筛选条目" data-filter-select></select>
+      <div class="vault-list-heading"><h2 id="vault-list-title">全部条目</h2><span class="vault-count" aria-live="polite" data-result-count></span></div>
+      <ul class="vault-records" data-records></ul>
+      <div class="vault-empty" data-empty-list hidden></div>
+    </section>
+    <section class="vault-details" aria-label="条目详情">
+      <button class="vault-action vault-back cursor-interaction" type="button" data-command="back"><i data-lucide="arrow-left" aria-hidden="true"></i>返回列表</button>
+      <div data-details></div>
+    </section>
+  </div>
+
+  <footer class="vault-footer">
+    <span class="vault-group-label vault-shortcuts" aria-label="搜索框内按上下方向键切换条目，按回车复制内容"><kbd>↑ ↓</kbd>切换 <kbd>↵</kbd>复制</span>
+  </footer>
+
+  <div class="vault-toast" data-toast aria-hidden="true" hidden><i data-lucide="check" aria-hidden="true"></i><span></span></div>
+  <div class="vault-sr" role="status" data-announcement></div>
+
+  <dialog aria-labelledby="vault-editor-title" data-editor>
+    <form method="dialog" autocomplete="off" data-editor-form>
+      <div class="vault-dialog-head">
+        <h2 id="vault-editor-title">新建条目</h2>
+        <button class="vault-action vault-icon-button cursor-interaction" type="button" data-command="close-dialog" aria-label="关闭编辑"><i data-lucide="x" aria-hidden="true"></i></button>
+      </div>
+      <div class="vault-dialog-content">
+        <div class="vault-form-first">
+          <label class="vault-form-field"><span>标题</span><input name="title" maxlength="90" placeholder="例如 GitHub 令牌" required autofocus></label>
+          <label class="vault-form-field"><span>类型</span><select name="kind"></select></label>
+        </div>
+        <p class="vault-form-hint" data-kind-hint></p>
+        <label class="vault-form-field" data-account-field hidden><span>账号（选填）</span><input name="account" maxlength="250" spellcheck="false" placeholder="用户名或邮箱"></label>
+        <div class="vault-form-field" data-secret-field>
+          <label for="vault-secret-input"><span data-secret-label>密钥</span></label>
+          <div class="vault-secret-input">
+            <input id="vault-secret-input" type="password" name="secret" maxlength="5000" spellcheck="false" autocomplete="new-password">
+            <button class="vault-action vault-icon-button cursor-interaction" type="button" data-command="toggle-input" aria-label="显示输入内容" aria-pressed="false"><i data-lucide="eye" aria-hidden="true"></i></button>
+          </div>
+        </div>
+        <label class="vault-form-field" data-text-field hidden><span data-text-label>内容</span><textarea name="text" rows="4" maxlength="12000" spellcheck="false"></textarea></label>
+        <label class="vault-form-field"><span>标签（选填）</span><input name="tags" maxlength="170" placeholder="例如 AI，开发（用逗号分隔）"></label>
+        <label class="vault-form-field"><span>备注（选填）</span><textarea name="notes" rows="2" maxlength="1000" placeholder="用途、适用场景或其他线索"></textarea></label>
+      </div>
+      <div class="vault-dialog-actions">
+        <button class="vault-action vault-outlined cursor-interaction" type="button" data-command="close-dialog">取消</button>
+        <button class="vault-action vault-primary cursor-interaction" type="button" data-command="save">保存条目</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog aria-labelledby="vault-delete-title" data-delete-dialog>
+    <div class="vault-dialog-head"><h2 id="vault-delete-title">删除条目</h2></div>
+    <div class="vault-dialog-content"><p data-delete-label></p></div>
+    <div class="vault-dialog-actions">
+      <button class="vault-action vault-outlined cursor-interaction" type="button" data-command="close-dialog" autofocus>取消</button>
+      <button class="vault-action vault-danger-button cursor-interaction" type="button" data-command="delete">删除</button>
+    </div>
+  </dialog>
+
+  <dialog aria-labelledby="vault-manual-title" data-copy-dialog>
+    <div class="vault-dialog-head"><h2 id="vault-manual-title">手动复制</h2></div>
+    <div class="vault-dialog-content">
+      <p>点按或使用键盘快捷键复制选中的内容。</p>
+      <textarea class="vault-manual-value" rows="3" readonly aria-label="待复制内容"></textarea>
+    </div>
+    <div class="vault-dialog-actions"><button class="vault-action vault-outlined cursor-interaction" type="button" data-command="close-dialog">关闭</button></div>
+  </dialog>
+</section>
+
+<script>
+(() => {
+  const root = document.getElementById("treasure-vault");
+  const find = (selector) => root.querySelector(selector);
+  const search = find("#vault-search");
+  const editor = find("[data-editor]");
+  const editorForm = find("[data-editor-form]");
+  const field = (name) => editorForm.elements.namedItem(name);
+  const deleteDialog = find("[data-delete-dialog]");
+  const copyDialog = find("[data-copy-dialog]");
+  const manualValue = copyDialog.querySelector("textarea");
+  const narrowFilter = find("[data-filter-select]");
+  const records = find("[data-records]");
+  const details = find("[data-details]");
+  const clearSearchButton = find('[data-command="clear-search"]');
+  const toast = find("[data-toast]");
+
+  const kinds = {
+    "api-key": { label: "API Key", field: "API Key", icon: "key-round", masked: true, hint: "用于服务接口的访问凭据。" },
+    "secret-key": { label: "密钥", field: "密钥", icon: "key", masked: true, hint: "仅保存密钥本身，适合加密、签名等密钥材料。" },
+    token: { label: "Token", field: "Token", icon: "ticket", masked: true, hint: "用于保存可撤销、可过期的访问令牌。" },
+    password: { label: "密码", field: "密码", icon: "lock-keyhole", masked: true, hint: "账号与密码成对保存，便于登录时识别。" },
+    prompt: { label: "提示词", field: "提示词内容", icon: "message-square-text", masked: false, hint: "用于保存可复用的提示词模板。" },
+    text: { label: "文本", field: "文本内容", icon: "file-text", masked: false, hint: "用于保存不属于其他类型的短文本。" },
+  };
+
+  const startedAt = Date.now();
+  const hour = 60 * 60 * 1000;
+  let entries = [
+    { id: "openai", kind: "api-key", title: "OpenAI API Key", value: "demo_openai_key_7M4K8Q2", tags: ["开发", "AI"], notes: "本地开发环境的接口调试。用于验证模型请求和返回格式。", favorite: true },
+    { id: "github", kind: "token", title: "GitHub 访问令牌", value: "demo_github_token_65CR8Z", tags: ["开发", "工作"], notes: "用于读取示例仓库的 CI 配置。", favorite: true },
+    { id: "signing", kind: "secret-key", title: "服务签名密钥", value: "demo_service_signing_key_P4V7D", tags: ["开发"], notes: "用于服务间请求签名。", favorite: false },
+    { id: "review", kind: "prompt", title: "代码审查提示词", value: "你是一名代码审查同事。先确认改动目标，再检查正确性、边界条件和可维护性。\n\n请按影响从高到低列出发现，每条写明文件位置、触发条件和建议修复。", tags: ["AI", "开发"], notes: "提交合并请求前，用于第一次审查。", favorite: true },
+    { id: "nas", kind: "password", title: "NAS 管理员密码", account: "admin@example.test", value: "Demo-Nas-47M2!", tags: ["个人"], notes: "家庭存储管理后台的演示账号。" },
+    { id: "cloudflare", kind: "api-key", title: "Cloudflare API Key", value: "demo_cloudflare_key_R38VJ", tags: ["开发"], notes: "测试域名的 DNS 配置。" },
+    { id: "vercel", kind: "token", title: "Vercel 部署令牌", value: "demo_vercel_token_T6W5P", tags: ["开发", "工作"], notes: "用于预览环境的部署流程。" },
+    { id: "meeting", kind: "prompt", title: "会议纪要提示词", value: "将会议记录整理成三部分。\n1. 已作出的决定\n2. 待办事项、负责人和截止日期\n3. 尚未解决的问题\n\n缺失的信息标为待确认。", tags: ["AI", "工作"], notes: "适合每周例会。" },
+    { id: "dev-url", kind: "text", title: "开发环境入口", value: "https://dev.example.test", tags: ["开发"], notes: "前端联调环境的示例地址。" },
+  ].map((entry, index) => ({ account: "", favorite: false, ...entry, updatedAt: startedAt - (index + 1) * hour }));
+
+  let filter = "all";
+  let selectedId = entries[0].id;
+  let visibleEntries = [];
+  let mobileDetail = false;
+  let revealedId = null;
+  let revealTimer;
+  let toastTimer;
+  let editingId = null;
+  let deletingId = null;
+
+  const dateFormat = new Intl.DateTimeFormat("zh-CN", {
+    month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", timeZone: "Asia/Shanghai", hourCycle: "h23",
+  });
+  const escapedCharacters = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
+  const escape = (value) => String(value).replace(/[&<>"']/g, (character) => escapedCharacters[character]);
+  const icon = (name, classes = "") => `<i data-lucide="${name}" class="${classes}" aria-hidden="true"></i>`;
+  const updateIcons = () => globalThis.lucide?.createIcons({ attrs: { width: 16, height: 16 } });
+  const glyph = (kind) => `<span class="vault-glyph" data-kind="${kind}">${icon(kinds[kind].icon)}</span>`;
+  const kindOptions = Object.entries(kinds).map(([value, { label }]) => ({ value, label }));
+  const fold = (text) => text.normalize("NFKC").toLocaleLowerCase();
+
+  function matchesFilter(entry, value) {
+    if (value === "all") return true;
+    if (value === "favorites") return entry.favorite;
+    if (value.startsWith("tag:")) return entry.tags.some((tag) => fold(tag) === value.slice(4));
+    return entry.kind === value;
+  }
+
+  function filterLabel(value) {
+    if (value === "all") return "全部条目";
+    if (value === "favorites") return "收藏";
+    if (value.startsWith("tag:")) return `# ${entries.flatMap((entry) => entry.tags).find((tag) => fold(tag) === value.slice(4)) ?? value.slice(4)}`;
+    return kinds[value].label;
+  }
+
+  function getVisibleEntries() {
+    const terms = fold(search.value).trim().split(/\s+/).filter(Boolean);
+    return entries.filter((entry) => {
+      if (!matchesFilter(entry, filter)) return false;
+      const searchable = [entry.title, kinds[entry.kind].label, ...entry.tags, entry.notes, entry.account];
+      if (!kinds[entry.kind].masked) searchable.push(entry.value);
+      const haystack = fold(searchable.join(" "));
+      return terms.every((term) => haystack.includes(term.replace(/^#/, "")));
+    }).sort((a, b) => b.updatedAt - a.updatedAt);
+  }
+
+  function renderNav() {
+    const tags = new Map();
+    for (const entry of entries) {
+      for (const tag of entry.tags) tags.set(`tag:${fold(tag)}`, tags.get(`tag:${fold(tag)}`) ?? tag);
+    }
+    if (filter.startsWith("tag:") && !tags.has(filter)) tags.set(filter, filter.slice(4));
+
+    const groups = [
+      { title: "资料库", items: [["all", "layout-grid"], ["favorites", "star"]] },
+      { title: "类型", items: Object.entries(kinds).map(([kind, value]) => [kind, value.icon]) },
+      { title: "标签", items: [...tags.keys()].map((tag) => [tag, "hash"]) },
+    ];
+    const navButton = ([value, symbol]) => {
+      const name = tags.get(value) ?? filterLabel(value);
+      const count = entries.filter((entry) => matchesFilter(entry, value)).length;
+      return `<button class="vault-nav-button cursor-interaction" type="button" data-filter="${escape(value)}" data-focus="filter:${escape(value)}" aria-current="${value === filter}">
+        ${icon(symbol)}<span>${escape(name)}</span><span class="vault-count" aria-label="${count} 条">${count}</span>
+      </button>`;
+    };
+    find("[data-navigation]").innerHTML = groups.filter(({ items }) => items.length).map(({ title, items }) =>
+      `<div class="vault-nav-group"><h2 class="vault-nav-heading">${title}</h2>${items.map(navButton).join("")}</div>`).join("");
+    narrowFilter.innerHTML = groups.filter(({ items }) => items.length).map(({ title, items }) =>
+      `<optgroup label="${title}">${items.map(([value]) => `<option value="${escape(value)}">${escape(filterLabel(value))}</option>`).join("")}</optgroup>`).join("");
+    narrowFilter.value = filter;
+  }
+
+  function renderList() {
+    find("#vault-list-title").textContent = filterLabel(filter);
+    find("[data-result-count]").textContent = `${visibleEntries.length} 条`;
+    records.innerHTML = visibleEntries.map((entry) => {
+      const active = entry.id === selectedId;
+      const label = [kinds[entry.kind].label, entry.tags[0]].filter(Boolean).join(" · ");
+      return `<li class="vault-record" data-active="${active}">
+        <button class="vault-item-content cursor-interaction" type="button" data-command="select" data-id="${entry.id}" data-focus="entry:${entry.id}" aria-current="${active ? "true" : "false"}">
+          ${glyph(entry.kind)}<span>
+            <span class="vault-item-title"><span>${escape(entry.title)}</span>${entry.favorite ? icon("star", "vault-star") : ""}</span>
+            <span class="vault-item-meta">${escape(label)}</span>
+          </span>
+        </button>
+        <button class="vault-action vault-icon-button cursor-interaction" type="button" data-command="copy" data-id="${entry.id}" aria-label="复制 ${escape(entry.title)}">${icon("copy")}</button>
+      </li>`;
+    }).join("");
+
+    const empty = find("[data-empty-list]");
+    empty.hidden = visibleEntries.length > 0;
+    records.hidden = !empty.hidden;
+    if (empty.hidden) return;
+
+    if (search.value.trim()) {
+      empty.innerHTML = `${icon("search")}<p>没有匹配的条目</p><button class="vault-action vault-outlined cursor-interaction" type="button" data-command="clear-search">清空搜索</button>`;
+    } else if (filter === "favorites") {
+      empty.innerHTML = `${icon("star")}<p>还没有收藏</p><button class="vault-action vault-outlined cursor-interaction" type="button" data-filter="all">浏览全部条目</button>`;
+    } else {
+      empty.innerHTML = `${icon("archive")}<p>这里还没有条目</p><button class="vault-action vault-outlined cursor-interaction" type="button" data-command="create">新建条目</button>`;
+    }
+  }
+
+  function renderDetails() {
+    const entry = visibleEntries.find(({ id }) => id === selectedId);
+    if (!entry) {
+      details.replaceChildren();
+      return;
+    }
+
+    const kind = kinds[entry.kind];
+    const isRevealed = revealedId === entry.id;
+    const masked = kind.masked && !isRevealed;
+    const value = masked ? '<span class="vault-masked" aria-label="内容已隐藏">••••••••••••</span>' : escape(entry.value);
+    const tags = entry.tags.map((tag) => `<button class="vault-tag cursor-interaction" type="button" data-filter="tag:${escape(fold(tag))}"># ${escape(tag)}</button>`).join("");
+    const showHide = kind.masked ? `<button class="vault-action vault-icon-button cursor-interaction" type="button" data-command="reveal" data-focus="reveal" aria-label="${isRevealed ? "隐藏内容" : "显示内容"}" aria-pressed="${isRevealed}">${icon(isRevealed ? "eye-off" : "eye")}</button>` : "";
+    details.innerHTML = `
+      <div class="vault-detail-head">
+        ${glyph(entry.kind)}
+        <div class="vault-detail-actions">
+          <button class="vault-action vault-icon-button cursor-interaction" type="button" data-command="favorite" data-focus="favorite" aria-label="收藏条目" aria-pressed="${entry.favorite}">${icon("star")}</button>
+          <button class="vault-action vault-outlined cursor-interaction" type="button" data-command="edit" data-focus="edit">${icon("pencil")}编辑</button>
+        </div>
+      </div>
+      <h2 class="vault-detail-title">${escape(entry.title)}</h2>
+      <p class="vault-detail-type">${kind.label}</p>
+      <dl class="vault-fields">
+        ${entry.kind === "password" && entry.account ? `<div><dt class="vault-field-label">账号</dt><dd>${escape(entry.account)}</dd></div>` : ""}
+        <div>
+          <dt class="vault-field-label">${kind.field}</dt>
+          <dd class="vault-value" data-multiline="${!kind.masked}">
+            <span class="vault-value-body">${value}</span>
+            <span class="vault-value-actions">${showHide}<button class="vault-action vault-primary cursor-interaction" type="button" data-command="copy" data-id="${entry.id}" data-focus="detail-copy">${icon("copy")}复制</button></span>
+          </dd>
+        </div>
+        ${tags ? `<div><dt class="vault-field-label">标签</dt><dd class="vault-tags">${tags}</dd></div>` : ""}
+        ${entry.notes ? `<div><dt class="vault-field-label">备注</dt><dd class="vault-notes">${escape(entry.notes)}</dd></div>` : ""}
+      </dl>
+      <div class="vault-detail-footer">
+        <time datetime="${new Date(entry.updatedAt).toISOString()}">更新于 ${dateFormat.format(entry.updatedAt)}</time>
+        <button class="vault-action vault-delete cursor-interaction" type="button" data-command="confirm-delete" data-focus="delete">${icon("trash-2")}删除</button>
+      </div>`;
+  }
+
+  function hideValue() {
+    clearTimeout(revealTimer);
+    revealedId = null;
+  }
+
+  function render({ nav = false } = {}) {
+    const focusKey = document.activeElement?.dataset.focus;
+    visibleEntries = getVisibleEntries();
+    if (!visibleEntries.some(({ id }) => id === selectedId)) {
+      hideValue();
+      selectedId = visibleEntries[0]?.id ?? null;
+    }
+    find(".vault-workspace").dataset.view = mobileDetail && selectedId ? "details" : "list";
+    clearSearchButton.hidden = !search.value;
+    find("[data-search-shortcut]").hidden = Boolean(search.value);
+    if (nav) renderNav();
+    renderList();
+    renderDetails();
+    updateIcons();
+    if (focusKey) find(`[data-focus="${CSS.escape(focusKey)}"]`)?.focus({ preventScroll: true });
+  }
+
+  function selectEntry(id, openDetails = false) {
+    if (selectedId !== id) hideValue();
+    selectedId = id;
+    mobileDetail = openDetails;
+    render();
+  }
+
+  function chooseFilter(value) {
+    filter = value;
+    mobileDetail = false;
+    hideValue();
+    render({ nav: true });
+  }
+
+  function notify(message) {
+    clearTimeout(toastTimer);
+    toast.querySelector("span").textContent = message;
+    find("[data-announcement]").textContent = message;
+    toast.hidden = false;
+    toastTimer = setTimeout(() => { toast.hidden = true; }, 2100);
+  }
+
+  function copyWithSelection(value) {
+    const active = document.activeElement;
+    const temporary = document.createElement("textarea");
+    temporary.value = value;
+    temporary.setAttribute("aria-hidden", "true");
+    temporary.style.cssText = "position:absolute;inset:0 auto auto 0;width:1px;height:1px;opacity:0;pointer-events:none";
+    root.append(temporary);
+    temporary.select();
+    try {
+      return document.execCommand("copy");
+    } catch {
+      return false;
+    } finally {
+      temporary.remove();
+      active?.focus({ preventScroll: true });
+    }
+  }
+
+  async function copyEntry(id) {
+    const entry = entries.find((item) => item.id === id);
+    if (!entry) return;
+    let copied = false;
+    if (navigator.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(entry.value);
+        copied = true;
+      } catch {
+        copied = copyWithSelection(entry.value);
+      }
+    } else {
+      copied = copyWithSelection(entry.value);
+    }
+    if (copied) {
+      notify(`已复制${kinds[entry.kind].masked ? kinds[entry.kind].field : "内容"}`);
+      return;
+    }
+    manualValue.value = entry.value;
+    if (!copyDialog.open) copyDialog.showModal();
+    manualValue.focus();
+    manualValue.select();
+  }
+
+  function setInputVisible(visible) {
+    const toggle = find('[data-command="toggle-input"]');
+    field("secret").type = visible ? "text" : "password";
+    toggle.setAttribute("aria-pressed", String(visible));
+    toggle.setAttribute("aria-label", visible ? "隐藏输入内容" : "显示输入内容");
+    toggle.innerHTML = icon(visible ? "eye-off" : "eye");
+    updateIcons();
+  }
+
+  function syncEditorFields() {
+    const value = field("kind").value;
+    const kind = kinds[value];
+    find("[data-account-field]").hidden = value !== "password";
+    find("[data-secret-field]").hidden = !kind.masked;
+    find("[data-text-field]").hidden = kind.masked;
+    find("[data-secret-label]").textContent = kind.field;
+    find("[data-text-label]").textContent = kind.field;
+    find("[data-kind-hint]").textContent = kind.hint;
+    field("secret").required = kind.masked;
+    field("text").required = !kind.masked;
+    for (const name of ["secret", "text"]) field(name).setCustomValidity("");
+    setInputVisible(false);
+  }
+
+  function openEditor(id) {
+    const entry = entries.find((item) => item.id === id);
+    editingId = entry?.id ?? null;
+    hideValue();
+    render();
+    editorForm.reset();
+    find("#vault-editor-title").textContent = entry ? "编辑条目" : "新建条目";
+    const initialKind = entry?.kind ?? (Object.hasOwn(kinds, filter) ? filter : "api-key");
+    field("kind").value = initialKind;
+    field("title").value = entry?.title ?? "";
+    field("title").setCustomValidity("");
+    field("account").value = entry?.account ?? "";
+    field("secret").value = kinds[initialKind].masked ? entry?.value ?? "" : "";
+    field("text").value = kinds[initialKind].masked ? "" : entry?.value ?? "";
+    field("tags").value = entry?.tags.join("，") ?? "";
+    field("notes").value = entry?.notes ?? "";
+    syncEditorFields();
+    editor.showModal();
+  }
+
+  function saveEntry() {
+    if (!editorForm.reportValidity()) return;
+    const kind = field("kind").value;
+    const title = field("title");
+    const content = field(kinds[kind].masked ? "secret" : "text");
+    if (!title.value.trim()) {
+      title.setCustomValidity("请输入标题");
+      title.reportValidity();
+      return;
+    }
+    if (!content.value.trim()) {
+      content.setCustomValidity("请输入内容");
+      content.reportValidity();
+      return;
+    }
+
+    const tags = new Map();
+    for (const label of field("tags").value.split(/[,，、]/)) {
+      const tag = label.trim().replace(/^#+\s*/, "");
+      if (tag && !tags.has(fold(tag))) tags.set(fold(tag), tag);
+    }
+    const existing = entries.find((entry) => entry.id === editingId);
+    const updated = {
+      id: existing?.id ?? `new-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      kind,
+      title: title.value.trim(),
+      value: content.value,
+      account: kind === "password" ? field("account").value.trim() : "",
+      tags: [...tags.values()],
+      notes: field("notes").value.trim(),
+      favorite: existing?.favorite ?? false,
+      updatedAt: Date.now(),
+    };
+    entries = [updated, ...entries.filter((entry) => entry.id !== updated.id)];
+    selectedId = updated.id;
+    mobileDetail = true;
+    if (!getVisibleEntries().some(({ id }) => id === selectedId)) {
+      filter = matchesFilter(updated, filter) ? filter : "all";
+      search.value = "";
+    }
+    editor.close();
+    render({ nav: true });
+    notify(existing ? "条目已更新" : "条目已添加");
+  }
+
+  function toggleValue() {
+    const wasRevealed = revealedId === selectedId;
+    hideValue();
+    if (!wasRevealed) {
+      revealedId = selectedId;
+      revealTimer = setTimeout(() => {
+        hideValue();
+        render();
+      }, 15000);
+    }
+    render();
+  }
+
+  function toggleFavorite() {
+    const entry = entries.find(({ id }) => id === selectedId);
+    if (!entry) return;
+    entry.favorite = !entry.favorite;
+    render({ nav: true });
+    notify(entry.favorite ? "已加入收藏" : "已取消收藏");
+  }
+
+  function confirmDelete() {
+    const entry = entries.find(({ id }) => id === selectedId);
+    if (!entry) return;
+    deletingId = entry.id;
+    hideValue();
+    render();
+    find("[data-delete-label]").textContent = `确定删除「${entry.title}」？`;
+    deleteDialog.showModal();
+  }
+
+  function deleteEntry() {
+    entries = entries.filter(({ id }) => id !== deletingId);
+    mobileDetail = false;
+    deleteDialog.close();
+    render({ nav: true });
+    notify("条目已删除");
+  }
+
+  function focusSearch() {
+    mobileDetail = false;
+    hideValue();
+    render();
+    search.focus();
+  }
+
+  const commands = {
+    create: () => openEditor(),
+    edit: () => openEditor(selectedId),
+    save: saveEntry,
+    select: (button) => {
+      selectEntry(button.dataset.id, true);
+      if (matchMedia("(max-width: 560px)").matches) find('[data-command="back"]').focus();
+    },
+    "clear-search": () => { search.value = ""; focusSearch(); },
+    back: () => {
+      mobileDetail = false;
+      hideValue();
+      render();
+      find(`[data-focus="entry:${CSS.escape(selectedId)}"]`)?.focus();
+    },
+    copy: (button) => copyEntry(button.dataset.id),
+    reveal: toggleValue,
+    favorite: toggleFavorite,
+    "confirm-delete": confirmDelete,
+    delete: deleteEntry,
+    "close-dialog": (button) => button.closest("dialog").close(),
+    "toggle-input": () => setInputVisible(field("secret").type === "password"),
+  };
+
+  root.addEventListener("click", (event) => {
+    const button = event.target.closest("button");
+    if (button?.dataset.filter) chooseFilter(button.dataset.filter);
+    if (button?.dataset.command) commands[button.dataset.command](button);
+  });
+  narrowFilter.addEventListener("change", () => chooseFilter(narrowFilter.value));
+  search.addEventListener("input", () => { mobileDetail = false; hideValue(); render(); });
+  search.addEventListener("keydown", (event) => {
+    if (event.isComposing || event.keyCode === 229 || visibleEntries.length === 0) return;
+    if (event.key === "Enter") {
+      event.preventDefault();
+      copyEntry(selectedId);
+    }
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault();
+      const index = visibleEntries.findIndex(({ id }) => id === selectedId);
+      const step = event.key === "ArrowDown" ? 1 : -1;
+      const next = visibleEntries[Math.max(0, Math.min(visibleEntries.length - 1, index + step))];
+      selectEntry(next.id);
+      find("[data-announcement]").textContent = `已选中 ${next.title}`;
+      find(`[data-focus="entry:${next.id}"]`)?.scrollIntoView({ block: "nearest" });
+    }
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.isComposing || event.keyCode === 229 || root.querySelector("dialog[open]")) return;
+    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+      event.preventDefault();
+      focusSearch();
+      search.select();
+    }
+    if (event.key === "Escape" && document.activeElement === search && search.value) {
+      event.preventDefault();
+      commands["clear-search"]();
+    }
+  });
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) return;
+    if (revealedId) {
+      hideValue();
+      render();
+    }
+    if (editor.open && field("secret").type === "text") setInputVisible(false);
+  });
+  editorForm.addEventListener("keydown", (event) => {
+    if (event.isComposing || event.keyCode === 229 || event.key !== "Enter") return;
+    if (event.target instanceof HTMLInputElement || event.metaKey || event.ctrlKey) {
+      event.preventDefault();
+      saveEntry();
+    }
+  });
+  editorForm.addEventListener("input", (event) => event.target.setCustomValidity?.(""));
+  field("kind").addEventListener("change", () => {
+    if (!kinds[field("kind").value].masked && !field("text").value) field("text").value = field("secret").value;
+    if (kinds[field("kind").value].masked && !field("secret").value && !/[\r\n]/.test(field("text").value)) field("secret").value = field("text").value;
+    syncEditorFields();
+  });
+  editor.addEventListener("close", () => { editingId = null; editorForm.reset(); });
+  deleteDialog.addEventListener("close", () => { deletingId = null; });
+  copyDialog.addEventListener("close", () => { manualValue.value = ""; });
+
+  field("kind").innerHTML = kindOptions.map(({ value, label }) => `<option value="${value}">${label}</option>`).join("");
+  find("[data-search-shortcut]").textContent = /Mac|iPhone|iPad/.test(navigator.platform) ? "⌘ K" : "Ctrl K";
+  render({ nav: true });
+})();
+</script>
